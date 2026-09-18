@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hero QA comparison</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 24px; background: #e7ebf3; color: #06133a; font: 14px/1.4 system-ui, sans-serif; }
+      main { display: grid; gap: 24px; }
+      section { display: grid; gap: 12px; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      figure { margin: 0; overflow: hidden; background: white; border: 1px solid rgba(6, 19, 58, .14); }
+      figcaption { padding: 10px 12px; border-bottom: 1px solid rgba(6, 19, 58, .12); }
+      img, iframe { display: block; width: 100%; border: 0; }
+      img { object-fit: contain; background: #0c2049; }
+      .live-viewport { height: 343px; overflow: hidden; background: #0c2049; }
+      .live-frame { width: 1904px; height: 879px; transform: scale(.39); transform-origin: left top; }
+      .mobile-frame { width: 320px; height: 920px; margin: 0 auto; }
+      @media (max-width: 900px) { .pair { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Hero после ручной правки</h1>
+        <div class="pair">
+          <figure><figcaption>Ручной референс, 1904 × 879</figcaption><img src="./qa-reference-hero-manual.png" alt="Ручной референс hero" /></figure>
+          <figure><figcaption>Реализация, 1904 × 879</figcaption><div class="live-viewport"><iframe class="live-frame" src="./index.html" title="Текущая реализация hero" onload="this.contentWindow.scrollTo(0,80)"></iframe></div></figure>
+        </div>
+      </section>
+      <section>
+        <h2>Мобильная контрольная ширина</h2>
+        <figure><figcaption>320 × 920 — линия скрыта</figcaption><iframe class="mobile-frame" src="./index.html" title="Мобильная реализация hero"></iframe></figure>
+      </section>
+    </main>
+  </body>
+</html>

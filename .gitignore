@@ -1,0 +1,21 @@
+# Локальные зависимости и временные данные
+node_modules/
+.npm-cache/
+dist/
+coverage/
+
+# Секреты и настройки конкретного компьютера
+.env
+.env.*
+!.env.example
+*.log
+
+# Файлы ОС и редакторов
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Временные экспортные страницы для визуальных экспериментов
+site/figma-*.html
+site/figma-*.css
