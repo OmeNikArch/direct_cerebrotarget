@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Яндекс Директ под заявки и продажи от Церебро" />
+    <title>Церебро — Яндекс Директ под заявки и продажи</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: '#06133a', night: '#0c2049', brand: '#0a238b', sky: '#c6e2ff', signal: '#1f7cff', accent: '#ffd400', paper: '#f4f6fa', mist: '#e7ebf3'
+            },
+            fontFamily: { sans: ['Roboto', 'sans-serif'], display: ['Onest', 'sans-serif'] },
+          },
+        },
+      }
+    </script>
+    <style>
+      :root { --ease-out: cubic-bezier(.23,1,.32,1); --ease-in-out: cubic-bezier(.77,0,.175,1); --radius-control: 6px; --radius-card: 8px; }
+      html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+      body { background: linear-gradient(180deg, #f7f9fd 0%, #edf3fa 100%); color: #06133a; }
+      body.menu-open { overflow: hidden; }
+      [hidden] { display: none !important; }
+      .container-page { width: min(1320px, calc(100% - 64px)); margin-inline: auto; }
+      button, a[data-cta], input, select { border-radius: var(--radius-control) !important; }
+      article, form, table, [data-problems-cta], [data-case-follow-up], [data-pricing-cta] { border-radius: var(--radius-card); }
+      .button-press { transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease, border-color 160ms ease; }
+      .button-press:active { transform: scale(.97); }
+      :where(a, button, input, select):focus-visible { outline: 3px solid #ffd400; outline-offset: 3px; }
+      [data-header-backdrop] { opacity: 0; transition: opacity 200ms var(--ease-out); }
+      [data-site-header].is-scrolled [data-header-backdrop] { opacity: 1; }
+      .surface-paper { background: linear-gradient(180deg, #f7f9fd 0%, #edf3fa 100%); }
+      .surface-white { background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%); }
+      .surface-sky { background: linear-gradient(145deg, #d9ecff 0%, #bcdcff 100%); }
+      .surface-night { background: linear-gradient(155deg, #0c2049 0%, #071a3d 100%); }
+      .mobile-menu { visibility: hidden; pointer-events: none; opacity: 0; transform: translateY(-8px); background-color: rgb(12 32 73 / .98); backdrop-filter: blur(12px); transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), visibility 0s linear 180ms; }
+      .mobile-menu[data-open="true"] { visibility: visible; pointer-events: auto; opacity: 1; transform: translateY(0); transition-delay: 0s; }
+      .service-card { opacity: 0; transform: translateY(12px); transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out); transition-delay: var(--service-delay, 0ms); }
+      .service-card.is-revealed { opacity: 1; transform: translateY(0); }
+      .start-media { opacity: 0; transform: translate(var(--start-from), -50%); transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+      .start-media.is-revealed { opacity: .28; transform: translate(0, -50%); }
+      .dot-field-dark { background-image: radial-gradient(circle, rgb(226 232 240 / .34) 1px, transparent 1.5px); background-size: 12px 12px; }
+      .dot-field-light { background-image: radial-gradient(circle, rgb(25 82 220 / .2) 1px, transparent 1.5px); background-size: 12px 12px; }
+      .case-stage { position: relative; }
+      .case-stage::after { content: ''; pointer-events: none; position: absolute; inset: 0 0 16px auto; z-index: 2; width: 112px; background: linear-gradient(90deg, rgb(244 246 250 / 0), rgb(244 246 250 / .96)); }
+      #case-viewport { scrollbar-width: none; }
+      #case-viewport::-webkit-scrollbar { display: none; }
+      .pricing-table { border-collapse: separate; border-spacing: 0 8px; }
+      .pricing-table th { background: rgb(198 226 255 / .55); }
+      .pricing-table td { background: rgb(255 255 255 / .88); }
+      .pricing-table th:first-child, .pricing-table td:first-child { border-radius: var(--radius-control) 0 0 var(--radius-control); }
+      .pricing-table th:last-child, .pricing-table td:last-child { border-radius: 0 var(--radius-control) var(--radius-control) 0; }
+      .review-pattern { background-color: #c6e2ff; background-image: linear-gradient(rgb(198 226 255 / .82), rgb(198 226 255 / .82)), url('./assets/review-pattern.png'); background-position: center; background-size: auto, 720px auto; }
+      .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 200ms cubic-bezier(.23,1,.32,1); }
+      .faq-answer > div { overflow: hidden; }
+      .faq-item[data-open="true"] .faq-answer { grid-template-rows: 1fr; }
+      .faq-plus { transition: transform 200ms cubic-bezier(.23,1,.32,1); }
+      .faq-item[data-open="true"] .faq-plus { transform: rotate(45deg); }
+      .hero-gradient { background: linear-gradient(180deg, #3c5cdd 0%, #0a238b 48%, #0c2049 100%); }
+      .hero-top-fill { background: #3c5cdd; }
+      .hero-line-path { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
+      .hero-scroll-dot { transform: translateY(13px); }
+      #hero .hero-scroll-dot { animation: hero-scroll-dot 1.6s var(--ease-in-out) infinite alternate; }
+      @keyframes hero-scroll-dot { from { transform: translateY(13px); } to { transform: translateY(-1px); } }
+      @media (max-width: 767px) {
+        :root { --radius-control: 5px; --radius-card: 6px; }
+        .container-page { width: calc(100% - 32px); }
+        .dot-field-dark, .dot-field-light { background-image: none; }
+        .case-stage::after { width: 40px; }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .interactive-border:hover { border-color: rgba(10, 35, 139, .55); }
+        .interactive-dark:hover { border-color: rgba(198, 226, 255, .48); }
+      }
+      @media (hover: none), (pointer: coarse) { .hero-scroll-indicator { display: none; } }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .button-press { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+        .button-press:active { transform: none; }
+        #hero .hero-scroll-dot { animation: none !important; transform: translateY(6px); }
+        .service-card, .start-media { opacity: 1; transform: none; }
+        .start-media.is-revealed { opacity: .28; transform: translateY(-50%); }
+        .mobile-menu { transform: none; transition: opacity 120ms var(--ease-out), visibility 0s linear 120ms; }
+      }
+    </style>
+  </head>
+  <body class="font-sans antialiased">
+    <header data-site-header class="fixed inset-x-0 top-0 z-50 bg-transparent text-white">
+      <div data-header-backdrop class="pointer-events-none absolute inset-0 border-b border-white/10 bg-night/95 backdrop-blur-sm" aria-hidden="true"></div>
+      <div class="container-page relative flex min-h-16 items-center justify-between gap-4 sm:min-h-20 sm:gap-6">
+        <a href="#top" aria-label="Церебро — к началу страницы"><img class="h-10 w-[107px] sm:h-12 sm:w-32" src="./assets/cerebro-logo.svg" alt="Церебро" width="128" height="48" /></a>
+        <nav class="hidden items-center gap-7 text-sm text-white/75 lg:flex" aria-label="Основная навигация">
+          <a class="hover:text-white" href="#process">Как работаем</a><a class="hover:text-white" href="#conditions">Условия</a><a class="hover:text-white" href="#faq">Вопросы</a>
+        </nav>
+        <a data-cta="header-quiz" class="button-press hidden rounded-full bg-accent px-5 py-3 text-sm font-medium text-ink sm:inline-flex" href="#quiz">Бесплатный медиаплан</a>
+        <button id="menu-button" aria-expanded="false" aria-controls="mobile-menu" class="button-press border border-white/30 px-3 py-2 text-sm sm:hidden">Меню</button>
+      </div>
+      <nav id="mobile-menu" data-open="false" aria-hidden="true" class="mobile-menu absolute inset-x-0 top-full border-t border-white/15 bg-night/98 sm:hidden" aria-label="Мобильная навигация">
+        <div class="container-page grid gap-1 py-4 text-sm"><a class="rounded-sm px-3 py-3" href="#process">Как работаем</a><a class="rounded-sm px-3 py-3" href="#conditions">Условия</a><a class="rounded-sm px-3 py-3" href="#faq">Вопросы</a><a class="rounded-sm px-3 py-3" href="#quiz">Бесплатный медиаплан</a><a class="rounded-sm px-3 py-3" href="#contact">Обсудить продвижение</a></div>
+      </nav>
+    </header>
+
+    <div class="header-hero-bridge hero-top-fill h-16 sm:h-20" aria-hidden="true"></div>
+
+    <main id="top">
+      <section id="hero" class="hero-gradient relative z-10 isolate overflow-hidden text-white">
+        <svg data-hero-line class="pointer-events-none absolute bottom-0 left-0 z-20 hidden h-[141px] w-full md:block" viewBox="0 0 1904 141" preserveAspectRatio="none" aria-hidden="true">
+          <path class="hero-line-path" pathLength="1" d="M1922.5 6.38477C1689 182.885 1694 -13.1144 1585.5 6.38556C1477 25.8856 1377.5 120.885 1321 111.047C1264.5 101.209 1322.5 29.1531 1242.5 16.8846C1146 2.08576 975 58.3856 846.256 100.636C717.513 142.886 563.5 147.386 545.717 111.047C527.935 74.7077 668.5 -6.61536 743.13 23.082C817.76 52.7794 543.503 121.288 435.959 92.5382C328.416 63.7888 302 6.38556 203.5 6.38556C105 6.38556 25.1859 86.0547 -3.5 92.5382" fill="none" stroke="url(#hero-line-gradient)" stroke-width="10" vector-effect="non-scaling-stroke" />
+          <defs>
+            <linearGradient id="hero-line-gradient" x1="-3.5" y1="61.6343" x2="1927.5" y2="61.6343" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFAE00" />
+              <stop offset="1" stop-color="#FFD400" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div data-hero-layout class="container-page relative z-10 flex min-h-[calc(100svh-4rem)] flex-col pb-6 pt-5 md:grid md:min-h-[calc(100svh-5rem)] md:grid-cols-12 md:grid-rows-[auto_auto_auto] md:content-start md:gap-x-8 md:gap-y-8 md:pb-0 md:pt-10 lg:grid-cols-12 lg:grid-rows-[auto_5rem_auto] lg:gap-y-0 xl:grid-cols-12">
+          <div class="contents">
+            <div data-hero-title class="order-1 mb-6 md:order-none md:col-span-12 md:row-start-1 md:mb-0 lg:col-span-8 xl:col-span-7">
+              <p data-hero-reveal style="--hero-delay:.3s;--hero-mobile-delay:.15s" class="mb-3 text-sm text-white/60 md:mb-5">Контекстная реклама для бизнеса</p>
+              <h1 data-hero-reveal style="--hero-delay:.55s;--hero-mobile-delay:.3s" class="max-w-[920px] font-display text-[2rem] font-semibold leading-[.98] tracking-[-0.04em] md:text-[clamp(2.5rem,5.3vw,4.65rem)] md:leading-[1.02] md:tracking-[-0.045em]">Приведём целевые заявки из Яндекс Директа</h1>
+            </div>
+            <aside data-hero-reveal style="--hero-delay:1.85s;--hero-mobile-delay:.45s" class="order-2 mb-8 flex items-start gap-4 border-l border-white/25 pl-4 md:order-none md:col-span-6 md:col-start-7 md:row-start-2 md:mb-0 md:flex-col md:gap-0 md:pl-5 lg:col-span-4 lg:col-start-9 lg:row-start-1 lg:-ml-4 lg:mt-10 lg:self-stretch lg:justify-between lg:pl-9 xl:col-span-5 xl:col-start-8">
+              <div class="flex shrink-0 items-center" aria-label="Церебро и Яндекс">
+                <img class="h-14 w-14 object-contain md:h-20 md:w-20 lg:h-24 lg:w-24" src="./assets/cerebro-badge.png" alt="Церебро" width="600" height="600" />
+                <img class="-ml-2 h-14 w-14 object-contain md:-ml-3 md:h-20 md:w-20 lg:-ml-4 lg:h-24 lg:w-24" src="./assets/yandex-badge.png" alt="Яндекс" width="600" height="600" />
+              </div>
+              <p data-hero-proof-copy class="max-w-none text-sm leading-6 text-white/70 md:mt-6 md:text-base md:leading-7 lg:text-lg lg:leading-8">Берём на себя аудит, стратегию, запуск, оптимизацию и аналитику — чтобы вы понимали, как реклама влияет на обращения и продажи</p>
+            </aside>
+          </div>
+          <div class="contents">
+            <div data-hero-actions data-hero-reveal style="--hero-delay:.72s;--hero-mobile-delay:.72s" class="order-3 mb-8 flex flex-col items-start gap-3 md:order-none md:col-span-5 md:row-start-2 md:mb-0 md:flex-row md:flex-wrap md:items-center md:gap-4 lg:col-span-4 lg:row-start-3 xl:col-span-3">
+              <a data-cta="hero-quiz" class="button-press inline-flex w-full justify-center whitespace-nowrap bg-accent px-4 py-4 text-sm font-medium text-ink sm:w-auto sm:px-6 lg:text-base" href="#quiz">Получить медиаплан бесплатно</a>
+              <a data-cta="hero-consultation" class="inline-flex text-sm font-medium text-white/75 underline decoration-white/35 underline-offset-4 transition-colors hover:text-white" href="#contact">Обсудить продвижение</a>
+            </div>
+            <div id="hero-facts" class="order-4 grid border-t border-white/20 sm:grid-cols-2 md:order-none md:col-span-12 md:row-start-3 lg:col-span-8 lg:col-start-5 lg:grid-cols-4 lg:border-t-0 xl:col-span-9 xl:col-start-4"></div>
+          </div>
+          <a data-hero-reveal style="--hero-delay:3.8s;--hero-mobile-delay:1.25s" class="hero-scroll-indicator relative z-30 hidden h-9 w-6 items-start justify-center rounded-[12px] border border-white/80 md:col-span-12 md:row-start-4 md:mt-[100px] md:flex md:justify-self-center" href="#fit" aria-label="Прокрутить к следующему разделу">
+            <span class="hero-scroll-dot mt-2 block h-1.5 w-1.5 rounded-full bg-white"></span>
+          </a>
+        </div>
+      </section>
+
+      <section id="fit" class="surface-paper pb-20 pt-32 md:pb-28 md:pt-36"><div class="container-page grid gap-10 lg:grid-cols-12 lg:gap-8"><div class="lg:col-span-5"><p class="text-sm text-ink/55">Вам подойдёт, если:</p><h2 class="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Хотите понимать не только цену, но и качество заявок?</h2></div><div id="fit-cards" class="grid gap-3 md:grid-cols-2 lg:col-span-7"></div></div></section>
+
+      <section id="quiz" class="surface-sky py-20 md:py-28"><div class="container-page grid gap-10 lg:grid-cols-12 lg:items-center"><div class="border-l-4 border-brand pl-5 lg:col-span-5"><p class="text-sm text-brand/70">Бесплатный медиаплан</p><h2 class="mt-3 max-w-xl font-display text-3xl font-semibold leading-tight tracking-[-.035em] text-night md:text-5xl">Получите бесплатный медиаплан</h2><p class="mt-5 max-w-lg text-base leading-7 text-night/75">Подготовим бесплатно — без обязательств. Поймёте, какой бюджет и сценарий продвижения подойдут вашей задаче</p><p class="mt-5 max-w-lg text-sm leading-6 text-night/60">Короткий опрос поможет собрать вводные и подготовить прогноз для вашего бизнеса</p></div><div class="rounded-sm border border-brand/15 bg-white p-5 text-ink md:p-8 lg:col-span-6 lg:col-start-7"><div class="flex items-center justify-between text-sm"><p class="font-medium">Шаг 1 из 5</p><p class="text-ink/50">Контекст бизнеса</p></div><div class="mt-5 grid grid-cols-5 gap-2" aria-label="Прогресс квиза"><span class="h-1 rounded-full bg-brand"></span><span class="h-1 rounded-full bg-mist"></span><span class="h-1 rounded-full bg-mist"></span><span class="h-1 rounded-full bg-mist"></span><span class="h-1 rounded-full bg-mist"></span></div><div id="quiz-placeholder-lines" class="mt-10 grid gap-4" aria-label="Место для вопроса и вариантов"><span class="h-7 w-3/4 rounded bg-paper"></span><span class="h-14 rounded border border-ink/10 bg-white"></span><span class="h-14 rounded border border-ink/10 bg-white"></span><span class="h-14 rounded border border-ink/10 bg-white"></span></div><div class="mt-8 flex items-center justify-between border-t border-ink/10 pt-5"><span class="text-sm text-ink/45">Вопросы добавим после согласования сценария</span><span class="rounded-full bg-ink px-5 py-3 text-sm font-medium text-white/45">Далее</span></div></div></div></section>
+
+      <section id="experience-dark" class="surface-night relative overflow-hidden py-20 text-white md:py-28">
+        <div class="dot-field-dark pointer-events-none absolute right-0 top-0 hidden h-64 w-[38%] opacity-35 lg:block" aria-hidden="true"></div>
+        <div class="container-page relative">
+          <div class="grid gap-12 lg:grid-cols-12">
+            <div class="lg:col-span-4"><p class="text-sm text-sky/65">Типичные проблемы рынка</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Ваша реклама часто не окупается?</h2></div>
+            <div id="problems" class="grid gap-3 lg:col-span-8"></div>
+          </div>
+          <div data-problems-cta class="mt-10 flex flex-col gap-5 bg-sky p-5 text-night sm:flex-row sm:items-center sm:justify-between md:p-6"><p class="max-w-xl text-sm leading-6 text-night/70">Ответьте на несколько коротких вопросов — и подготовим основу медиаплана именно под вашу ситуацию.</p><a data-cta="problems" class="button-press inline-flex shrink-0 justify-center bg-accent px-5 py-3 text-sm font-medium text-ink" href="#quiz">Получить медиаплан</a></div>
+          <div class="mt-24 border-t border-white/15 pt-20 md:mt-32 md:pt-24">
+            <div class="grid gap-6 lg:grid-cols-12 lg:items-end"><div class="lg:col-span-7"><p class="text-sm text-sky/65">Состав работы</p><h2 class="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Как мы работаем с вашим проектом</h2></div><div class="dot-field-dark hidden h-24 rounded-sm opacity-35 lg:col-span-4 lg:col-start-9 lg:block" aria-hidden="true"></div></div>
+            <div id="service-scope-cards" class="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="process" class="surface-paper py-20 md:py-28"><div class="container-page"><div class="grid gap-6 lg:grid-cols-12"><div class="lg:col-span-6"><p class="text-sm text-ink/55">Понятный старт</p><h2 class="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Вы оставили заявку. Что дальше?</h2></div></div><div id="process-cards" class="mt-12 grid gap-3 md:grid-cols-2 lg:grid-cols-5"></div></div></section>
+
+      <section data-transparency-section class="surface-sky py-20 text-night md:py-28"><div class="container-page"><div class="grid gap-10 lg:grid-cols-12"><div class="lg:col-span-6"><p class="text-sm text-brand/65">Контроль на каждом этапе</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Строим работу прозрачно и понятно — ничего не скрываем</h2></div><p class="max-w-xl self-end text-base leading-7 text-night/70 lg:col-span-5 lg:col-start-8">Вы видите, что происходит с рекламой, на чём основаны решения и какие действия запланированы</p></div><div id="transparency-cards" class="mt-12 grid gap-3 md:grid-cols-2 lg:grid-cols-12"></div><div class="mt-8"><a data-cta="transparency" class="button-press inline-flex bg-brand px-5 py-3 text-sm font-medium text-white" href="#quiz">Получить медиаплан по вашей задаче</a></div></div></section>
+
+      <section id="proof" class="surface-paper relative overflow-hidden py-20 md:py-28"><div class="dot-field-light pointer-events-none absolute left-0 top-0 hidden h-48 w-[42%] opacity-55 lg:block" aria-hidden="true"></div><div class="container-page relative"><div class="grid gap-8 lg:grid-cols-12 lg:items-end"><div class="lg:col-span-4"><p class="text-sm text-ink/55">Практика по нишам</p><h2 class="mt-3 max-w-md font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Наши кейсы</h2><div class="mt-8 hidden gap-2 md:flex"><button id="case-prev" class="button-press interactive-border inline-flex h-11 w-11 items-center justify-center border border-brand bg-white text-lg text-brand disabled:cursor-not-allowed disabled:opacity-35" type="button" aria-label="Предыдущий кейс">←</button><button id="case-next" class="button-press interactive-border inline-flex h-11 w-11 items-center justify-center border border-brand bg-white text-lg text-brand disabled:cursor-not-allowed disabled:opacity-35" type="button" aria-label="Следующий кейс">→</button></div></div><div class="lg:col-span-7 lg:col-start-6"><div id="case-filters" class="flex flex-wrap gap-2" aria-label="Фильтр кейсов"></div><p class="mt-5 max-w-xl text-sm leading-6 text-ink/60">Не нашли свою нишу? После заявки подберём кейсы, релевантные вашей задаче — часть портфеля закрыта NDA.</p></div></div><div class="case-stage mt-10"><div id="case-viewport" class="snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-4"><div id="case-cards" class="flex items-stretch gap-4"></div></div></div><div data-case-controls class="mt-2 flex gap-2 md:order-2 md:hidden"><button class="button-press inline-flex h-11 w-11 items-center justify-center border border-brand bg-white text-lg text-brand disabled:opacity-35" type="button" data-case-step="-1" aria-label="Предыдущий кейс">←</button><button class="button-press inline-flex h-11 w-11 items-center justify-center border border-brand bg-white text-lg text-brand disabled:opacity-35" type="button" data-case-step="1" aria-label="Следующий кейс">→</button></div><div data-case-follow-up class="mt-8 bg-night p-5 text-white md:flex md:items-center md:justify-between md:gap-8 md:p-6"><div><p class="text-sm text-white/55">Нужны примеры из вашей ниши?</p><p class="mt-2 font-display text-xl font-semibold tracking-[-.025em]">Подберём кейсы под вашу задачу</p></div><a data-cta="cases" class="button-press mt-5 inline-flex bg-accent px-5 py-3 text-sm font-medium text-ink md:mt-0" href="#quiz">Получить бесплатный медиаплан</a></div></div></section>
+
+      <section id="conditions" class="surface-white py-20 md:py-28"><div class="container-page grid gap-10 lg:grid-cols-12"><div class="lg:col-span-4"><p class="text-sm text-ink/55">Условия и стоимость</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-4xl">Стоимость ведения</h2></div><div class="lg:col-span-8"><div data-pricing-mobile class="flex flex-col gap-3 md:hidden"><article class="bg-sky/40 p-4"><p class="text-sm text-ink/55">Рекламный бюджет</p><p class="mt-2 font-display text-lg font-semibold">от 100 000 до 500 000 ₽</p><div class="mt-4 border-t border-ink/10 pt-4"><p class="text-sm text-ink/55">Стоимость ведения</p><p class="mt-2 font-display text-lg font-semibold">50 000 ₽ / месяц</p></div></article><article class="bg-sky/40 p-4"><p class="text-sm text-ink/55">Рекламный бюджет</p><p class="mt-2 font-display text-lg font-semibold">от 501 000 ₽</p><div class="mt-4 border-t border-ink/10 pt-4"><p class="text-sm text-ink/55">Стоимость ведения</p><p class="mt-2 font-display text-lg font-semibold">50 000 ₽ / месяц + 7% рекламного бюджета</p></div></article></div><div class="hidden md:block"><table data-pricing-table class="pricing-table w-full text-left"><thead class="bg-paper text-sm text-ink/60"><tr><th class="p-4 font-medium">Рекламный бюджет</th><th class="p-4 font-medium">Стоимость ведения</th></tr></thead><tbody><tr class="border-t border-ink/10"><td class="p-4 font-display text-lg font-semibold">от 100 000 до 500 000 ₽</td><td class="p-4 font-display text-lg font-semibold">50 000 ₽ / месяц</td></tr><tr class="border-t border-ink/10"><td class="p-4 font-display text-lg font-semibold">от 501 000 ₽</td><td class="p-4 font-display text-lg font-semibold">50 000 ₽ / месяц + 7% рекламного бюджета</td></tr></tbody></table></div><p class="mt-5 max-w-2xl text-sm leading-6 text-ink/55">Аудит, стратегия и запуск включены. Рекламный бюджет оплачивается отдельно.</p><div data-pricing-cta class="mt-7 flex flex-col gap-4 bg-sky p-5 sm:flex-row sm:items-center md:p-6"><a data-cta="pricing" class="button-press inline-flex w-fit shrink-0 whitespace-nowrap rounded-full bg-accent px-5 py-3 text-sm font-medium text-ink" href="#quiz">Получить бесплатный медиаплан</a><p class="text-sm leading-6 text-ink/55">Ответьте на несколько вопросов — затем сможем точнее обсудить сценарий продвижения.</p></div></div></div></section>
+
+      <section class="surface-sky relative isolate overflow-hidden py-20 md:py-32"><div class="start-media absolute -left-20 top-1/2 hidden aspect-[4/3] w-72 overflow-hidden rounded-sm lg:block" style="--start-from:-16px" aria-hidden="true"><img class="h-full w-full object-cover" src="./assets/cases/dentistry.png" alt="" /></div><div class="start-media absolute -right-20 top-1/2 hidden aspect-[4/3] w-72 overflow-hidden rounded-sm lg:block" style="--start-from:16px" aria-hidden="true"><img class="h-full w-full object-cover" src="./assets/cases/furniture.png" alt="" /></div><div class="container-page relative"><div class="mx-auto max-w-3xl text-center"><p class="text-sm text-brand/70">Первый шаг</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] text-night md:text-5xl">С чего начнём работу</h2></div><div id="start-options" class="mx-auto mt-10 grid max-w-4xl gap-3 md:grid-cols-2"></div></div></section>
+
+      <section id="trust" class="surface-paper py-16 md:py-20"><div class="container-page grid gap-8 lg:grid-cols-12 lg:items-stretch"><div class="border-l-4 border-accent pl-5 lg:col-span-5"><p class="text-sm text-ink/55">О Церебро</p><p data-count-up="3000" class="mt-8 font-display text-5xl font-semibold leading-none tracking-[-.05em] md:text-6xl">3000+</p><p class="mt-3 max-w-[13rem] text-lg leading-6">клиентов работают с Церебро</p><h2 class="mt-10 max-w-md font-display text-2xl font-semibold leading-tight tracking-[-.03em] md:text-3xl">Больше 10 лет ведём рекламу на российских площадках</h2><p class="mt-4 max-w-lg text-base leading-7 text-ink/65">Разбираемся в особенностях каждого канала и помогаем выбрать подходящий сценарий продвижения</p><div class="mt-6 flex flex-wrap items-center gap-3"><span class="text-sm text-ink/55">Официальный партнёр:</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">VK</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Яндекс</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Авито</span></div></div><div id="reviews" class="review-pattern p-5 md:p-7 lg:col-span-6 lg:col-start-7"><div class="flex items-center justify-between gap-4"><p class="text-sm text-ink/55">Отзывы клиентов</p><div class="flex items-center gap-4"><p id="review-counter" class="text-sm text-ink/55" aria-live="polite"></p><div class="flex gap-2"><button id="review-prev" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Предыдущий отзыв">←</button><button id="review-next" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Следующий отзыв">→</button></div></div></div><div id="review-slides" class="mt-5" aria-live="polite"></div></div></div></section>
+
+      <section id="faq" class="surface-white py-20 md:py-28"><div class="container-page grid gap-10 lg:grid-cols-12"><div class="lg:col-span-4"><p class="text-sm text-ink/55">FAQ</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-4xl">Важные вопросы до старта</h2></div><div id="faq-list" class="lg:col-span-8"></div></div></section>
+
+      <section id="contact" class="hero-gradient py-20 text-white md:py-28"><div class="container-page grid gap-12 lg:grid-cols-12"><div class="lg:col-span-6"><p class="text-sm text-white/60">Нужна консультация</p><h2 class="mt-3 max-w-xl font-display text-4xl font-semibold leading-[1.05] tracking-[-.04em] md:text-5xl">Обсудим вашу задачу и следующий шаг</h2><p class="mt-6 max-w-lg leading-7 text-white/70">Позвоним, уточним детали и согласуем дальнейшие действия</p><a class="mt-5 inline-flex text-sm font-medium text-white/75 underline decoration-white/35 underline-offset-4 hover:text-white" href="#quiz">Нужен бесплатный медиаплан?</a></div><form id="lead-form" data-endpoint="" data-vk-bot-url="" novalidate class="surface-sky grid gap-4 p-5 text-ink md:grid-cols-2 lg:col-span-5 lg:col-start-8">
+  <div id="lead-form-fields" class="contents">
+    <label class="grid gap-2 text-sm">Имя<input class="rounded-lg border border-ink/15 px-4 py-3 outline-none focus:border-brand" name="name" type="text" autocomplete="name" aria-describedby="name-error" aria-invalid="false" /><span id="name-error" class="hidden text-xs text-red-700" data-error="name"></span></label>
+    <label class="grid gap-2 text-sm">Телефон<input class="rounded-lg border border-ink/15 px-4 py-3 outline-none focus:border-brand" name="phone" type="tel" autocomplete="tel" aria-describedby="phone-error" aria-invalid="false" /><span id="phone-error" class="hidden text-xs text-red-700" data-error="phone"></span></label>
+    <label class="grid gap-2 text-sm md:col-span-2">Общий рекламный бюджет<select class="rounded-lg border border-ink/15 bg-white px-4 py-3 outline-none focus:border-brand" name="budget" aria-describedby="budget-error" aria-invalid="false"><option value="">Выберите бюджет</option><option value="50-500">50–500 тыс. ₽</option><option value="501-1000">501 тыс.–1 млн ₽</option><option value="1000-plus">Более 1 млн ₽</option></select><span id="budget-error" class="hidden text-xs text-red-700" data-error="budget"></span></label>
+    <label class="flex items-start gap-3 text-xs leading-5 text-ink/65 md:col-span-2"><input class="mt-1 accent-brand" name="consent" type="checkbox" aria-describedby="consent-error" aria-invalid="false" /><span>Соглашаюсь на обработку персональных данных</span></label>
+    <span id="consent-error" class="hidden text-xs text-red-700 md:col-span-2" data-error="consent"></span>
+    <button class="button-press rounded-full bg-accent px-5 py-4 font-medium disabled:cursor-wait disabled:opacity-70 md:col-span-2" type="submit">Отправить заявку</button>
+    <p id="form-status" role="status" aria-live="polite" hidden class="rounded-lg px-4 py-3 text-sm md:col-span-2"></p>
+  </div>
+  <section id="lead-success" hidden tabindex="-1" class="md:col-span-2" aria-labelledby="lead-success-title">
+    <p class="text-sm font-medium text-brand">Заявка отправлена</p>
+    <h3 id="lead-success-title" class="mt-3 font-display text-2xl font-semibold leading-tight tracking-[-.03em]">Продолжим в VK</h3>
+    <a id="vk-brief-link" class="button-press mt-6 inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#0077FF] px-5 py-4 font-medium text-white aria-disabled:cursor-not-allowed" aria-disabled="true" tabindex="-1"><img class="h-6 w-6" src="./assets/vk.svg" alt="" />Заполнить бриф</a>
+    <p class="mt-5 text-sm leading-6 text-ink/65">Продолжите заполнение брифа в VK-боте — так мы подробнее узнаем о вашем проекте</p>
+    <p id="vk-link-status" class="mt-3 text-xs leading-5 text-ink/45">Переход станет доступен после подключения бота</p>
+  </section>
+</form></div></section>
+    </main>
+    <footer class="surface-white py-10"><div class="container-page grid gap-8 text-sm text-ink/55 md:grid-cols-[auto_1fr_auto] md:items-end"><div><a class="inline-flex rounded-sm bg-night p-2" href="#top" aria-label="Церебро — к началу страницы"><img class="h-12 w-32" src="./assets/cerebro-logo.svg" alt="Церебро" width="128" height="48" /></a><p class="mt-5">© 2026 Церебро. Все права защищены.</p></div><div class="flex flex-col gap-3 md:items-center"><span data-legal-placeholder role="link" aria-disabled="true" title="Подключить реальный URL перед публикацией">Политика конфиденциальности</span><span data-legal-placeholder role="link" aria-disabled="true" title="Подключить реальный URL перед публикацией">Согласие на обработку персональных данных</span></div><a class="w-fit rounded-full bg-paper px-4 py-2 text-ink/60 md:justify-self-end" href="#top">Наверх</a></div></footer>
+    <script type="module" src="./script.js?v=case-cards-1"></script>
+  </body>
+</html>
+
+
