@@ -146,7 +146,6 @@ const landingData = {
 }
 
 const render = (id, html) => { document.getElementById(id).innerHTML = html }
-const card = (number, title, text, className = '') => `<article class="${className} bg-white/90 p-6 md:p-7"><p class="text-sm text-ink/45">${number}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${text}</p></article>`
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const siteHeader = document.querySelector('[data-site-header]')
@@ -168,18 +167,24 @@ if (hero && heroLine) {
   heroMotion.start()
 }
 
-render('fit-cards', landingData.fit.map(([n, t, d]) => card(n, t, d, 'min-h-[232px]')).join(''))
-render('problems', landingData.problems.map(([problem, solution]) => `<article class="grid overflow-hidden bg-night/80 md:grid-cols-2"><div class="p-5 md:p-6"><p class="text-xs text-white/40">Было</p><h3 class="mt-3 font-display text-lg font-semibold tracking-[-.02em] text-white">${problem}</h3></div><div class="bg-white/[.07] p-5 md:p-6"><p class="text-xs text-sky">Станет</p><p class="mt-3 text-sm leading-6 text-white/75">${solution}</p></div></article>`).join(''))
+const fitImages = [
+  './assets/fit/01-management.png',
+  './assets/fit/02-budget.png',
+  './assets/fit/03-leads.png',
+  './assets/fit/04-transparency.png',
+]
+render('fit-cards', landingData.fit.map(([n, t, d], index) => `<article class="grid min-h-[204px] grid-cols-[minmax(0,1fr)_104px] overflow-hidden bg-white sm:min-h-[220px] sm:grid-cols-[minmax(0,1fr)_144px] lg:grid-cols-[minmax(0,1fr)_38%]"><figure class="order-2 flex min-h-full items-center justify-center overflow-hidden bg-white p-2 sm:p-3 lg:p-4"><img data-fit-image class="h-full w-full object-contain" src="${fitImages[index]}" alt="" width="1536" height="1152" loading="lazy" decoding="async" /></figure><div class="order-1 flex min-w-0 flex-col justify-center p-5 sm:p-6 md:p-7"><p class="text-sm text-ink/45">${n}</p><h3 class="mt-5 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
+render('problems', landingData.problems.map(([problem, solution]) => `<article class="grid overflow-hidden md:grid-cols-2"><div class="bg-white/[.055] p-5 text-white md:p-6"><p class="text-xs text-white/50">Было</p><h3 class="mt-3 font-display text-lg font-semibold tracking-[-.02em]">${problem}</h3></div><div class="bg-sky/80 p-5 text-ink md:p-6"><p class="text-xs text-brand">Станет</p><p class="mt-3 text-sm leading-6 text-ink/70">${solution}</p></div></article>`).join(''))
 const serviceIcons = [
   './assets/service-icons/01-strategy.svg',
   './assets/service-icons/02-launch.svg',
   './assets/service-icons/03-analytics.svg',
   './assets/service-icons/04-site-recommendations.svg',
 ]
-render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] bg-night/85 p-6 md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-14 w-14 bg-sky [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><span class="mt-8 block h-1 w-8 bg-accent" aria-hidden="true"></span><h3 class="mt-5 font-display text-xl font-semibold leading-tight tracking-[-.025em] text-white">${t}</h3><p class="mt-3 text-sm leading-6 text-white/60">${d}</p></article>`).join(''))
+render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] bg-night/85 p-6 md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em] text-white">${t}</h3><p class="mt-3 text-sm leading-6 text-white/60">${d}</p></article>`).join(''))
 createRevealOnceController({ elements: [...document.querySelectorAll('.service-card')], reduceMotion })
-render('process-cards', landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-10 w-10 items-center justify-center rounded-[5px] bg-sky font-display text-lg font-semibold text-brand md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
-render('transparency-cards', landingData.transparency.map(([, t, d], index) => `<article class="min-h-[218px] bg-white/65 p-5 text-night md:p-6 ${index < 2 ? 'lg:col-span-6' : 'lg:col-span-4'}"><h3 class="font-display text-lg font-semibold leading-tight">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-night/65">${d}</p></article>`).join(''))
+render('process-cards', `${landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-10 w-10 items-center justify-center rounded-[5px] bg-sky font-display text-lg font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join('')}<div data-layout-pattern data-process-pattern class="dot-field-light hidden min-h-[248px] rounded-[var(--radius-card)] md:block lg:hidden" aria-hidden="true"></div>`)
+render('transparency-cards', `${landingData.transparency.map(([, t, d], index) => `<article class="min-h-[218px] bg-white/65 p-5 text-night md:p-6 ${index < 2 ? 'lg:col-span-6' : 'lg:col-span-4'}"><h3 class="font-display text-lg font-semibold leading-tight">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-night/65">${d}</p></article>`).join('')}<div data-layout-pattern data-transparency-pattern class="dot-field-light hidden min-h-[218px] rounded-[var(--radius-card)] opacity-55 md:block lg:hidden" aria-hidden="true"></div>`)
 const caseFilters = [
   ['all', 'Все'],
   ['medicine', 'Медицина'],
@@ -204,7 +209,7 @@ const caseImages = [
 const getFilteredCases = () => landingData.cases.filter(({ category }) => activeCaseFilter === 'all' || category === activeCaseFilter)
 
 const renderCaseFilters = () => {
-  caseFiltersElement.innerHTML = caseFilters.map(([id, label]) => `<button class="button-press interactive-border border px-4 py-2 text-sm font-medium ${activeCaseFilter === id ? 'border-brand bg-brand text-white' : 'border-ink/15 bg-white text-ink/70'}" type="button" data-case-filter="${id}" aria-pressed="${activeCaseFilter === id}">${label}</button>`).join('')
+  caseFiltersElement.innerHTML = caseFilters.map(([id, label]) => `<button class="button-press px-4 py-2 text-sm font-medium ${activeCaseFilter === id ? 'bg-brand text-white' : 'bg-white text-ink/70'}" type="button" data-case-filter="${id}" aria-pressed="${activeCaseFilter === id}">${label}</button>`).join('')
 }
 
 const updateCaseControls = () => {
@@ -247,8 +252,7 @@ caseViewport.addEventListener('scroll', updateCaseControls, { passive: true })
 window.addEventListener?.('resize', updateCaseControls)
 renderCaseFilters()
 renderCaseCards()
-render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId]) => `<article class="flex min-h-[286px] flex-col bg-white/90 p-6 text-left md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></article>`).join(''))
-createRevealOnceController({ elements: [...document.querySelectorAll('.start-media')], reduceMotion })
+render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId]) => `<article class="grid min-h-[286px] grid-cols-[minmax(0,1fr)_96px] overflow-hidden bg-white/90 text-left sm:grid-cols-[minmax(0,1fr)_144px] lg:grid-cols-[minmax(0,1fr)_36%]"><div class="flex min-w-0 flex-col p-6 md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></div><div data-start-media-slot class="dot-field-light min-h-full bg-paper/70" aria-hidden="true"></div></article>`).join(''))
 render('faq-list', landingData.faq.map(([question, answer], index) => `<article class="faq-item border-b border-ink/10" data-open="false"><button class="flex w-full items-center justify-between gap-6 py-6 text-left font-display text-lg font-semibold leading-tight" id="faq-button-${index}" aria-expanded="false" aria-controls="faq-answer-${index}"><span>${question}</span><span class="faq-plus text-2xl font-normal text-brand">+</span></button><div class="faq-answer" id="faq-answer-${index}" role="region" aria-labelledby="faq-button-${index}"><div><p class="max-w-2xl pb-6 text-sm leading-6 text-ink/65">${answer}</p></div></div></article>`).join(''))
 
 document.querySelectorAll('.faq-item button').forEach((button) => button.addEventListener('click', () => {
@@ -263,7 +267,7 @@ let reviewIndex = 0
 
 const renderReviewSlide = () => {
   const [label, detail, paragraphs] = landingData.reviewSlides[reviewIndex]
-  reviewSlides.innerHTML = `<div data-review-message class="max-w-2xl rounded-[8px] rounded-tl-[3px] bg-white p-5 md:p-6"><div class="flex items-start justify-between gap-4"><div><p class="text-sm font-medium text-brand">${label}</p><p class="mt-1 text-xs leading-5 text-ink/50">${detail}</p></div><span class="shrink-0 rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/50">Сообщение клиента</span></div><div class="mt-5 grid gap-4 text-sm leading-6 text-ink/70">${paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></div>`
+  reviewSlides.innerHTML = `<div data-review-message class="max-w-2xl rounded-[8px] rounded-tl-[3px] bg-white p-5 md:p-6"><div class="flex items-start justify-between gap-4"><div><p class="text-sm font-medium text-brand">${label}</p><p class="mt-1 text-xs leading-5 text-ink/50">${detail}</p></div><span class="shrink-0 rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/50">Сообщение клиента Ц</span></div><div class="mt-5 grid gap-4 text-sm leading-6 text-ink/70">${paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></div>`
   reviewCounter.textContent = `${reviewIndex + 1} / ${landingData.reviewSlides.length}`
 }
 

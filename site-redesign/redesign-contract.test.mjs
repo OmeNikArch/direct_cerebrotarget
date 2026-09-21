@@ -2,14 +2,16 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 
-const sourceHtml = await readFile(new URL('../site/index.html', import.meta.url), 'utf8')
 const redesignHtml = await readFile(new URL('./index.html', import.meta.url), 'utf8')
 const redesignScript = await readFile(new URL('./script.js', import.meta.url), 'utf8')
 
-const heroFragment = (html) => html.match(/<section id="hero"[\s\S]*?<\/section>/u)?.[0]
-
-test('keeps the complete hero section unchanged', () => {
-  assert.equal(heroFragment(redesignHtml), heroFragment(sourceHtml))
+test('keeps the approved hero offer while reserving a safe lower band for the line', () => {
+  const hero = redesignHtml.match(/<section id="hero"[\s\S]*?<\/section>/u)?.[0] || ''
+  assert.match(hero, /Приведём целевые заявки из Яндекс Директа/u)
+  assert.match(hero, /Получить медиаплан бесплатно/u)
+  assert.match(hero, /data-hero-layout[^>]*md:pb-36/u)
+  assert.doesNotMatch(hero, /hero-scroll-indicator|Прокрутить к следующему разделу/u)
+  assert.match(hero, /data-hero-line[^>]*h-\[110px\][^>]*viewBox="0 0 1930 110"/u)
 })
 
 test('adds a sticky header state layer without changing its height', () => {
@@ -40,11 +42,13 @@ test('renders five real case images inside a swipeable scroll-snap carousel', ()
   assert.match(redesignScript, /data-case-image[\s\S]*?<img/u)
 })
 
-test('provides the required light footer links without inventing legal URLs', () => {
+test('provides the required footer links on a seamless dark continuation', () => {
   assert.match(redesignHtml, /Политика конфиденциальности/u)
   assert.match(redesignHtml, /Согласие на обработку персональных данных/u)
   assert.match(redesignHtml, /href="#top"[^>]*>Наверх/u)
   assert.equal((redesignHtml.match(/data-legal-placeholder/gu) || []).length, 2)
+  assert.match(redesignHtml, /<footer[^>]*bg-night[^>]*text-white/u)
+  assert.doesNotMatch(redesignHtml, /<footer[\s\S]*?<a[^>]*bg-night[^>]*aria-label="Церебро — к началу страницы"/u)
 })
 
 test('connects form errors to controls and focuses the first invalid field', () => {
@@ -76,17 +80,130 @@ test('removes the retired before-after section and its runtime hookup', () => {
 test('applies the refined spacing, CTA, pricing, contact, and review treatments', () => {
   assert.match(redesignHtml, /id="problems"[^>]*gap-3/u)
   assert.match(redesignHtml, /id="service-scope-cards"[^>]*gap-3/u)
-  assert.match(redesignHtml, /data-problems-cta[^>]*bg-sky/u)
+  assert.match(redesignHtml, /data-problems-cta[^>]*text-white/u)
   assert.match(redesignHtml, /data-case-follow-up[^>]*bg-night/u)
   assert.match(redesignHtml, /data-pricing-cta[^>]*bg-sky/u)
   assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table/u)
   assert.match(redesignHtml, /id="contact"[^>]*hero-gradient/u)
   assert.match(redesignHtml, /id="reviews"[^>]*review-pattern/u)
+  assert.match(redesignHtml, /id="reviews"[^>]*rounded-\[var\(--radius-card\)\]/u)
   assert.match(redesignHtml, /review-pattern\.png/u)
 })
 
-test('uses square blue process numbers and a fade hint on the case carousel', () => {
+test('uses square sky process numbers and a fade hint on the case carousel', () => {
   assert.match(redesignScript, /data-process-number/u)
-  assert.match(redesignScript, /h-10 w-10[^`]*bg-sky/u)
+  assert.match(redesignScript, /h-10 w-10[^`]*bg-sky[^`]*text-white/u)
   assert.match(redesignHtml, /case-stage/u)
+})
+
+test('uses dot tiles only to complete intentional empty grid cells', () => {
+  assert.doesNotMatch(redesignHtml, /absolute right-0 top-0[^>]*dot-field-dark/u)
+  assert.match(redesignHtml, /data-problems-pattern[^>]*dot-field-dark/u)
+  assert.match(redesignScript, /data-process-pattern[^>]*dot-field-light/u)
+  assert.match(redesignScript, /data-transparency-pattern[^>]*dot-field-light/u)
+  assert.doesNotMatch(redesignHtml, /data-problems-pattern[^>]*bg-/u)
+  assert.doesNotMatch(redesignScript, /data-process-pattern[^>]*bg-/u)
+  assert.doesNotMatch(redesignScript, /data-transparency-pattern[^>]*bg-/u)
+  assert.match(redesignHtml, /@media \(max-width: 767px\)[\s\S]*?\[data-layout-pattern\] \{ display: none/u)
+})
+
+test('finishes the highlighted cards with the shared visual system', () => {
+  assert.match(redesignHtml, /data-quiz-card[^>]*rounded-\[var\(--radius-card\)\]/u)
+  assert.match(redesignScript, /bg-sky\/80 p-5 text-ink[^`]*text-xs text-brand">Станет/u)
+  assert.match(redesignScript, /bg-white\/\[\.055\][^`]*text-white/u)
+  assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table[^>]*text-white/u)
+  assert.match(redesignHtml, /\.pricing-table th \{ background: rgb\(31 55 101 \/ \.96\)/u)
+  assert.match(redesignHtml, /\.pricing-table td \{ background: rgb\(12 32 73 \/ \.96\)/u)
+})
+
+test('lets the problems CTA sit directly on the section background', () => {
+  const cta = redesignHtml.match(/<div data-problems-cta[^>]*class="([^"]*)"/u)?.[1] || ''
+  assert.doesNotMatch(cta, /\bbg-/u)
+  assert.doesNotMatch(cta, /(?:^|\s)(?:p|px|pl|pr)-/u)
+  assert.match(redesignHtml, /data-cta="problems"[^>]*bg-accent[^>]*text-ink/u)
+})
+
+test('aligns the hero proof with its grid edge without decoration', () => {
+  const proof = redesignHtml.match(/<aside data-hero-reveal[^>]*class="([^"]*)"/u)?.[1] || ''
+  assert.doesNotMatch(proof, /border-l|(?:^|\s)(?:pl|ml)-/u)
+  assert.doesNotMatch(redesignHtml, /data-hero-logos[^>]*dot-field/u)
+})
+
+test('moves the pricing note inside desktop and mobile pricing surfaces', () => {
+  assert.match(redesignHtml, /data-pricing-table[\s\S]*?<tfoot>[\s\S]*?Аудит, стратегия и запуск включены/u)
+  assert.match(redesignHtml, /data-pricing-note-mobile[^>]*bg-night[^>]*>Аудит, стратегия и запуск включены/u)
+  assert.doesNotMatch(redesignHtml, /<\/table><\/div><p class="mt-5[^>]*">Аудит, стратегия/u)
+})
+
+test('uses full-width start cards with reserved illustration slots and no side images', () => {
+  assert.doesNotMatch(redesignHtml, /class="start-media|assets\/cases\/(?:dentistry|furniture)\.png/u)
+  assert.match(redesignHtml, /id="start-options"[^>]*container-page[^>]*md:grid-cols-2/u)
+  assert.match(redesignScript, /data-start-media-slot/u)
+  assert.match(redesignScript, /grid-cols-\[minmax\(0,1fr\)_96px\][^`]*sm:grid-cols-\[minmax\(0,1fr\)_144px\]/u)
+})
+
+test('presents the agency statistic in a wide hero-gradient card', () => {
+  const trust = redesignHtml.match(/<section id="trust"[\s\S]*?<section id="faq"/u)?.[0] || ''
+  assert.doesNotMatch(trust, /border-l-4 border-accent/u)
+  assert.match(trust, /data-trust-stat[^>]*hero-gradient[^>]*text-white/u)
+  assert.match(trust, /data-trust-stat[\s\S]*?cerebro-badge\.png[\s\S]*?data-count-up="3000"/u)
+})
+
+test('matches the contact form to the quiz card and offsets the select arrow', () => {
+  assert.match(redesignHtml, /id="lead-form"[^>]*data-contact-form-card[^>]*border[^>]*bg-white/u)
+  assert.match(redesignHtml, /<select[^>]*appearance-none[^>]*pr-12[^>]*name="budget"/u)
+  assert.match(redesignHtml, /data-select-arrow[^>]*right-4/u)
+  assert.match(redesignHtml, /<button[^>]*bg-accent[^>]*type="submit"/u)
+})
+
+test('styles the quiz next control like the shared project buttons', () => {
+  assert.match(redesignHtml, /data-quiz-next[^>]*button-press[^>]*bg-brand[^>]*disabled/u)
+  assert.doesNotMatch(redesignHtml, /data-quiz-next[^>]*rounded-full/u)
+})
+
+test('uses compact yellow service icons without separator bars', () => {
+  assert.match(redesignScript, /data-service-icon[^>]*h-7 w-7[^>]*bg-accent/u)
+  assert.doesNotMatch(redesignScript, /mt-8 block h-1 w-8 bg-accent/u)
+})
+
+test('uses a clean sky case chapter and borderless niche filters', () => {
+  const proof = redesignHtml.match(/<section id="proof"[\s\S]*?<\/section>/u)?.[0] || ''
+  assert.match(proof, /surface-sky/u)
+  assert.doesNotMatch(proof, /dot-field-light/u)
+  assert.match(redesignHtml, /\.case-stage::after \{[^}]*rgb\(198 226 255 \/ \.96\)/u)
+  assert.match(redesignScript, /<button class="button-press px-4 py-2[^`]*bg-brand text-white/u)
+  assert.doesNotMatch(redesignScript, /<button class="button-press[^"`]*border(?:-|\s)[^"`]*"[^>]*data-case-filter/u)
+})
+
+test('adds a dot tile to pricing and uses the blue media-plan action', () => {
+  assert.match(redesignHtml, /data-pricing-pattern[^>]*dot-field-light/u)
+  assert.match(redesignHtml, /data-cta="pricing"[^>]*bg-brand[^>]*text-white/u)
+})
+
+test('makes the messenger treatment more visible and uses the approved label', () => {
+  assert.match(redesignHtml, /\.review-pattern \{[^}]*linear-gradient\(145deg/u)
+  assert.match(redesignScript, />Сообщение клиента Ц<\/span>/u)
+})
+
+test('shows full navigation from the tablet breakpoint', () => {
+  assert.match(redesignHtml, /<nav[^>]*hidden[^>]*md:flex[^>]*aria-label="Основная навигация"/u)
+  assert.match(redesignHtml, /id="menu-button"[^>]*md:hidden/u)
+  assert.match(redesignHtml, /id="mobile-menu"[^>]*md:hidden/u)
+})
+
+test('stacks the fit reasons beside a sticky heading until the mobile breakpoint', () => {
+  assert.match(redesignHtml, /data-fit-layout[^>]*md:grid-cols-12[^>]*md:items-start/u)
+  assert.match(redesignHtml, /data-fit-heading[^>]*md:sticky[^>]*md:top-28[^>]*md:col-span-4/u)
+  assert.match(redesignHtml, /id="fit-cards"[^>]*md:col-span-8/u)
+  assert.doesNotMatch(redesignHtml, /id="fit-cards"[^>]*md:grid-cols-2/u)
+})
+
+test('integrates a compact white illustration inside every fit card', () => {
+  assert.match(redesignScript, /const fitImages = \[/u)
+  assert.equal((redesignScript.match(/\.\/assets\/fit\//gu) || []).length, 4)
+  assert.match(redesignScript, /data-fit-image/u)
+  assert.match(redesignScript, /grid-cols-\[minmax\(0,1fr\)_104px\][^`]*sm:grid-cols-\[minmax\(0,1fr\)_144px\]/u)
+  assert.match(redesignScript, /<figure class="order-2[^"]*bg-white/u)
+  assert.doesNotMatch(redesignScript, /order-first[^`]*data-fit-image/u)
+  assert.match(redesignScript, /data-fit-image[^>]*object-contain/u)
 })
