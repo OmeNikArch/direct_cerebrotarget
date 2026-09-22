@@ -152,14 +152,14 @@ test('uses stacked pricing rows instead of horizontal scrolling on mobile', () =
 test('visually separates mobile pricing options', () => {
   assert.equal(/data-pricing-mobile[^>]*flex[^>]*gap-3/u.test(html), true)
   const pricingMobile = html.match(/<div data-pricing-mobile[\s\S]*?<div class="hidden md:block">/u)?.[0] || ''
-  assert.equal((pricingMobile.match(/<article class="bg-night[^>]*text-white"/gu) || []).length, 2)
-  assert.equal((pricingMobile.match(/border-white\/10/gu) || []).length, 2)
+  assert.equal((pricingMobile.match(/<article class="bg-surface[^>]*text-ink"/gu) || []).length, 2)
+  assert.equal((pricingMobile.match(/border-border/gu) || []).length, 5)
 })
 
 test('renders the work process as responsive airy cards', () => {
   assert.equal(/id="process-cards"[^>]*gap-3/u.test(html), true)
   assert.equal(/lg:grid-cols-5/u.test(html), true)
-  assert.equal(/data-process-number[^>]*h-10 w-10/u.test(script), true)
+  assert.equal(/data-process-number[^>]*h-\[30px\] w-\[30px\]/u.test(script), true)
 })
 
 test('keeps the approved heading language varied', () => {
@@ -255,7 +255,7 @@ test('uses the approved static gradient and numbered hero facts without a backgr
   assert.equal(/landingData\.transparency\.map\(\(\[n, t, d\]\)/u.test(script), false)
   assert.doesNotMatch(html, /<video/u)
   assert.doesNotMatch(html, /hero-light-wave\.mp4/u)
-  for (const color of ['#3c5cdd', '#0a238b', '#0c2049']) assert.equal(html.toLowerCase().includes(color), true)
+  for (const color of ['#2f63f5', '#0a238b', '#06195f']) assert.equal(html.toLowerCase().includes(color), true)
   assert.match(html, /src="\.\/assets\/cerebro-logo\.svg"/u)
   assert.equal(script.includes('data-fact-icon='), false)
   assert.equal((script.match(/data-hero-fact/gu) || []).length, 1)
@@ -269,7 +269,7 @@ test('uses the supplied 10 pixel gradient path inside a reserved lower hero band
   assert.equal(path[1], 'M1926.85 6.05902C1693.35 141.23 1698.35 -8.8743 1589.85 6.05963C1481.35 20.9936 1381.85 93.7478 1325.35 86.2135C1268.85 78.6792 1326.85 23.496 1246.85 14.1003C1150.35 2.76666 979.352 45.8834 850.608 78.2405C721.864 110.598 567.852 114.043 550.069 86.2135C532.286 58.3836 571.352 6.05963 629.852 24.5C688.352 42.9404 547.854 94.0564 440.311 72.039C332.767 50.0215 306.352 6.05963 207.852 6.05963C109.352 6.05963 29.5375 67.0736 0.851562 72.039')
   assert.match(html, /data-hero-line[^>]*h-\[110px\][^>]*viewBox="0 0 1930 110"/u)
   assert.match(html, /class="hero-line-path"[^>]*stroke="url\(#hero-line-gradient\)"[^>]*stroke-width="10"/u)
-  assert.match(html, /<stop stop-color="#FFAE00"\s*\/>/u)
+  assert.match(html, /<stop stop-color="#FFD400"\s*\/>/u)
   assert.match(html, /<stop offset="1" stop-color="#FFD400"\s*\/>/u)
   assert.match(html, /data-hero-layout[^>]*md:pb-36/u)
   assert.doesNotMatch(html, /data-hero-line[^>]*translate-y/u)

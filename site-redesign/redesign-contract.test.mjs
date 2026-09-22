@@ -47,8 +47,8 @@ test('provides the required footer links on a seamless dark continuation', () =>
   assert.match(redesignHtml, /Согласие на обработку персональных данных/u)
   assert.match(redesignHtml, /href="#top"[^>]*>Наверх/u)
   assert.equal((redesignHtml.match(/data-legal-placeholder/gu) || []).length, 2)
-  assert.match(redesignHtml, /<footer[^>]*bg-night[^>]*text-white/u)
-  assert.doesNotMatch(redesignHtml, /<footer[\s\S]*?<a[^>]*bg-night[^>]*aria-label="Церебро — к началу страницы"/u)
+  assert.match(redesignHtml, /<footer[^>]*py-10[^>]*text-white/u)
+  assert.doesNotMatch(redesignHtml, /<footer[\s\S]*?<a[^>]*bg-brand-deep[^>]*aria-label="Церебро — к началу страницы"/u)
 })
 
 test('connects form errors to controls and focuses the first invalid field', () => {
@@ -68,7 +68,7 @@ test('keeps the header visually merged with hero until scrolling starts', () => 
   assert.match(redesignHtml, /<header[^>]*bg-transparent/u)
   assert.match(redesignHtml, /data-header-backdrop/u)
   assert.match(redesignHtml, /\[data-site-header\]\.is-scrolled \[data-header-backdrop\] \{ opacity: 1/u)
-  assert.match(redesignHtml, /\.hero-top-fill \{ background: #3c5cdd; \}/u)
+  assert.match(redesignHtml, /\.hero-top-fill \{ background: #2F63F5; \}/u)
   assert.match(redesignHtml, /<div[^>]*header-hero-bridge[^>]*hero-top-fill/u)
 })
 
@@ -81,10 +81,10 @@ test('applies the refined spacing, CTA, pricing, contact, and review treatments'
   assert.match(redesignHtml, /id="problems"[^>]*gap-3/u)
   assert.match(redesignHtml, /id="service-scope-cards"[^>]*gap-3/u)
   assert.match(redesignHtml, /data-problems-cta[^>]*text-white/u)
-  assert.match(redesignHtml, /data-case-follow-up[^>]*bg-night/u)
-  assert.match(redesignHtml, /data-pricing-cta[^>]*bg-sky/u)
+  assert.match(redesignHtml, /data-case-follow-up[^>]*bg-brand-deep/u)
+  assert.match(redesignHtml, /data-pricing-cta[^>]*bg-blue-soft/u)
   assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table/u)
-  assert.match(redesignHtml, /id="contact"[^>]*hero-gradient/u)
+  assert.match(redesignHtml, /contact-footer-gradient[\s\S]*?id="contact"/u)
   assert.match(redesignHtml, /id="reviews"[^>]*review-pattern/u)
   assert.match(redesignHtml, /id="reviews"[^>]*rounded-\[var\(--radius-card\)\]/u)
   assert.match(redesignHtml, /review-pattern\.png/u)
@@ -92,7 +92,7 @@ test('applies the refined spacing, CTA, pricing, contact, and review treatments'
 
 test('uses square sky process numbers and a fade hint on the case carousel', () => {
   assert.match(redesignScript, /data-process-number/u)
-  assert.match(redesignScript, /h-10 w-10[^`]*bg-sky[^`]*text-white/u)
+  assert.match(redesignScript, /h-\[30px\] w-\[30px\][^`]*bg-blue-soft[^`]*text-white/u)
   assert.match(redesignHtml, /case-stage/u)
 })
 
@@ -109,11 +109,11 @@ test('uses dot tiles only to complete intentional empty grid cells', () => {
 
 test('finishes the highlighted cards with the shared visual system', () => {
   assert.match(redesignHtml, /data-quiz-card[^>]*rounded-\[var\(--radius-card\)\]/u)
-  assert.match(redesignScript, /bg-sky\/80 p-5 text-ink[^`]*text-xs text-brand">Станет/u)
+  assert.match(redesignScript, /bg-blue-soft\/80 p-5 text-ink[^`]*text-xs text-brand">Станет/u)
   assert.match(redesignScript, /bg-white\/\[\.055\][^`]*text-white/u)
-  assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table[^>]*text-white/u)
-  assert.match(redesignHtml, /\.pricing-table th \{ background: rgb\(31 55 101 \/ \.96\)/u)
-  assert.match(redesignHtml, /\.pricing-table td \{ background: rgb\(12 32 73 \/ \.96\)/u)
+  assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table[^>]*text-ink/u)
+  assert.match(redesignHtml, /\.pricing-table th \{ background: #E9EEFF; \}/u)
+  assert.match(redesignHtml, /\.pricing-table td \{ background: #FFFFFF; \}/u)
 })
 
 test('lets the problems CTA sit directly on the section background', () => {
@@ -131,7 +131,7 @@ test('aligns the hero proof with its grid edge without decoration', () => {
 
 test('moves the pricing note inside desktop and mobile pricing surfaces', () => {
   assert.match(redesignHtml, /data-pricing-table[\s\S]*?<tfoot>[\s\S]*?Аудит, стратегия и запуск включены/u)
-  assert.match(redesignHtml, /data-pricing-note-mobile[^>]*bg-night[^>]*>Аудит, стратегия и запуск включены/u)
+  assert.match(redesignHtml, /data-pricing-note-mobile[^>]*bg-surface[^>]*>Аудит, стратегия и запуск включены/u)
   assert.doesNotMatch(redesignHtml, /<\/table><\/div><p class="mt-5[^>]*">Аудит, стратегия/u)
 })
 
@@ -168,9 +168,9 @@ test('uses compact yellow service icons without separator bars', () => {
 
 test('uses a clean sky case chapter and borderless niche filters', () => {
   const proof = redesignHtml.match(/<section id="proof"[\s\S]*?<\/section>/u)?.[0] || ''
-  assert.match(proof, /surface-sky/u)
+  assert.match(proof, /surface-paper/u)
   assert.doesNotMatch(proof, /dot-field-light/u)
-  assert.match(redesignHtml, /\.case-stage::after \{[^}]*rgb\(198 226 255 \/ \.96\)/u)
+  assert.match(redesignHtml, /\.case-stage::after \{[^}]*rgb\(244 246 250 \/ \.96\)/u)
   assert.match(redesignScript, /<button class="button-press px-4 py-2[^`]*bg-brand text-white/u)
   assert.doesNotMatch(redesignScript, /<button class="button-press[^"`]*border(?:-|\s)[^"`]*"[^>]*data-case-filter/u)
 })
@@ -181,7 +181,7 @@ test('adds a dot tile to pricing and uses the blue media-plan action', () => {
 })
 
 test('makes the messenger treatment more visible and uses the approved label', () => {
-  assert.match(redesignHtml, /\.review-pattern \{[^}]*linear-gradient\(145deg/u)
+  assert.match(redesignHtml, /\.review-pattern \{[^}]*background-color: #E9EEFF/u)
   assert.match(redesignScript, />Сообщение клиента Ц<\/span>/u)
 })
 
