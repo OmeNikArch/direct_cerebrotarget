@@ -21,7 +21,7 @@ class FakeElement {
   querySelectorAll() { return [] }
 }
 
-test('reserves a responsive image slot in the upper-right corner of every case card', async () => {
+test('renders a responsive 4:3 production image in every case card', async () => {
   const elements = new Map()
   const getElement = (id) => {
     if (!elements.has(id)) elements.set(id, new FakeElement())
@@ -40,6 +40,7 @@ test('reserves a responsive image slot in the upper-right corner of every case c
   const caseCards = getElement('case-cards').innerHTML
   assert.match(caseCards, /data-case-header/u)
   assert.match(caseCards, /data-case-image/u)
-  assert.match(caseCards, /grid-cols-\[minmax\(0,1fr\)_80px\]/u)
-  assert.match(caseCards, /sm:grid-cols-\[minmax\(0,1fr\)_120px\]/u)
+  assert.match(caseCards, /md:grid-cols-\[minmax\(0,1fr\)_320px\]/u)
+  assert.match(caseCards, /aspect-\[4\/3\][^"']*md:w-80/u)
+  assert.match(caseCards, /assets\/cases\/dentistry\.png/u)
 })

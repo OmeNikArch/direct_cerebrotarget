@@ -14,19 +14,19 @@ const createButton = () => {
   }
 }
 
-test('starts the before-after example collapsed and reveals it from its button', () => {
+test('starts the animated before-after example collapsed and reveals it from its button', () => {
   const button = createButton()
-  const panel = { hidden: false }
+  const panel = { dataset: {} }
 
   createBeforeAfterToggle({ button, panel })
 
   assert.equal(button.attributes.get('aria-expanded'), 'false')
   assert.equal(button.textContent, 'Показать пример')
-  assert.equal(panel.hidden, true)
+  assert.equal(panel.dataset.expanded, 'false')
 
   button.click()
 
   assert.equal(button.attributes.get('aria-expanded'), 'true')
   assert.equal(button.textContent, 'Скрыть пример')
-  assert.equal(panel.hidden, false)
+  assert.equal(panel.dataset.expanded, 'true')
 })

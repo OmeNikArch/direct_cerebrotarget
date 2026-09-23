@@ -7,8 +7,9 @@
 ## Структура
 
 - `site/index.html` — разметка страницы и стили Tailwind
-- `site/script.js` — данные секций и интерактивные элементы
+- `site/script.js`, `site/ui-behavior.mjs` — данные секций и UI-логика
 - `site/form-logic.mjs` — валидация формы
+- `site/content-polish.mjs` — типографика заголовков и счётчик статистики
 - `site/assets/` — изображения
 - `site/*.test.mjs` — автоматические проверки
 
@@ -34,11 +35,10 @@ node --test site/*.test.mjs
 
 - `name` — имя
 - `phone` — телефон
-- `email` — почта
-- `request_type` — `promotion` или `audit`
-- `contact_method` — `telegram`, `phone` или `email`
-- `profile` — ник или ссылка в Telegram; обязательны только для Telegram
-- `consent` — согласие на обработку персональных данных
+- `budget` — читаемая подпись выбранного диапазона рекламного бюджета
+- `source` — постоянное значение `landing-yandex-direct`
+
+Согласие проверяется на клиенте, но не передаётся в payload.
 
 Frontend ожидает любой успешный HTTP-статус `2xx`. Другой статус или сетевая ошибка переводят форму в состояние ошибки. Интерфейс формы поддерживает состояния `idle`, `submitting`, `success` и `error` через `data-state`.
 
