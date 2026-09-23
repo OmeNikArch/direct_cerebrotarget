@@ -20,10 +20,11 @@ test('adds a sticky header state layer without changing its height', () => {
   assert.match(redesignScript, /createStickyHeaderController/u)
 })
 
-test('groups problems and service scope into one dark chapter', () => {
+test('groups problems and service scope into one light chapter', () => {
   const chapter = redesignHtml.match(/<section id="experience-dark"[\s\S]*?<\/section>/u)?.[0] || ''
   assert.match(chapter, /Ваша реклама часто не окупается\?/u)
   assert.match(chapter, /Как мы работаем с вашим проектом/u)
+  assert.match(chapter, /surface-paper[^>]*text-ink/u)
 })
 
 test('uses the four supplied decorative service icons without visible service numbers', () => {
@@ -80,14 +81,14 @@ test('removes the retired before-after section and its runtime hookup', () => {
 test('applies the refined spacing, CTA, pricing, contact, and review treatments', () => {
   assert.match(redesignHtml, /id="problems"[^>]*gap-3/u)
   assert.match(redesignHtml, /id="service-scope-cards"[^>]*gap-3/u)
-  assert.match(redesignHtml, /data-problems-cta[^>]*text-white/u)
+  assert.match(redesignHtml, /data-problems-cta[^>]*text-ink/u)
   assert.match(redesignHtml, /data-case-follow-up[^>]*bg-brand-deep/u)
   assert.match(redesignHtml, /data-pricing-cta[^>]*bg-blue-soft/u)
   assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table/u)
   assert.match(redesignHtml, /contact-footer-gradient[\s\S]*?id="contact"/u)
   assert.match(redesignHtml, /id="reviews"[^>]*review-pattern/u)
   assert.match(redesignHtml, /id="reviews"[^>]*rounded-\[var\(--radius-card\)\]/u)
-  assert.match(redesignHtml, /review-pattern\.png/u)
+  assert.match(redesignHtml, /review-pattern-v2\.png/u)
 })
 
 test('uses square sky process numbers and a fade hint on the case carousel', () => {
@@ -98,19 +99,18 @@ test('uses square sky process numbers and a fade hint on the case carousel', () 
 
 test('uses dot tiles only to complete intentional empty grid cells', () => {
   assert.doesNotMatch(redesignHtml, /absolute right-0 top-0[^>]*dot-field-dark/u)
-  assert.match(redesignHtml, /data-problems-pattern[^>]*dot-field-dark/u)
+  assert.match(redesignHtml, /data-problems-pattern[^>]*dot-field-light/u)
   assert.match(redesignScript, /data-process-pattern[^>]*dot-field-light/u)
-  assert.match(redesignScript, /data-transparency-pattern[^>]*dot-field-light/u)
+  assert.doesNotMatch(redesignScript, /data-transparency-pattern/u)
   assert.doesNotMatch(redesignHtml, /data-problems-pattern[^>]*bg-/u)
   assert.doesNotMatch(redesignScript, /data-process-pattern[^>]*bg-/u)
-  assert.doesNotMatch(redesignScript, /data-transparency-pattern[^>]*bg-/u)
   assert.match(redesignHtml, /@media \(max-width: 767px\)[\s\S]*?\[data-layout-pattern\] \{ display: none/u)
 })
 
 test('finishes the highlighted cards with the shared visual system', () => {
   assert.match(redesignHtml, /data-quiz-card[^>]*rounded-\[var\(--radius-card\)\]/u)
   assert.match(redesignScript, /bg-blue-soft\/80 p-5 text-ink[^`]*text-xs text-brand">Станет/u)
-  assert.match(redesignScript, /bg-white\/\[\.055\][^`]*text-white/u)
+  assert.match(redesignScript, /border border-border bg-white[^`]*text-ink/u)
   assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table[^>]*text-ink/u)
   assert.match(redesignHtml, /\.pricing-table th \{ background: #E9EEFF; \}/u)
   assert.match(redesignHtml, /\.pricing-table td \{ background: #FFFFFF; \}/u)
@@ -146,7 +146,8 @@ test('presents the agency statistic in a wide hero-gradient card', () => {
   const trust = redesignHtml.match(/<section id="trust"[\s\S]*?<section id="faq"/u)?.[0] || ''
   assert.doesNotMatch(trust, /border-l-4 border-accent/u)
   assert.match(trust, /data-trust-stat[^>]*hero-gradient[^>]*text-white/u)
-  assert.match(trust, /data-trust-stat[\s\S]*?cerebro-badge\.png[\s\S]*?data-count-up="3000"/u)
+  assert.match(trust, /data-trust-stat[\s\S]*?trust-logo\.svg[\s\S]*?data-count-up="3000"/u)
+  assert.match(trust, /data-draw-line[^>]*trust-line-path/u)
 })
 
 test('matches the contact form to the quiz card and offsets the select arrow', () => {
@@ -182,7 +183,39 @@ test('adds a dot tile to pricing and uses the blue media-plan action', () => {
 
 test('makes the messenger treatment more visible and uses the approved label', () => {
   assert.match(redesignHtml, /\.review-pattern \{[^}]*background-color: #E9EEFF/u)
+  assert.match(redesignHtml, /\.review-pattern::before \{[^}]*opacity: \.18/u)
+  assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-position: left top/u)
+  assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-size: 640px auto/u)
+  assert.match(redesignHtml, /\.review-pattern > \* \{[^}]*z-index: 1/u)
   assert.match(redesignScript, />Сообщение клиента Ц<\/span>/u)
+})
+
+test('uses the hero gradient for quiz and the shared contact/footer surface', () => {
+  assert.match(redesignHtml, /<section id="quiz"[^>]*hero-gradient[^>]*text-white/u)
+  assert.match(redesignHtml, /\.contact-footer-gradient \{ background: linear-gradient\(135deg, #2F63F5 0%, #0A238B 60%, #06195F 100%\); \}/u)
+  assert.match(redesignHtml, /data-hero-proof-copy[^>]*text-white\/75/u)
+  assert.match(redesignHtml, /id="contact"[\s\S]*?text-white\/75/u)
+})
+
+test('draws the supplied yellow lines along their SVG paths', () => {
+  assert.match(redesignHtml, /data-case-follow-up[^>]*relative[^>]*overflow-hidden/u)
+  assert.match(redesignHtml, /data-case-line[^>]*left-\[26%\][^>]*-top-7[^>]*h-\[calc\(100%\+28px\)\][^>]*w-\[49%\]/u)
+  assert.match(redesignHtml, /data-trust-line[^>]*inset-y-0[^>]*right-0[^>]*h-full[^>]*w-\[46%\][^>]*preserveAspectRatio="none"/u)
+  assert.match(redesignHtml, /class="draw-line-path case-cta-line-path"[^>]*pathLength="1"/u)
+  assert.match(redesignHtml, /class="draw-line-path trust-line-path"[^>]*pathLength="1"/u)
+  assert.match(redesignScript, /createPathDrawOnViewController/u)
+})
+
+test('uses white result cells with larger aligned case figures', () => {
+  assert.match(redesignScript, /data-case-result[^>]*bg-white/u)
+  assert.match(redesignScript, /data-case-result[^>]*flex[^>]*flex-col/u)
+  assert.match(redesignScript, /text-2xl[^`]*md:text-3xl/u)
+  assert.doesNotMatch(redesignScript, /data-case-results[^`]*bg-paper/u)
+})
+
+test('keeps the top header transparent and removes the scrolled divider', () => {
+  const headerBackdrop = redesignHtml.match(/<div data-header-backdrop[^>]*class="([^"]*)"/u)?.[1] || ''
+  assert.doesNotMatch(headerBackdrop, /border-b|border-border/u)
 })
 
 test('shows full navigation from the tablet breakpoint', () => {
@@ -206,4 +239,30 @@ test('integrates a compact white illustration inside every fit card', () => {
   assert.match(redesignScript, /<figure class="order-2[^"]*bg-white/u)
   assert.doesNotMatch(redesignScript, /order-first[^`]*data-fit-image/u)
   assert.match(redesignScript, /data-fit-image[^>]*object-contain/u)
+})
+
+test('renders the approved responsive transparency bento with five edge-positioned illustrations', () => {
+  assert.match(redesignHtml, /script\.js\?v=transparency-bento-1/u)
+  const expectedImages = [
+    '01-dashboard-access.png',
+    '02-approving-changes.png',
+    '03-promotion-consultation.png',
+    '04-always-in-touch.png',
+    '05-transparent-expenses.png',
+  ]
+
+  for (const name of expectedImages) {
+    assert.equal(redesignScript.includes(`./assets/transparency/${name}`), true)
+  }
+
+  assert.match(redesignHtml, /id="transparency-cards"[^>]*md:grid-cols-2[^>]*lg:grid-cols-12/u)
+  assert.match(redesignScript, /data-transparency-card/u)
+  assert.match(redesignScript, /data-transparency-image/u)
+  assert.match(redesignScript, /transparency-card[^`]*relative[^`]*overflow-hidden/u)
+  assert.match(redesignScript, /index === 0 \? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4'/u)
+  assert.doesNotMatch(redesignScript, /data-transparency-pattern/u)
+  assert.match(redesignHtml, /@media \(min-width: 1024px\)[\s\S]*?\.transparency-art-1 \{ bottom: -22%; \}[\s\S]*?\.transparency-art-5 \{ bottom: -20%; \}/u)
+  assert.match(redesignHtml, /@media \(min-width: 768px\) and \(max-width: 1023px\)[\s\S]*?\.transparency-art-1 \{[^}]*bottom: -16%;/u)
+  assert.match(redesignHtml, /@media \(min-width: 560px\) and \(max-width: 767px\)[\s\S]*?\.transparency-art \{ width: 52%;[^}]*\}[\s\S]*?\.transparency-art-1 \{ width: 46%;/u)
+  assert.match(redesignHtml, /@media \(max-width: 559px\)[\s\S]*?\.transparency-art \{ right: -12%; \}[\s\S]*?\.transparency-art-1 \{ right: -8%; \}/u)
 })

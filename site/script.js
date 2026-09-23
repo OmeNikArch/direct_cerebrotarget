@@ -1,6 +1,6 @@
 import { buildLeadPayload, validateLeadForm } from './form-logic.mjs'
 import { createHeroLineMotionController } from './hero-motion.mjs'
-import { createMobileMenuController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
+import { createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
 import { createCountUpController, protectHeadingOrphans } from './content-polish.mjs'
 
 const landingData = {
@@ -167,6 +167,11 @@ if (hero && heroLine) {
   heroMotion.start()
 }
 
+createPathDrawOnViewController({
+  paths: [...document.querySelectorAll('[data-draw-line]')],
+  reduceMotion,
+})
+
 const fitImages = [
   './assets/fit/01-management.png',
   './assets/fit/02-budget.png',
@@ -174,17 +179,24 @@ const fitImages = [
   './assets/fit/04-transparency.png',
 ]
 render('fit-cards', landingData.fit.map(([n, t, d], index) => `<article class="grid min-h-[204px] grid-cols-[minmax(0,1fr)_104px] overflow-hidden bg-white sm:min-h-[220px] sm:grid-cols-[minmax(0,1fr)_144px] lg:grid-cols-[minmax(0,1fr)_38%]"><figure class="order-2 flex min-h-full items-center justify-center overflow-hidden bg-white p-2 sm:p-3 lg:p-4"><img data-fit-image class="h-full w-full object-contain" src="${fitImages[index]}" alt="" width="1536" height="1152" loading="lazy" decoding="async" /></figure><div class="order-1 flex min-w-0 flex-col justify-center p-5 sm:p-6 md:p-7"><p class="text-sm text-ink/45">${n}</p><h3 class="mt-5 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
-render('problems', landingData.problems.map(([problem, solution]) => `<article class="grid overflow-hidden md:grid-cols-2"><div class="bg-white/[.055] p-5 text-white md:p-6"><p class="text-xs text-white/50">Было</p><h3 class="mt-3 font-display text-lg font-semibold tracking-[-.02em]">${problem}</h3></div><div class="bg-blue-soft/80 p-5 text-ink md:p-6"><p class="text-xs text-brand">Станет</p><p class="mt-3 text-sm leading-6 text-ink/70">${solution}</p></div></article>`).join(''))
+render('problems', landingData.problems.map(([problem, solution]) => `<article class="grid overflow-hidden border border-border bg-white text-ink md:grid-cols-2"><div class="p-5 md:p-6"><p class="text-xs text-ink/45">Было</p><h3 class="mt-3 font-display text-lg font-semibold tracking-[-.02em]">${problem}</h3></div><div class="bg-blue-soft/80 p-5 text-ink md:p-6"><p class="text-xs text-brand">Станет</p><p class="mt-3 text-sm leading-6 text-ink/70">${solution}</p></div></article>`).join(''))
 const serviceIcons = [
   './assets/service-icons/01-strategy.svg',
   './assets/service-icons/02-launch.svg',
   './assets/service-icons/03-analytics.svg',
   './assets/service-icons/04-site-recommendations.svg',
 ]
-render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] bg-brand-deep/85 p-6 md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em] text-white">${t}</h3><p class="mt-3 text-sm leading-6 text-white/60">${d}</p></article>`).join(''))
+render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] border border-border bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
 createRevealOnceController({ elements: [...document.querySelectorAll('.service-card')], reduceMotion })
 render('process-cards', `${landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-[30px] w-[30px] items-center justify-center rounded-[5px] bg-blue-soft font-display text-sm font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join('')}<div data-layout-pattern data-process-pattern class="dot-field-light hidden min-h-[248px] rounded-[var(--radius-card)] md:block lg:hidden" aria-hidden="true"></div>`)
-render('transparency-cards', `${landingData.transparency.map(([, t, d], index) => `<article class="min-h-[218px] bg-white/65 p-5 text-ink md:p-6 ${index < 2 ? 'lg:col-span-6' : 'lg:col-span-4'}"><h3 class="font-display text-lg font-semibold leading-tight">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/65">${d}</p></article>`).join('')}<div data-layout-pattern data-transparency-pattern class="dot-field-light hidden min-h-[218px] rounded-[var(--radius-card)] opacity-55 md:block lg:hidden" aria-hidden="true"></div>`)
+const transparencyImages = [
+  './assets/transparency/01-dashboard-access.png',
+  './assets/transparency/02-approving-changes.png',
+  './assets/transparency/03-promotion-consultation.png',
+  './assets/transparency/04-always-in-touch.png',
+  './assets/transparency/05-transparent-expenses.png',
+]
+render('transparency-cards', landingData.transparency.map(([, t, d], index) => `<article data-transparency-card class="transparency-card relative min-h-[220px] overflow-hidden bg-white/65 text-ink md:min-h-[260px] ${index === 0 ? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4'} ${index === 0 ? 'lg:min-h-[286px]' : 'lg:min-h-[252px]'}"><div class="relative z-10 max-w-[72%] p-5 md:p-6 ${index === 0 ? 'lg:max-w-[58%]' : 'lg:max-w-[90%]'}"><h3 class="font-display text-lg font-semibold leading-tight">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/65">${d}</p></div><img data-transparency-image class="transparency-art transparency-art-${index + 1}" src="${transparencyImages[index]}" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></article>`).join(''))
 const caseFilters = [
   ['all', 'Все'],
   ['medicine', 'Медицина'],
@@ -224,7 +236,7 @@ const renderCaseCards = () => {
   const filteredCases = getFilteredCases()
   caseCardsElement.innerHTML = filteredCases.map(({ label, title, context, task, solution, results }) => {
     const image = caseImages[landingData.cases.findIndex((item) => item.title === title)]
-    return `<article class="flex min-w-0 flex-[0_0_92%] snap-start flex-col overflow-hidden bg-white sm:flex-[0_0_82%] lg:flex-[0_0_72%] xl:flex-[0_0_68%]"><div data-case-header class="grid md:grid-cols-[minmax(0,1fr)_320px]"><div class="min-w-0 p-5 md:p-7"><p class="text-sm font-medium text-brand">${label}</p><p data-case-context class="mt-2 min-w-0 text-xs leading-5 text-ink/45">${context}</p><h3 class="mt-5 max-w-xl font-display text-2xl font-semibold leading-[1.15] tracking-[-.03em] md:text-3xl">${title}</h3></div><div data-case-image class="aspect-[4/3] w-full overflow-hidden bg-blue-soft md:w-80" aria-hidden="true"><img class="h-full w-full object-cover" src="${image}" alt="" width="1024" height="768" /></div></div><div data-case-body class="grid gap-5 border-t border-ink/10 p-5 text-sm leading-6 md:p-7 xl:grid-cols-[2fr_3fr] xl:gap-0"><div data-case-task class="xl:pr-7"><p class="font-medium text-ink">Задача</p><p class="mt-1 text-ink/65">${task}</p></div><div data-case-solution class="xl:border-l xl:border-ink/10 xl:pl-7"><p class="font-medium text-ink">Решение</p><ul class="mt-2 grid gap-2 text-ink/65">${solution.map((item) => `<li class="grid grid-cols-[8px_1fr] gap-2"><span class="mt-[9px] h-1.5 w-1.5 bg-accent" aria-hidden="true"></span><span>${item}</span></li>`).join('')}</ul></div></div><div data-case-results class="mt-auto border-t border-ink/10 p-5 md:p-7"><p class="text-sm font-medium text-ink">Результат</p><dl class="mt-3 grid gap-px bg-brand/10 sm:grid-cols-3">${results.map(([value, caption]) => `<div class="bg-paper p-3 md:p-4"><dt class="font-display text-xl font-semibold leading-tight tracking-[-.03em] text-brand">${value}</dt><dd class="mt-1 text-xs leading-5 text-ink/55">${caption}</dd></div>`).join('')}</dl></div></article>`
+    return `<article class="flex min-w-0 flex-[0_0_92%] snap-start flex-col overflow-hidden bg-white sm:flex-[0_0_82%] lg:flex-[0_0_72%] xl:flex-[0_0_68%]"><div data-case-header class="grid md:grid-cols-[minmax(0,1fr)_320px]"><div class="min-w-0 p-5 md:p-7"><p class="text-sm font-medium text-brand">${label}</p><p data-case-context class="mt-2 min-w-0 text-xs leading-5 text-ink/45">${context}</p><h3 class="mt-5 max-w-xl font-display text-2xl font-semibold leading-[1.15] tracking-[-.03em] md:text-3xl">${title}</h3></div><div data-case-image class="aspect-[4/3] w-full overflow-hidden bg-blue-soft md:w-80" aria-hidden="true"><img class="h-full w-full object-cover" src="${image}" alt="" width="1024" height="768" /></div></div><div data-case-body class="grid gap-5 border-t border-ink/10 p-5 text-sm leading-6 md:p-7 xl:grid-cols-[2fr_3fr] xl:gap-0"><div data-case-task class="xl:pr-7"><p class="font-medium text-ink">Задача</p><p class="mt-1 text-ink/65">${task}</p></div><div data-case-solution class="xl:border-l xl:border-ink/10 xl:pl-7"><p class="font-medium text-ink">Решение</p><ul class="mt-2 grid gap-2 text-ink/65">${solution.map((item) => `<li class="grid grid-cols-[8px_1fr] gap-2"><span class="mt-[9px] h-1.5 w-1.5 bg-accent" aria-hidden="true"></span><span>${item}</span></li>`).join('')}</ul></div></div><div data-case-results class="mt-auto border-t border-ink/10 p-5 md:p-7"><p class="text-sm font-medium text-ink">Результат</p><dl class="mt-3 grid border-y border-border bg-white sm:grid-cols-3">${results.map(([value, caption]) => `<div data-case-result class="flex min-h-[104px] flex-col justify-between border-t border-border bg-white py-4 first:border-t-0 sm:border-l sm:border-t-0 sm:px-4 sm:first:border-l-0"><dt class="font-display text-2xl font-semibold leading-none tracking-[-.04em] text-brand md:text-3xl">${value}</dt><dd class="mt-3 text-xs leading-5 text-ink/55">${caption}</dd></div>`).join('')}</dl></div></article>`
   }).join('')
   caseViewport.scrollLeft = 0
   if (typeof requestAnimationFrame === 'function') requestAnimationFrame(updateCaseControls)

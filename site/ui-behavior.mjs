@@ -69,3 +69,37 @@ export const createRevealOnceController = ({
   elements.forEach((element) => observer.observe(element))
   return { destroy: () => observer.disconnect() }
 }
+
+export const createPathDrawOnViewController = ({
+  paths,
+  reduceMotion = false,
+  observerFactory = (callback, options) => new IntersectionObserver(callback, options),
+}) => {
+  const animations = new Set()
+  paths.forEach((path) => {
+    path.style.strokeDasharray = '1 1'
+    path.style.strokeDashoffset = reduceMotion ? '0' : '1'
+  })
+
+  if (paths.length === 0 || reduceMotion) return { destroy() {} }
+
+  const observer = observerFactory((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return
+      const animation = entry.target.animate(
+        [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }],
+        { duration: 1600, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', fill: 'forwards' },
+      )
+      animations.add(animation)
+      observer.unobserve(entry.target)
+    })
+  }, { threshold: 0.18 })
+
+  paths.forEach((path) => observer.observe(path))
+  return {
+    destroy() {
+      animations.forEach((animation) => animation.cancel())
+      observer.disconnect()
+    },
+  }
+}

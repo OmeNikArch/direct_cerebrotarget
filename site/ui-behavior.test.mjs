@@ -73,3 +73,52 @@ test('mobile menu locks page scroll and closes on Escape', () => {
   assert.equal(body.classList.contains('menu-open'), false)
   assert.equal(button.focusCalled, true)
 })
+
+test('draws decorative SVG paths once when their block enters the viewport', () => {
+  assert.equal(typeof ui.createPathDrawOnViewController, 'function')
+
+  const animations = []
+  const paths = [
+    { style: {}, animate(frames, options) { animations.push({ frames, options }); return { cancel() {} } } },
+    { style: {}, animate(frames, options) { animations.push({ frames, options }); return { cancel() {} } } },
+  ]
+  let observerCallback
+  const observed = []
+  const unobserved = []
+  const observerFactory = (callback, options) => {
+    observerCallback = callback
+    assert.deepEqual(options, { threshold: 0.18 })
+    return {
+      observe(element) { observed.push(element) },
+      unobserve(element) { unobserved.push(element) },
+      disconnect() {},
+    }
+  }
+
+  ui.createPathDrawOnViewController({ paths, observerFactory })
+
+  assert.deepEqual(observed, paths)
+  assert.equal(paths[0].style.strokeDasharray, '1 1')
+  assert.equal(paths[0].style.strokeDashoffset, '1')
+  observerCallback([{ target: paths[0], isIntersecting: true }])
+  assert.deepEqual(animations, [{
+    frames: [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }],
+    options: { duration: 1600, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', fill: 'forwards' },
+  }])
+  assert.deepEqual(unobserved, [paths[0]])
+})
+
+test('shows decorative SVG paths immediately when reduced motion is requested', () => {
+  assert.equal(typeof ui.createPathDrawOnViewController, 'function')
+
+  let animated = false
+  const path = {
+    style: {},
+    animate() { animated = true },
+  }
+
+  ui.createPathDrawOnViewController({ paths: [path], reduceMotion: true })
+
+  assert.equal(path.style.strokeDashoffset, '0')
+  assert.equal(animated, false)
+})
