@@ -25,28 +25,26 @@ test('frames the media plan as a free, useful outcome rather than only a quiz', 
   assert.equal(html.includes('Поймёте, какой бюджет и сценарий продвижения подойдут вашей задаче'), true)
 })
 
-test('places a visual media-plan quiz after fit and a before-after exhibit after cases', () => {
+test('places a visual media-plan quiz after fit and moves directly from cases to conditions', () => {
   const fitPosition = html.indexOf('Вам подойдёт, если:')
   const quizPosition = html.indexOf('id="quiz"')
   const problemsPosition = html.indexOf('Типичные проблемы рынка')
   const proofPosition = html.indexOf('id="proof"')
-  const beforeAfterPosition = html.indexOf('id="before-after"')
   const conditionsPosition = html.indexOf('id="conditions"')
 
   assert.equal(fitPosition < quizPosition && quizPosition < problemsPosition, true)
-  assert.equal(proofPosition < beforeAfterPosition && beforeAfterPosition < conditionsPosition, true)
+  assert.equal(proofPosition < conditionsPosition, true)
   assert.equal(html.includes('Получите бесплатный медиаплан'), true)
   assert.equal(/id="quiz-placeholder-lines"/u.test(html), true)
-  assert.equal(html.includes('Что меняется в рекламном кабинете'), true)
-  assert.equal(html.includes('./assets/before-after-charts.png'), true)
+  assert.equal(html.includes('id="before-after"'), false)
 })
 
-test('places the supplied trust proof after before-after and before reviews', () => {
-  const beforeAfterPosition = html.indexOf('id="before-after"')
+test('places the supplied trust proof after conditions and before reviews', () => {
+  const conditionsPosition = html.indexOf('id="conditions"')
   const trustPosition = html.indexOf('id="trust"')
   const reviewsPosition = html.indexOf('id="reviews"')
 
-  assert.equal(beforeAfterPosition < trustPosition && trustPosition < reviewsPosition, true)
+  assert.equal(conditionsPosition < trustPosition && trustPosition < reviewsPosition, true)
   assert.equal(html.includes('3000+'), true)
   assert.equal(html.includes('Больше 10 лет'), true)
   assert.equal(html.includes('VK'), true)
@@ -104,8 +102,9 @@ test('stretches the wide-desktop hero across the full container without CTA coll
   assert.match(html, /id="hero-facts"[^>]*md:col-span-12[^>]*md:row-start-3[^>]*lg:col-span-8[^>]*lg:col-start-5[^>]*xl:col-span-9[^>]*xl:col-start-4/u)
 })
 
-test('aligns the proof and third-fact dividers across compact and wide desktop grids', () => {
-  assert.match(html, /<aside[^>]*lg:-ml-4[^>]*lg:pl-9/u)
+test('aligns the proof directly to its compact and wide desktop grid edge', () => {
+  const proof = html.match(/<aside data-hero-reveal[^>]*class="([^"]*)"/u)?.[1] || ''
+  assert.doesNotMatch(proof, /lg:-ml-4|lg:pl-9/u)
 })
 
 test('uses a fixed 80 pixel gap throughout the desktop layout', () => {
@@ -119,14 +118,8 @@ test('does not use breakpoint-specific negative margins to position the desktop 
   assert.doesNotMatch(html, /id="hero-facts"[^>]*2xl:-mt-20/u)
 })
 
-test('places the centered scroll indicator 100 pixels after the UTP row', () => {
-  const indicator = html.match(/<a data-hero-reveal[^>]*class="([^"]*hero-scroll-indicator[^"]*)"/u)
-
-  assert.ok(indicator, 'hero scroll indicator should exist')
-  assert.match(indicator[1], /md:row-start-4/u)
-  assert.match(indicator[1], /md:mt-\[100px\]/u)
-  assert.match(indicator[1], /md:justify-self-center/u)
-  assert.doesNotMatch(indicator[1], /(?:^|\s)(?:absolute|bottom-6|-ml-3)(?:\s|$)/u)
+test('removes the redundant hero scroll indicator', () => {
+  assert.doesNotMatch(html, /hero-scroll-indicator|Прокрутить к следующему разделу/u)
 })
 
 test('removes decorative line and reduces partner badges only on mobile', () => {
@@ -157,14 +150,16 @@ test('uses stacked pricing rows instead of horizontal scrolling on mobile', () =
 })
 
 test('visually separates mobile pricing options', () => {
-  assert.equal(/data-pricing-mobile[^>]*flex[^>]*gap-2/u.test(html), true)
-  assert.equal((html.match(/data-pricing-mobile[\s\S]*?<article[^>]*border/gu) || []).length, 1)
+  assert.equal(/data-pricing-mobile[^>]*flex[^>]*gap-3/u.test(html), true)
+  const pricingMobile = html.match(/<div data-pricing-mobile[\s\S]*?<div class="hidden md:block">/u)?.[0] || ''
+  assert.equal((pricingMobile.match(/<article class="bg-surface[^>]*text-ink"/gu) || []).length, 2)
+  assert.equal((pricingMobile.match(/border-border/gu) || []).length, 5)
 })
 
-test('renders the work process as a responsive timeline', () => {
-  assert.equal(/id="process-cards"[^>]*process-timeline/u.test(html), true)
+test('renders the work process as responsive airy cards', () => {
+  assert.equal(/id="process-cards"[^>]*gap-3/u.test(html), true)
   assert.equal(/lg:grid-cols-5/u.test(html), true)
-  assert.equal(/border-l[^"`]*lg:border-l-0/u.test(script), true)
+  assert.equal(/data-process-number[^>]*h-\[30px\] w-\[30px\]/u.test(script), true)
 })
 
 test('keeps the approved heading language varied', () => {
@@ -194,9 +189,11 @@ test('uses the approved title for promotion consulting', () => {
   assert.equal(script.includes('Единое окно'), false)
 })
 
-test('stages service scope cards in a desktop checkerboard', () => {
-  assert.equal(/id="service-scope-cards"[^>]*lg:pb-20/u.test(html), true)
-  assert.equal(/serviceScope\.map\(\(\[n, t, d\], index\)[\s\S]*?lg:translate-y-20/u.test(script), true)
+test('stages service scope cards as one icon-led dark grid', () => {
+  assert.equal(/id="service-scope-cards"[^>]*lg:grid-cols-4/u.test(html), true)
+  assert.equal(/serviceScope\.map\(\(\[, t, d\], index\)/u.test(script), true)
+  assert.equal(script.includes('data-service-icon aria-hidden="true"'), true)
+  assert.equal(script.includes('lg:translate-y-20'), false)
 })
 
 test('renders the five supplied published cases without sending visitors to external pages', () => {
@@ -258,23 +255,23 @@ test('uses the approved static gradient and numbered hero facts without a backgr
   assert.equal(/landingData\.transparency\.map\(\(\[n, t, d\]\)/u.test(script), false)
   assert.doesNotMatch(html, /<video/u)
   assert.doesNotMatch(html, /hero-light-wave\.mp4/u)
-  for (const color of ['#3c5cdd', '#0a238b', '#0c2049']) assert.equal(html.toLowerCase().includes(color), true)
+  for (const color of ['#2f63f5', '#0a238b', '#06195f']) assert.equal(html.toLowerCase().includes(color), true)
   assert.match(html, /src="\.\/assets\/cerebro-logo\.svg"/u)
   assert.equal(script.includes('data-fact-icon='), false)
   assert.equal((script.match(/data-hero-fact/gu) || []).length, 1)
 })
 
-test('uses the supplied 10 pixel gradient path entirely inside the hero', () => {
+test('uses the supplied 10 pixel gradient path inside a reserved lower hero band', () => {
   const path = html.match(/<path class="hero-line-path"[^>]*d="([^"]+)"/u)
 
   assert.ok(path, 'hero line path should exist')
   assert.equal((path[1].match(/M/gu) || []).length, 1)
-  assert.equal(path[1], 'M1922.5 6.38477C1689 182.885 1694 -13.1144 1585.5 6.38556C1477 25.8856 1377.5 120.885 1321 111.047C1264.5 101.209 1322.5 29.1531 1242.5 16.8846C1146 2.08576 975 58.3856 846.256 100.636C717.513 142.886 563.5 147.386 545.717 111.047C527.935 74.7077 668.5 -6.61536 743.13 23.082C817.76 52.7794 543.503 121.288 435.959 92.5382C328.416 63.7888 302 6.38556 203.5 6.38556C105 6.38556 25.1859 86.0547 -3.5 92.5382')
-  assert.match(html, /data-hero-line[^>]*viewBox="0 0 1904 141"/u)
+  assert.equal(path[1], 'M1926.85 6.05902C1693.35 141.23 1698.35 -8.8743 1589.85 6.05963C1481.35 20.9936 1381.85 93.7478 1325.35 86.2135C1268.85 78.6792 1326.85 23.496 1246.85 14.1003C1150.35 2.76666 979.352 45.8834 850.608 78.2405C721.864 110.598 567.852 114.043 550.069 86.2135C532.286 58.3836 571.352 6.05963 629.852 24.5C688.352 42.9404 547.854 94.0564 440.311 72.039C332.767 50.0215 306.352 6.05963 207.852 6.05963C109.352 6.05963 29.5375 67.0736 0.851562 72.039')
+  assert.match(html, /data-hero-line[^>]*h-\[110px\][^>]*viewBox="0 0 1930 110"/u)
   assert.match(html, /class="hero-line-path"[^>]*stroke="url\(#hero-line-gradient\)"[^>]*stroke-width="10"/u)
-  assert.match(html, /<stop stop-color="#FFAE00"\s*\/>/u)
+  assert.match(html, /<stop stop-color="#FFD400"\s*\/>/u)
   assert.match(html, /<stop offset="1" stop-color="#FFD400"\s*\/>/u)
-  assert.match(html, /data-hero-line[^>]*bottom-0[^>]*h-\[141px\]/u)
+  assert.match(html, /data-hero-layout[^>]*md:pb-36/u)
   assert.doesNotMatch(html, /data-hero-line[^>]*translate-y/u)
   assert.match(html, /id="hero"[^>]*overflow-hidden/u)
 })
