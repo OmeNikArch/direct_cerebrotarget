@@ -24,3 +24,9 @@ test('uses the same locked scene constants in the production hero', () => {
   assert.match(production, /rotate\(4\.65deg\)/u)
   assert.match(production, /stroke-linecap="round"\s+stroke-linejoin="round"/u)
 })
+
+test('draws the production line from its hidden top endpoint downward', () => {
+  assert.match(preview, /@keyframes draw-line\s*\{\s*from\s*\{\s*stroke-dashoffset:\s*-1;/su)
+  assert.match(production, /\[data-hero-scene="ready"\] \.hero-composition-line path\s*\{[^}]*stroke-dashoffset:\s*-1/su)
+  assert.match(production, /@keyframes hero-line-draw\s*\{\s*from\s*\{\s*stroke-dashoffset:\s*-1;/su)
+})

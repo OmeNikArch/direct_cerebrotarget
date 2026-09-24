@@ -72,7 +72,7 @@ test('keeps the fee transition and future proof sections explicit', () => {
 
 test('uses a compact desktop form and a responsive hero facts grid', () => {
   assert.equal(/<form[^>]*id="lead-form"[^>]*md:grid-cols-2/u.test(html), true)
-  assert.match(html, /id="hero-facts"[^>]*grid-cols-2[^>]*sm:grid-cols-4/u)
+  assert.match(html, /id="hero-facts"[^>]*grid-cols-1[^>]*md:grid-cols-2[^>]*lg:grid-cols-4/u)
 })
 
 test('offers both hero actions and keeps fact copy away from its divider', () => {
@@ -83,6 +83,7 @@ test('offers both hero actions and keeps fact copy away from its divider', () =>
 
 test('puts the locked composition above copy on mobile and keeps the CTA stack below it', () => {
   assert.match(html, /min-h-16[^"']*sm:min-h-20/u)
+  assert.match(html, /data-hero-layout[^>]*min-h-\[calc\(100svh-4rem\)\][^>]*gap-3[^>]*pt-0/u)
   assert.match(html, /data-hero-composition[^>]*order-1[^>]*lg:order-2/u)
   assert.match(html, /<h1[^>]*text-\[2rem\][^>]*md:text-\[clamp\(2\.5rem,5\.1vw,4\.65rem\)\]/u)
   assert.match(html, /data-cta="hero-quiz"[^>]*whitespace-nowrap/u)
@@ -93,7 +94,7 @@ test('puts the locked composition above copy on mobile and keeps the CTA stack b
 })
 
 test('places copy at left and the same scaled composition at right from desktop upward', () => {
-  assert.match(html, /data-hero-layout[^>]*lg:grid-cols-12[^>]*lg:items-center/u)
+  assert.match(html, /data-hero-layout[^>]*lg:min-h-\[calc\(100svh-5rem\)\][^>]*lg:grid-cols-12[^>]*lg:grid-rows-\[minmax\(0,1fr\)_auto\][^>]*lg:items-center/u)
   assert.match(html, /data-hero-title[^>]*lg:order-1[^>]*lg:col-span-6/u)
   assert.match(html, /data-hero-composition[^>]*lg:order-2[^>]*lg:col-span-6/u)
   assert.match(html, /data-hero-proof-copy[^>]*max-w-\[38rem\]/u)
