@@ -81,6 +81,14 @@ test('offers both hero actions and keeps fact copy away from its divider', () =>
   assert.equal(script.includes('sm:first:pl-0'), false)
 })
 
+test('keeps both hero buttons equal in width and removes the top facts divider', () => {
+  const heroActions = html.match(/<div data-hero-actions[^>]*>[\s\S]*?<\/div>/u)?.[0] || ''
+  assert.match(heroActions, /data-hero-actions[^>]*flex-col[^>]*md:max-w-\[292px\]/u)
+  assert.equal((heroActions.match(/data-cta="hero-(?:quiz|consultation)"[^>]*\bw-full\b/gu) || []).length, 2)
+  assert.doesNotMatch(heroActions, /sm:w-auto/u)
+  assert.doesNotMatch(html, /id="hero-facts"[^>]*border-t/u)
+})
+
 test('puts the locked composition above copy on mobile and keeps the CTA stack below it', () => {
   assert.match(html, /min-h-16[^"']*sm:min-h-20/u)
   assert.match(html, /data-hero-layout[^>]*min-h-\[calc\(100svh-4rem\)\][^>]*gap-3[^>]*pt-0/u)
@@ -90,7 +98,17 @@ test('puts the locked composition above copy on mobile and keeps the CTA stack b
   assert.match(html, /data-hero-title[^>]*order-2[^>]*lg:order-1/u)
   assert.match(html, /data-hero-actions[^>]*order-3/u)
   assert.match(html, /id="hero-facts"[^>]*order-4/u)
-  assert.match(html, /data-hero-actions[^>]*flex-col[^>]*sm:flex-row/u)
+  assert.match(html, /data-hero-actions[^>]*flex-col/u)
+})
+
+test('keeps mobile compact and gives the desktop hero lower row a 64px bottom inset', () => {
+  assert.match(html, /data-hero-layout[^>]*\bpb-8\b[^>]*md:pb-16[^>]*lg:pb-16/u)
+})
+
+test('lifts the whole locked composition six pixels beneath the header clipping edge', () => {
+  assert.match(html, /\.hero-composition\s*\{[^}]*transform:\s*translateY\(calc\(-10% - 6px\)\)/su)
+  assert.match(html, /@media \(min-width: 768px\)[\s\S]*?\.hero-composition\s*\{[^}]*transform:\s*translateY\(calc\(-12% - 6px\)\)/su)
+  assert.match(html, /@media \(min-width: 1024px\)[\s\S]*?\.hero-composition\s*\{[^}]*transform:\s*translateY\(calc\(-12% - 6px\)\)/su)
 })
 
 test('places copy at left and the same scaled composition at right from desktop upward', () => {

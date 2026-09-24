@@ -14,6 +14,53 @@ const createClassList = () => {
   }
 }
 
+test('starts an unanchored page at the top instead of restoring an old scroll position', () => {
+  assert.equal(typeof ui.createInitialScrollController, 'function')
+
+  const listeners = new Map()
+  const scrollCalls = []
+  const windowObject = {
+    scrollTo(x, y) { scrollCalls.push([x, y]) },
+    addEventListener(name, handler) { listeners.set(name, handler) },
+    removeEventListener(name, handler) {
+      if (listeners.get(name) === handler) listeners.delete(name)
+    },
+  }
+  const historyObject = { scrollRestoration: 'auto' }
+
+  const controller = ui.createInitialScrollController({
+    windowObject,
+    historyObject,
+    locationObject: { hash: '' },
+  })
+
+  assert.equal(historyObject.scrollRestoration, 'manual')
+  assert.deepEqual(scrollCalls, [[0, 0]])
+
+  listeners.get('pageshow')()
+  assert.deepEqual(scrollCalls, [[0, 0], [0, 0]])
+
+  controller.destroy()
+  assert.equal(listeners.has('pageshow'), false)
+})
+
+test('preserves a direct link to an anchored section', () => {
+  assert.equal(typeof ui.createInitialScrollController, 'function')
+
+  const scrollCalls = []
+  ui.createInitialScrollController({
+    windowObject: {
+      scrollTo(x, y) { scrollCalls.push([x, y]) },
+      addEventListener() {},
+      removeEventListener() {},
+    },
+    historyObject: { scrollRestoration: 'auto' },
+    locationObject: { hash: '#quiz' },
+  })
+
+  assert.deepEqual(scrollCalls, [])
+})
+
 test('sticky header gains its background as soon as scrolling starts', () => {
   assert.equal(typeof ui.createStickyHeaderController, 'function')
   const header = { classList: createClassList() }

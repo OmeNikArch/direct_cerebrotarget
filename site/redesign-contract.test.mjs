@@ -105,14 +105,11 @@ test('uses square sky process numbers and a fade hint on the case carousel', () 
   assert.match(redesignHtml, /case-stage/u)
 })
 
-test('uses dot tiles only to complete intentional empty grid cells', () => {
-  assert.doesNotMatch(redesignHtml, /absolute right-0 top-0[^>]*dot-field-dark/u)
-  assert.match(redesignHtml, /data-problems-pattern[^>]*dot-field-light/u)
-  assert.match(redesignScript, /data-process-pattern[^>]*dot-field-light/u)
-  assert.doesNotMatch(redesignScript, /data-transparency-pattern/u)
-  assert.doesNotMatch(redesignHtml, /data-problems-pattern[^>]*bg-/u)
-  assert.doesNotMatch(redesignScript, /data-process-pattern[^>]*bg-/u)
-  assert.match(redesignHtml, /@media \(max-width: 767px\)[\s\S]*?\[data-layout-pattern\] \{ display: none/u)
+test('removes all decorative dot tiles while preserving the review artwork', () => {
+  assert.doesNotMatch(redesignHtml, /dot-field-(?:light|dark)|data-(?:layout|problems|pricing)-pattern/u)
+  assert.doesNotMatch(redesignScript, /dot-field-(?:light|dark)|data-process-pattern|data-start-media-slot/u)
+  assert.match(redesignHtml, /id="reviews"[^>]*review-pattern/u)
+  assert.match(redesignHtml, /review-pattern-v2\.png/u)
 })
 
 test('finishes the highlighted cards with the shared visual system', () => {
@@ -143,11 +140,12 @@ test('moves the pricing note inside desktop and mobile pricing surfaces', () => 
   assert.doesNotMatch(redesignHtml, /<\/table><\/div><p class="mt-5[^>]*">Аудит, стратегия/u)
 })
 
-test('uses full-width start cards with reserved illustration slots and no side images', () => {
+test('uses full-width start cards without decorative side slots or side images', () => {
+  const startCards = redesignScript.match(/render\('start-options',[\s\S]*?\.join\(''\)\)/u)?.[0] || ''
   assert.doesNotMatch(redesignHtml, /class="start-media|assets\/cases\/(?:dentistry|furniture)\.png/u)
   assert.match(redesignHtml, /id="start-options"[^>]*container-page[^>]*md:grid-cols-2/u)
-  assert.match(redesignScript, /data-start-media-slot/u)
-  assert.match(redesignScript, /grid-cols-\[minmax\(0,1fr\)_96px\][^`]*sm:grid-cols-\[minmax\(0,1fr\)_144px\]/u)
+  assert.doesNotMatch(startCards, /data-start-media-slot|grid-cols-\[minmax\(0,1fr\)_/u)
+  assert.match(startCards, /<article class="flex min-h-\[286px\][^`]*bg-white\/90/u)
 })
 
 test('presents the agency statistic in a wide hero-gradient card', () => {
@@ -184,8 +182,8 @@ test('uses a clean sky case chapter and borderless niche filters', () => {
   assert.doesNotMatch(redesignScript, /<button class="button-press[^"`]*border(?:-|\s)[^"`]*"[^>]*data-case-filter/u)
 })
 
-test('adds a dot tile to pricing and uses the blue media-plan action', () => {
-  assert.match(redesignHtml, /data-pricing-pattern[^>]*dot-field-light/u)
+test('keeps pricing free of decorative dot tiles and uses the blue media-plan action', () => {
+  assert.doesNotMatch(redesignHtml, /data-pricing-pattern|dot-field-light/u)
   assert.match(redesignHtml, /data-cta="pricing"[^>]*bg-brand[^>]*text-white/u)
 })
 
@@ -232,25 +230,30 @@ test('shows full navigation from the tablet breakpoint', () => {
   assert.match(redesignHtml, /id="mobile-menu"[^>]*md:hidden/u)
 })
 
-test('stacks the fit reasons beside a sticky heading until the mobile breakpoint', () => {
-  assert.match(redesignHtml, /data-fit-layout[^>]*md:grid-cols-12[^>]*md:items-start/u)
-  assert.match(redesignHtml, /data-fit-heading[^>]*md:sticky[^>]*md:top-28[^>]*md:col-span-4/u)
-  assert.match(redesignHtml, /id="fit-cards"[^>]*md:col-span-8/u)
+test('keeps the fit heading beside cards on desktop and above them on tablet and mobile', () => {
+  assert.match(redesignHtml, /data-fit-layout[^>]*lg:grid-cols-12[^>]*lg:items-start/u)
+  assert.match(redesignHtml, /data-fit-heading[^>]*lg:sticky[^>]*lg:top-28[^>]*lg:col-span-4/u)
+  assert.match(redesignHtml, /id="fit-cards"[^>]*lg:col-span-8/u)
   assert.doesNotMatch(redesignHtml, /id="fit-cards"[^>]*md:grid-cols-2/u)
 })
 
-test('integrates a compact white illustration inside every fit card', () => {
+test('uses the approved fit preview composition without upscaling on wider cards', () => {
   assert.match(redesignScript, /const fitImages = \[/u)
   assert.equal((redesignScript.match(/\.\/assets\/fit\//gu) || []).length, 4)
   assert.match(redesignScript, /data-fit-image/u)
-  assert.match(redesignScript, /grid-cols-\[minmax\(0,1fr\)_104px\][^`]*sm:grid-cols-\[minmax\(0,1fr\)_144px\]/u)
-  assert.match(redesignScript, /<figure class="order-2[^"]*bg-white/u)
-  assert.doesNotMatch(redesignScript, /order-first[^`]*data-fit-image/u)
-  assert.match(redesignScript, /data-fit-image[^>]*object-contain/u)
+  assert.match(redesignScript, /<article class="relative overflow-hidden bg-white"><figure data-fit-art/u)
+  assert.match(redesignScript, /data-fit-art[^>]*inset-y-0 right-0 w-full/u)
+  assert.match(redesignHtml, /#fit-cards \[data-fit-art\] \{ max-width: 764px; \}/u)
+  assert.match(redesignScript, /data-fit-image[^>]*absolute[^>]*object-contain/u)
+  assert.match(redesignScript, /relative z-10 w-\[62%\]/u)
+  assert.match(redesignHtml, /#fit-cards \[data-fit-image\] \{ top: 50%; bottom: auto; right: -8%; width: 41%; opacity: \.5; transform: translateY\(-50%\); \}/u)
+  assert.match(redesignHtml, /#fit-cards > article:nth-child\(3\) \[data-fit-image\] \{ top: 41%; \}/u)
+  assert.match(redesignHtml, /#fit-cards > article:nth-child\(4\) \[data-fit-image\] \{ transform: translateY\(-50%\) scaleX\(-1\); \}/u)
+  assert.match(redesignHtml, /#fit-cards > article:nth-child\(n\) \[data-fit-image\] \{ top: 50%; right: calc\(-28% \+ 30px\); width: 68%; \}/u)
 })
 
 test('renders the approved responsive transparency bento with five edge-positioned illustrations', () => {
-  assert.match(redesignHtml, /script\.js\?v=transparency-bento-1/u)
+  assert.match(redesignHtml, /script\.js\?v=fit-approved-1/u)
   const expectedImages = [
     '01-dashboard-access.png',
     '02-approving-changes.png',

@@ -1,3 +1,22 @@
+export const createInitialScrollController = ({
+  windowObject = globalThis.window,
+  historyObject = globalThis.history,
+  locationObject = globalThis.location,
+}) => {
+  if (historyObject && 'scrollRestoration' in historyObject) historyObject.scrollRestoration = 'manual'
+
+  const resetToTop = () => {
+    if (!locationObject?.hash && typeof windowObject?.scrollTo === 'function') windowObject.scrollTo(0, 0)
+  }
+
+  resetToTop()
+  windowObject?.addEventListener?.('pageshow', resetToTop)
+
+  return {
+    destroy: () => windowObject?.removeEventListener?.('pageshow', resetToTop),
+  }
+}
+
 export const createStickyHeaderController = ({
   header,
   windowObject = window,

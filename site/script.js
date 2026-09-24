@@ -1,6 +1,6 @@
 import { buildLeadPayload, validateLeadForm } from './form-logic.mjs'
 import { createHeroCompositionController } from './hero-composition.mjs'
-import { createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
+import { createInitialScrollController, createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
 import { createCountUpController, protectHeadingOrphans } from './content-polish.mjs'
 
 const landingData = {
@@ -148,6 +148,8 @@ const landingData = {
 const render = (id, html) => { document.getElementById(id).innerHTML = html }
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+createInitialScrollController({})
+
 const siteHeader = document.querySelector('[data-site-header]')
 const mobileMenuButton = document.getElementById('menu-button')
 const mobileMenu = document.getElementById('mobile-menu')
@@ -172,11 +174,11 @@ createPathDrawOnViewController({
 
 const fitImages = [
   './assets/fit/01-management.png',
-  './assets/fit/02-budget.png',
+  './assets/fit/02-budget.png?v=fit-approved-1',
   './assets/fit/03-leads.png',
-  './assets/fit/04-transparency.png',
+  './assets/fit/04-transparency.png?v=fit-approved-1',
 ]
-render('fit-cards', landingData.fit.map(([n, t, d], index) => `<article class="grid min-h-[204px] grid-cols-[minmax(0,1fr)_104px] overflow-hidden bg-white sm:min-h-[220px] sm:grid-cols-[minmax(0,1fr)_144px] lg:grid-cols-[minmax(0,1fr)_38%]"><figure class="order-2 flex min-h-full items-center justify-center overflow-hidden bg-white p-2 sm:p-3 lg:p-4"><img data-fit-image class="h-full w-full object-contain" src="${fitImages[index]}" alt="" width="1536" height="1152" loading="lazy" decoding="async" /></figure><div class="order-1 flex min-w-0 flex-col justify-center p-5 sm:p-6 md:p-7"><p class="text-sm text-ink/45">${n}</p><h3 class="mt-5 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
+render('fit-cards', landingData.fit.map(([n, t, d], index) => `<article class="relative overflow-hidden bg-white"><figure data-fit-art class="pointer-events-none absolute inset-y-0 right-0 w-full" aria-hidden="true"><img data-fit-image class="absolute z-[1] h-auto max-w-none select-none object-contain" src="${fitImages[index]}" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></figure><div class="relative z-10 w-[62%]"><p class="text-sm text-ink/45">${n}</p><h3 class="mt-5 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
 render('problems', landingData.problems.map(([problem, solution]) => `<article class="grid overflow-hidden border border-border bg-white text-ink md:grid-cols-2"><div class="p-5 md:p-6"><p class="text-xs text-ink/45">Было</p><h3 class="mt-3 font-display text-lg font-semibold tracking-[-.02em]">${problem}</h3></div><div class="bg-blue-soft/80 p-5 text-ink md:p-6"><p class="text-xs text-brand">Станет</p><p class="mt-3 text-sm leading-6 text-ink/70">${solution}</p></div></article>`).join(''))
 const serviceIcons = [
   './assets/service-icons/01-strategy.svg',
@@ -186,7 +188,7 @@ const serviceIcons = [
 ]
 render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] border border-border bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
 createRevealOnceController({ elements: [...document.querySelectorAll('.service-card')], reduceMotion })
-render('process-cards', `${landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-[30px] w-[30px] items-center justify-center rounded-[5px] bg-blue-soft font-display text-sm font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join('')}<div data-layout-pattern data-process-pattern class="dot-field-light hidden min-h-[248px] rounded-[var(--radius-card)] md:block lg:hidden" aria-hidden="true"></div>`)
+render('process-cards', landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-[30px] w-[30px] items-center justify-center rounded-[5px] bg-blue-soft font-display text-sm font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
 const transparencyImages = [
   './assets/transparency/01-dashboard-access.png',
   './assets/transparency/02-approving-changes.png',
@@ -262,7 +264,7 @@ caseViewport.addEventListener('scroll', updateCaseControls, { passive: true })
 window.addEventListener?.('resize', updateCaseControls)
 renderCaseFilters()
 renderCaseCards()
-render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId]) => `<article class="grid min-h-[286px] grid-cols-[minmax(0,1fr)_96px] overflow-hidden bg-white/90 text-left sm:grid-cols-[minmax(0,1fr)_144px] lg:grid-cols-[minmax(0,1fr)_36%]"><div class="flex min-w-0 flex-col p-6 md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></div><div data-start-media-slot class="dot-field-light min-h-full bg-paper/70" aria-hidden="true"></div></article>`).join(''))
+render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId]) => `<article class="flex min-h-[286px] overflow-hidden bg-white/90 text-left"><div class="flex min-w-0 flex-col p-6 md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></div></article>`).join(''))
 render('faq-list', landingData.faq.map(([question, answer], index) => `<article class="faq-item border-b border-ink/10" data-open="false"><button class="flex w-full items-center justify-between gap-6 py-6 text-left font-display text-lg font-semibold leading-tight" id="faq-button-${index}" aria-expanded="false" aria-controls="faq-answer-${index}"><span>${question}</span><span class="faq-plus text-2xl font-normal text-brand">+</span></button><div class="faq-answer" id="faq-answer-${index}" role="region" aria-labelledby="faq-button-${index}"><div><p class="max-w-2xl pb-6 text-sm leading-6 text-ink/65">${answer}</p></div></div></article>`).join(''))
 
 document.querySelectorAll('.faq-item button').forEach((button) => button.addEventListener('click', () => {
