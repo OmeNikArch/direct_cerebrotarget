@@ -5,13 +5,21 @@ import test from 'node:test'
 const redesignHtml = await readFile(new URL('./index.html', import.meta.url), 'utf8')
 const redesignScript = await readFile(new URL('./script.js', import.meta.url), 'utf8')
 
-test('keeps the approved hero offer while reserving a safe lower band for the line', () => {
+test('uses the approved right-side composition and retains hero CTA routes', () => {
   const hero = redesignHtml.match(/<section id="hero"[\s\S]*?<\/section>/u)?.[0] || ''
   assert.match(hero, /Приведём целевые заявки из Яндекс Директа/u)
-  assert.match(hero, /Получить медиаплан бесплатно/u)
-  assert.match(hero, /data-hero-layout[^>]*md:pb-36/u)
-  assert.doesNotMatch(hero, /hero-scroll-indicator|Прокрутить к следующему разделу/u)
-  assert.match(hero, /data-hero-line[^>]*h-\[110px\][^>]*viewBox="0 0 1930 110"/u)
+  assert.match(hero, /data-hero-composition/u)
+  assert.match(hero, /yandex-medallion\.png/u)
+  assert.match(hero, /cerebro-medallion\.png/u)
+  assert.match(hero, /href="#quiz"[^>]*>Получить медиаплан бесплатно/u)
+  assert.match(hero, /href="#contact"[^>]*>Обсудить продвижение/u)
+  assert.doesNotMatch(hero, /data-hero-line|hero-line-path|joltaya_line2|hero-scroll-indicator/u)
+})
+
+test('keeps the scene geometry invariant below desktop', () => {
+  assert.match(redesignHtml, /\.hero-composition\s*\{[^}]*aspect-ratio:\s*451\s*\/\s*460/su)
+  const mobileCss = redesignHtml.match(/@media \(max-width: 767px\) \{([\s\S]*?)\n\s*\}/u)?.[1] || ''
+  assert.doesNotMatch(mobileCss, /hero-composition-(?:line|yandex|cerebro)/u)
 })
 
 test('adds a sticky header state layer without changing its height', () => {

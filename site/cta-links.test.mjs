@@ -70,9 +70,9 @@ test('keeps the fee transition and future proof sections explicit', () => {
   assert.match(html, /Отзывы/u)
 })
 
-test('uses a compact desktop form and padded hero facts', () => {
+test('uses a compact desktop form and a responsive hero facts grid', () => {
   assert.equal(/<form[^>]*id="lead-form"[^>]*md:grid-cols-2/u.test(html), true)
-  assert.equal(/lg:px-6/u.test(script), true)
+  assert.match(html, /id="hero-facts"[^>]*grid-cols-2[^>]*sm:grid-cols-4/u)
 })
 
 test('offers both hero actions and keeps fact copy away from its divider', () => {
@@ -81,36 +81,36 @@ test('offers both hero actions and keeps fact copy away from its divider', () =>
   assert.equal(script.includes('sm:first:pl-0'), false)
 })
 
-test('packs the mobile hero into one viewport with compact proof before the CTA', () => {
+test('puts the locked composition above copy on mobile and keeps the CTA stack below it', () => {
   assert.match(html, /min-h-16[^"']*sm:min-h-20/u)
-  assert.match(html, /min-h-\[calc\(100svh-4rem\)\][^"']*md:min-h-\[calc\(100svh-5rem\)\]/u)
-  assert.match(html, /<h1[^>]*text-\[2rem\][^>]*md:text-\[clamp\(2\.5rem,5\.3vw,4\.65rem\)\]/u)
+  assert.match(html, /data-hero-composition[^>]*order-1[^>]*lg:order-2/u)
+  assert.match(html, /<h1[^>]*text-\[2rem\][^>]*md:text-\[clamp\(2\.5rem,5\.1vw,4\.65rem\)\]/u)
   assert.match(html, /data-cta="hero-quiz"[^>]*whitespace-nowrap/u)
-  assert.match(html, /data-hero-title[^>]*order-1/u)
-  assert.match(html, /<aside[^>]*order-2/u)
+  assert.match(html, /data-hero-title[^>]*order-2[^>]*lg:order-1/u)
   assert.match(html, /data-hero-actions[^>]*order-3/u)
   assert.match(html, /id="hero-facts"[^>]*order-4/u)
-  assert.equal((html.match(/order-(?:1|2|3|4)[^"']*md:order-none/gu) || []).length, 4)
+  assert.match(html, /data-hero-actions[^>]*flex-col[^>]*sm:flex-row/u)
 })
 
-test('stretches the wide-desktop hero across the full container without CTA collisions', () => {
-  assert.match(html, /data-hero-layout[^>]*md:grid[^>]*md:grid-cols-12[^>]*lg:grid-cols-12[^>]*xl:grid-cols-12/u)
-  assert.match(html, /data-hero-title[^>]*md:col-span-12[^>]*md:row-start-1[^>]*lg:col-span-8[^>]*xl:col-span-7/u)
-  assert.match(html, /<aside[^>]*md:col-span-6[^>]*md:col-start-7[^>]*md:row-start-2[^>]*lg:col-span-4[^>]*lg:col-start-9[^>]*lg:row-start-1[^>]*xl:col-span-5[^>]*xl:col-start-8/u)
-  assert.match(html, /data-hero-proof-copy[^>]*max-w-none/u)
-  assert.match(html, /data-hero-actions[^>]*md:col-span-5[^>]*md:row-start-2[^>]*lg:col-span-4[^>]*lg:row-start-3[^>]*xl:col-span-3/u)
-  assert.match(html, /id="hero-facts"[^>]*md:col-span-12[^>]*md:row-start-3[^>]*lg:col-span-8[^>]*lg:col-start-5[^>]*xl:col-span-9[^>]*xl:col-start-4/u)
+test('places copy at left and the same scaled composition at right from desktop upward', () => {
+  assert.match(html, /data-hero-layout[^>]*lg:grid-cols-12[^>]*lg:items-center/u)
+  assert.match(html, /data-hero-title[^>]*lg:order-1[^>]*lg:col-span-6/u)
+  assert.match(html, /data-hero-composition[^>]*lg:order-2[^>]*lg:col-span-6/u)
+  assert.match(html, /data-hero-proof-copy[^>]*max-w-\[38rem\]/u)
+  assert.match(html, /data-hero-actions[^>]*lg:col-span-3/u)
+  assert.match(html, /id="hero-facts"[^>]*lg:col-span-9/u)
 })
 
-test('aligns the proof directly to its compact and wide desktop grid edge', () => {
-  const proof = html.match(/<aside data-hero-reveal[^>]*class="([^"]*)"/u)?.[1] || ''
-  assert.doesNotMatch(proof, /lg:-ml-4|lg:pl-9/u)
+test('keeps the description immediately under the hero title', () => {
+  const titlePosition = html.indexOf('data-hero-title')
+  const proofPosition = html.indexOf('data-hero-proof-copy')
+  const actionsPosition = html.indexOf('data-hero-actions')
+  assert.equal(titlePosition < proofPosition && proofPosition < actionsPosition, true)
 })
 
-test('uses a fixed 80 pixel gap throughout the desktop layout', () => {
-  assert.match(html, /data-hero-layout[^>]*lg:grid-rows-\[auto_5rem_auto\]/u)
-  assert.doesNotMatch(html, /2xl:grid-rows-\[auto_1fr_auto\]/u)
-  assert.match(html, /data-hero-proof-copy[^>]*lg:text-lg/u)
+test('makes consultation an outlined secondary button', () => {
+  assert.match(html, /data-cta="hero-consultation"[^>]*rounded-xl[^>]*border[^>]*border-white\/70/u)
+  assert.doesNotMatch(html, /data-cta="hero-consultation"[^>]*underline/u)
 })
 
 test('does not use breakpoint-specific negative margins to position the desktop lower row', () => {
@@ -122,9 +122,10 @@ test('removes the redundant hero scroll indicator', () => {
   assert.doesNotMatch(html, /hero-scroll-indicator|Прокрутить к следующему разделу/u)
 })
 
-test('removes decorative line and reduces partner badges only on mobile', () => {
-  assert.match(html, /data-hero-line[^>]*hidden[^>]*md:block/u)
-  assert.equal((html.match(/h-14 w-14[^"']*lg:h-24 lg:w-24/gu) || []).length, 2)
+test('uses the locked hero illustration instead of the retired lower line and compact badges', () => {
+  assert.match(html, /data-hero-composition/u)
+  assert.match(html, /hero-composition-line/u)
+  assert.doesNotMatch(html, /data-hero-line|hero-line-path|data-hero-logos/u)
 })
 
 test('keeps the final form as the consultation route and points media-plan seekers to the quiz', () => {
@@ -261,24 +262,15 @@ test('uses the approved static gradient and numbered hero facts without a backgr
   assert.equal((script.match(/data-hero-fact/gu) || []).length, 1)
 })
 
-test('uses the supplied 10 pixel gradient path inside a reserved lower hero band', () => {
-  const path = html.match(/<path class="hero-line-path"[^>]*d="([^"]+)"/u)
-
-  assert.ok(path, 'hero line path should exist')
-  assert.equal((path[1].match(/M/gu) || []).length, 1)
-  assert.equal(path[1], 'M1926.85 6.05902C1693.35 141.23 1698.35 -8.8743 1589.85 6.05963C1481.35 20.9936 1381.85 93.7478 1325.35 86.2135C1268.85 78.6792 1326.85 23.496 1246.85 14.1003C1150.35 2.76666 979.352 45.8834 850.608 78.2405C721.864 110.598 567.852 114.043 550.069 86.2135C532.286 58.3836 571.352 6.05963 629.852 24.5C688.352 42.9404 547.854 94.0564 440.311 72.039C332.767 50.0215 306.352 6.05963 207.852 6.05963C109.352 6.05963 29.5375 67.0736 0.851562 72.039')
-  assert.match(html, /data-hero-line[^>]*h-\[110px\][^>]*viewBox="0 0 1930 110"/u)
-  assert.match(html, /class="hero-line-path"[^>]*stroke="url\(#hero-line-gradient\)"[^>]*stroke-width="10"/u)
-  assert.match(html, /<stop stop-color="#FFD400"\s*\/>/u)
-  assert.match(html, /<stop offset="1" stop-color="#FFD400"\s*\/>/u)
-  assert.match(html, /data-hero-layout[^>]*md:pb-36/u)
-  assert.doesNotMatch(html, /data-hero-line[^>]*translate-y/u)
-  assert.match(html, /id="hero"[^>]*overflow-hidden/u)
+test('keeps the supplied rounded yellow path inside the fixed scene', () => {
+  assert.match(html, /hero-composition-line[^>]*viewBox="0 0 410 432"/u)
+  assert.match(html, /stroke="#FFD400"[^>]*stroke-width="5"[^>]*stroke-linecap="round"[^>]*stroke-linejoin="round"/u)
+  assert.match(html, /M89 404\.637C116\.5 424\.515/u)
 })
 
-test('initializes the reversible line controller instead of the retired video controller', () => {
-  assert.match(script, /createHeroLineMotionController/u)
-  assert.doesNotMatch(script, /createHeroMotionController|heroVideo/u)
+test('initializes the one-time composition controller instead of the retired line controller', () => {
+  assert.match(script, /createHeroCompositionController/u)
+  assert.doesNotMatch(script, /createHeroLineMotionController|createHeroMotionController|heroVideo/u)
 })
 
 test('places review navigation before the review message', () => {

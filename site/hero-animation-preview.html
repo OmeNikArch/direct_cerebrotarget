@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Превью анимации hero — Церебро</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 320px; background: #06195F; font-family: Arial, sans-serif; }
+      .preview { min-height: 100svh; overflow: hidden; background: linear-gradient(135deg, #2F63F5 0%, #0A238B 60%, #06195F 100%); }
+      .toolbar { position: fixed; z-index: 10; top: 16px; right: 16px; display: flex; align-items: center; gap: 12px; }
+      .toolbar p { margin: 0; color: rgb(255 255 255 / .65); font-size: 13px; }
+      .replay { min-height: 44px; border: 1px solid rgb(255 255 255 / .7); border-radius: 8px; padding: 0 16px; background: transparent; color: #fff; font: inherit; font-size: 14px; cursor: pointer; }
+      .replay:hover { background: #fff; color: #0A238B; }
+      .replay:focus-visible { outline: 2px solid #2F63F5; outline-offset: 4px; }
+      .stage { position: relative; width: min(100vw, 760px); aspect-ratio: 451 / 460; margin: 0 auto; }
+      .light { position: absolute; z-index: 0; top: 50%; left: 50%; width: 116%; transform: translate(-50%, -50%); opacity: 0; filter: brightness(1.32); }
+      .line { position: absolute; z-index: 1; top: 4%; left: 4%; width: 90%; height: 90%; overflow: visible; }
+      .line path { stroke-dasharray: 1; stroke-dashoffset: -1; stroke-linecap: round; stroke-linejoin: round; }
+      .mark { position: absolute; z-index: 2; display: block; width: auto; opacity: 0; transform-origin: center; filter: drop-shadow(0 16px 24px rgb(0 19 77 / .3)); }
+      .mark-yandex { top: 16.5%; right: 9%; width: 40%; transform: translateY(-17%) rotate(21deg) scale(.92); }
+      .mark-cerebro { top: 54.5%; left: 16%; width: 28%; transform: translateY(-17%) rotate(4.65deg) scale(.92); }
+      .stage.is-playing .light { animation: light-in 440ms cubic-bezier(.2, .8, .2, 1) both; }
+      .stage.is-playing .mark-yandex { animation: drop-in-yandex 720ms 0ms cubic-bezier(.16, 1, .3, 1) both; }
+      .stage.is-playing .mark-cerebro { animation: drop-in-cerebro 680ms 0ms cubic-bezier(.16, 1, .3, 1) both; }
+      .stage.is-playing .line path { animation: draw-line 960ms 860ms cubic-bezier(.55, 0, .25, 1) both; }
+      @keyframes light-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.82); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+      @keyframes drop-in-yandex { 0% { opacity: 0; transform: translateY(-22%) rotate(21deg) scale(.88); } 68% { opacity: 1; transform: translateY(3%) rotate(21deg) scale(1.025); } 84% { transform: translateY(-1.5%) rotate(21deg) scale(.995); } 100% { opacity: 1; transform: translateY(0) rotate(21deg) scale(1); } }
+      @keyframes drop-in-cerebro { 0% { opacity: 0; transform: translateY(-22%) rotate(4.65deg) scale(.88); } 68% { opacity: 1; transform: translateY(3%) rotate(4.65deg) scale(1.025); } 84% { transform: translateY(-1.5%) rotate(4.65deg) scale(.995); } 100% { opacity: 1; transform: translateY(0) rotate(4.65deg) scale(1); } }
+      @keyframes draw-line { from { stroke-dashoffset: -1; } to { stroke-dashoffset: 0; } }
+      @media (max-width: 767px) {
+        .toolbar { top: 12px; right: 12px; left: 12px; justify-content: space-between; }
+        .toolbar p { font-size: 12px; }
+        .stage { width: min(100vw, 560px); margin-top: 44px; }
+      }
+      @media (prefers-reduced-motion: reduce) { .light { opacity: 1; transform: translate(-50%, -50%); } .mark { opacity: 1; } .mark-yandex { transform: rotate(21deg); } .mark-cerebro { transform: rotate(4.65deg); } .line path { stroke-dashoffset: 0; } .stage.is-playing .light, .stage.is-playing .mark, .stage.is-playing .line path { animation: none; } }
+    </style>
+  </head>
+  <body>
+    <main class="preview">
+      <div class="toolbar"><p>Превью анимации hero</p><button class="replay" type="button">Повторить анимацию</button></div>
+      <section class="stage is-playing" aria-label="Анимированная композиция с логотипами Церебро и Яндекса">
+        <img class="light" src="./assets/hero-animation-preview/hero-light.svg" alt="" aria-hidden="true" />
+        <svg class="line" viewBox="0 0 410 432" fill="none" aria-hidden="true"><path pathLength="1" d="M89 404.637C116.5 424.515 228.53 447.143 198 404.637C167.47 362.13 22.0432 352.906 3.51397 300.707C-15.0153 248.507 225.563 279.097 303.572 307.364C381.582 335.631 289.543 359.304 216.036 327.779C142.529 296.254 31.0645 215.02 54.0558 152.516C77.047 90.0126 207.063 194.288 253.069 226.75C299.074 259.213 395.461 279.62 407.088 247.166C418.714 214.711 180.061 113.682 237.568 1.13672" stroke="#FFD400" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <img class="mark mark-yandex" src="./assets/hero-animation-preview/yandex-medallion.png" alt="Логотип Яндекс Директа" />
+        <img class="mark mark-cerebro" src="./assets/hero-animation-preview/cerebro-medallion.png" alt="Логотип Церебро" />
+      </section>
+    </main>
+    <script>
+      const stage = document.querySelector('.stage');
+      document.querySelector('.replay').addEventListener('click', () => {
+        stage.classList.remove('is-playing');
+        void stage.offsetWidth;
+        stage.classList.add('is-playing');
+      });
+    </script>
+  </body>
+</html>

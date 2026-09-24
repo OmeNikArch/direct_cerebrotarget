@@ -1,5 +1,5 @@
 import { buildLeadPayload, validateLeadForm } from './form-logic.mjs'
-import { createHeroLineMotionController } from './hero-motion.mjs'
+import { createHeroCompositionController } from './hero-composition.mjs'
 import { createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
 import { createCountUpController, protectHeadingOrphans } from './content-polish.mjs'
 
@@ -154,14 +154,12 @@ const mobileMenu = document.getElementById('mobile-menu')
 if (siteHeader) createStickyHeaderController({ header: siteHeader })
 if (mobileMenuButton && mobileMenu) createMobileMenuController({ button: mobileMenuButton, menu: mobileMenu, body: document.body })
 
-render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact data-hero-reveal style="--hero-delay:${1 + index * .4}s;--hero-mobile-delay:${.65 + index * .14}s" class="border-b border-white/20 py-4 sm:px-4 lg:border-b-0 lg:border-l lg:border-white/25 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-4 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
+render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact class="border-b border-white/20 py-4 even:border-l even:border-white/20 sm:border-b-0 sm:border-l sm:border-white/20 sm:first:border-l-0 sm:px-4 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-3 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
 
-const hero = document.getElementById('hero')
-const heroLine = document.querySelector('.hero-line-path')
-if (hero && heroLine) {
-  const heroMotion = createHeroLineMotionController({
-    root: hero,
-    path: heroLine,
+const heroComposition = document.querySelector('[data-hero-composition]')
+if (heroComposition) {
+  const heroMotion = createHeroCompositionController({
+    root: heroComposition,
     reduceMotion,
   })
   heroMotion.start()

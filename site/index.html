@@ -71,7 +71,26 @@
       .faq-item[data-open="true"] .faq-plus { transform: rotate(45deg); }
       .hero-gradient { background: linear-gradient(135deg, #2F63F5 0%, #0A238B 60%, #06195F 100%); }
       .hero-top-fill { background: #2F63F5; }
-      .hero-line-path { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
+      .hero-composition { position: relative; width: min(100%, 760px); aspect-ratio: 451 / 460; margin-inline: auto; }
+      .hero-composition-light { position: absolute; z-index: 0; top: 50%; left: 50%; width: 116%; max-width: none; transform: translate(-50%, -50%) scale(1); filter: brightness(1.32); }
+      .hero-composition-line { position: absolute; z-index: 1; top: 4%; left: 4%; width: 90%; height: 90%; overflow: visible; }
+      .hero-composition-line path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+      .hero-composition-medallion { position: absolute; z-index: 2; height: auto; max-width: none; transform-origin: center; }
+      .hero-composition-yandex { top: 16.5%; right: 9%; width: 40%; transform: rotate(21deg); }
+      .hero-composition-cerebro { top: 54.5%; left: 16%; width: 28%; transform: rotate(4.65deg); }
+      [data-hero-scene="ready"] .hero-composition-light { opacity: 0; transform: translate(-50%, -50%) scale(.82); }
+      [data-hero-scene="ready"] .hero-composition-yandex { opacity: 0; transform: translateY(-22%) rotate(21deg) scale(.88); }
+      [data-hero-scene="ready"] .hero-composition-cerebro { opacity: 0; transform: translateY(-20%) rotate(4.65deg) scale(.88); }
+      [data-hero-scene="ready"] .hero-composition-line path { stroke-dashoffset: 1; }
+      [data-hero-scene="playing"] .hero-composition-light { animation: hero-light-in 440ms cubic-bezier(.16, 1, .3, 1) both; }
+      [data-hero-scene="playing"] .hero-composition-yandex { animation: hero-drop-yandex 720ms cubic-bezier(.16, 1, .3, 1) both; }
+      [data-hero-scene="playing"] .hero-composition-cerebro { animation: hero-drop-cerebro 680ms cubic-bezier(.16, 1, .3, 1) both; }
+      [data-hero-scene="playing"] .hero-composition-line path { animation: hero-line-draw 960ms 860ms cubic-bezier(.55, 0, .25, 1) both; }
+      @keyframes hero-light-in { from { opacity: 0; transform: translate(-50%, -50%) scale(.82); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+      @keyframes hero-drop-yandex { 0% { opacity: 0; transform: translateY(-22%) rotate(21deg) scale(.88); } 72% { opacity: 1; transform: translateY(3%) rotate(21deg) scale(1.02); } 100% { opacity: 1; transform: translateY(0) rotate(21deg) scale(1); } }
+      @keyframes hero-drop-cerebro { 0% { opacity: 0; transform: translateY(-20%) rotate(4.65deg) scale(.88); } 72% { opacity: 1; transform: translateY(3%) rotate(4.65deg) scale(1.02); } 100% { opacity: 1; transform: translateY(0) rotate(4.65deg) scale(1); } }
+      @keyframes hero-line-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+      @media (prefers-reduced-motion: reduce) { [data-hero-scene] .hero-composition-light, [data-hero-scene] .hero-composition-yandex, [data-hero-scene] .hero-composition-cerebro, [data-hero-scene] .hero-composition-line path { animation: none; opacity: 1; } [data-hero-scene] .hero-composition-light { transform: translate(-50%, -50%) scale(1); } [data-hero-scene] .hero-composition-yandex { transform: rotate(21deg); } [data-hero-scene] .hero-composition-cerebro { transform: rotate(4.65deg); } [data-hero-scene] .hero-composition-line path { stroke-dashoffset: 0; } }
       .draw-line-path { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
       @media (max-width: 767px) {
         :root { --radius-control: 5px; --radius-card: 6px; }
@@ -146,36 +165,23 @@
 
     <main id="top">
       <section id="hero" class="hero-gradient relative z-10 isolate overflow-hidden text-white">
-        <svg data-hero-line class="pointer-events-none absolute bottom-0 left-0 z-20 hidden h-[110px] w-full md:block" viewBox="0 0 1930 110" preserveAspectRatio="none" aria-hidden="true">
-          <path class="hero-line-path" pathLength="1" d="M1926.85 6.05902C1693.35 141.23 1698.35 -8.8743 1589.85 6.05963C1481.35 20.9936 1381.85 93.7478 1325.35 86.2135C1268.85 78.6792 1326.85 23.496 1246.85 14.1003C1150.35 2.76666 979.352 45.8834 850.608 78.2405C721.864 110.598 567.852 114.043 550.069 86.2135C532.286 58.3836 571.352 6.05963 629.852 24.5C688.352 42.9404 547.854 94.0564 440.311 72.039C332.767 50.0215 306.352 6.05963 207.852 6.05963C109.352 6.05963 29.5375 67.0736 0.851562 72.039" fill="none" stroke="url(#hero-line-gradient)" stroke-width="10" vector-effect="non-scaling-stroke" />
-          <defs>
-            <linearGradient id="hero-line-gradient" x1="0.851562" y1="48.3714" x2="1931.85" y2="48.3714" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#FFD400" />
-              <stop offset="1" stop-color="#FFD400" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div data-hero-layout class="container-page relative z-10 flex min-h-[calc(100svh-4rem)] flex-col pb-6 pt-5 md:grid md:min-h-[calc(100svh-5rem)] md:grid-cols-12 md:grid-rows-[auto_auto_auto] md:content-start md:gap-x-8 md:gap-y-8 md:pb-36 md:pt-10 lg:grid-cols-12 lg:grid-rows-[auto_5rem_auto] lg:gap-y-0 xl:grid-cols-12">
-          <div class="contents">
-            <div data-hero-title class="order-1 mb-6 md:order-none md:col-span-12 md:row-start-1 md:mb-0 lg:col-span-8 xl:col-span-7">
-              <p data-hero-reveal style="--hero-delay:.3s;--hero-mobile-delay:.15s" class="mb-3 text-sm text-white/60 md:mb-5">Контекстная реклама для бизнеса</p>
-              <h1 data-hero-reveal style="--hero-delay:.55s;--hero-mobile-delay:.3s" class="max-w-[920px] font-display text-[2rem] font-semibold leading-[.98] tracking-[-0.04em] md:text-[clamp(2.5rem,5.3vw,4.65rem)] md:leading-[1.02] md:tracking-[-0.045em]">Приведём целевые заявки из Яндекс Директа</h1>
-            </div>
-            <aside data-hero-reveal style="--hero-delay:1.85s;--hero-mobile-delay:.45s" class="order-2 mb-8 flex items-start gap-4 md:order-none md:col-span-6 md:col-start-7 md:row-start-2 md:mb-0 md:flex-col md:gap-0 lg:col-span-4 lg:col-start-9 lg:row-start-1 lg:mt-10 lg:self-stretch lg:justify-between xl:col-span-5 xl:col-start-8">
-              <div data-hero-logos class="flex shrink-0 items-center" aria-label="Церебро и Яндекс">
-                <img class="h-14 w-14 object-contain md:h-20 md:w-20 lg:h-24 lg:w-24" src="./assets/cerebro-badge.png" alt="Церебро" width="600" height="600" />
-                <img class="-ml-2 h-14 w-14 object-contain md:-ml-3 md:h-20 md:w-20 lg:-ml-4 lg:h-24 lg:w-24" src="./assets/yandex-badge.png" alt="Яндекс" width="600" height="600" />
-              </div>
-              <p data-hero-proof-copy class="max-w-none text-sm leading-6 text-white/75 md:mt-6 md:text-base md:leading-7 lg:text-lg lg:leading-8">Берём на себя аудит, стратегию, запуск, оптимизацию и аналитику — чтобы вы понимали, как реклама влияет на обращения и продажи</p>
-            </aside>
+        <div data-hero-layout class="container-page relative z-10 grid gap-8 pb-12 pt-6 md:gap-10 md:pb-14 md:pt-10 lg:min-h-[720px] lg:grid-cols-12 lg:items-center lg:gap-x-8 lg:gap-y-10 lg:pb-12 lg:pt-20">
+          <figure data-hero-composition data-hero-scene="complete" class="hero-composition order-1 w-full lg:order-2 lg:col-span-6" aria-label="Церебро и Яндекс Директ">
+            <img class="hero-composition-light" src="./assets/hero-animation/hero-light.svg" alt="" aria-hidden="true" />
+            <svg class="hero-composition-line" viewBox="0 0 410 432" fill="none" aria-hidden="true"><path pathLength="1" d="M89 404.637C116.5 424.515 228.53 447.143 198 404.637C167.47 362.13 22.0432 352.906 3.51397 300.707C-15.0153 248.507 225.563 279.097 303.572 307.364C381.582 335.631 289.543 359.304 216.036 327.779C142.529 296.254 31.0645 215.02 54.0558 152.516C77.047 90.0126 207.063 194.288 253.069 226.75C299.074 259.213 395.461 279.62 407.088 247.166C418.714 214.711 180.061 113.682 237.568 1.13672" stroke="#FFD400" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <img class="hero-composition-medallion hero-composition-yandex" src="./assets/hero-animation/yandex-medallion.png" alt="Яндекс Директ" width="600" height="600" />
+            <img class="hero-composition-medallion hero-composition-cerebro" src="./assets/hero-animation/cerebro-medallion.png" alt="Церебро" width="600" height="600" />
+          </figure>
+          <div data-hero-title class="order-2 lg:order-1 lg:col-span-6">
+            <p class="mb-3 text-sm text-white/60 md:mb-5">Контекстная реклама для бизнеса</p>
+            <h1 class="max-w-[720px] font-display text-[2rem] font-semibold leading-[.98] tracking-[-.04em] md:text-[clamp(2.5rem,5.1vw,4.65rem)] md:leading-[1.02] md:tracking-[-.045em]">Приведём целевые заявки из Яндекс Директа</h1>
+            <p data-hero-proof-copy class="mt-5 max-w-[38rem] text-sm leading-6 text-white/75 md:mt-6 md:text-base md:leading-7">Берём на себя аудит, стратегию, запуск, оптимизацию и аналитику — чтобы вы понимали, как реклама влияет на обращения и продажи</p>
           </div>
-          <div class="contents">
-            <div data-hero-actions data-hero-reveal style="--hero-delay:.72s;--hero-mobile-delay:.72s" class="order-3 mb-8 flex flex-col items-start gap-3 md:order-none md:col-span-5 md:row-start-2 md:mb-0 md:flex-row md:flex-wrap md:items-center md:gap-4 lg:col-span-4 lg:row-start-3 xl:col-span-3">
-              <a data-cta="hero-quiz" class="button-press inline-flex w-full justify-center whitespace-nowrap bg-accent px-4 py-4 text-sm font-medium text-ink sm:w-auto sm:px-6 lg:text-base" href="#quiz">Получить медиаплан бесплатно</a>
-              <a data-cta="hero-consultation" class="inline-flex text-sm font-medium text-white/75 underline decoration-white/35 underline-offset-4 transition-colors hover:text-white" href="#contact">Обсудить продвижение</a>
-            </div>
-            <div id="hero-facts" class="order-4 grid border-t border-white/20 sm:grid-cols-2 md:order-none md:col-span-12 md:row-start-3 lg:col-span-8 lg:col-start-5 lg:grid-cols-4 lg:border-t-0 xl:col-span-9 xl:col-start-4"></div>
+          <div data-hero-actions class="order-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap lg:col-span-3">
+            <a data-cta="hero-quiz" class="button-press inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-xl bg-accent px-4 text-sm font-medium text-ink sm:w-auto sm:px-6 md:h-[52px] md:text-base" href="#quiz">Получить медиаплан бесплатно</a>
+            <a data-cta="hero-consultation" class="button-press inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-xl border border-white/70 px-4 text-sm font-medium text-white transition-colors hover:bg-white hover:text-brand sm:w-auto sm:px-6 md:h-[52px] md:text-base" href="#contact">Обсудить продвижение</a>
           </div>
+          <div id="hero-facts" class="order-4 grid grid-cols-2 border-t border-white/20 sm:grid-cols-4 lg:col-span-9"></div>
         </div>
       </section>
 
