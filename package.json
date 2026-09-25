@@ -1,0 +1,9 @@
+{
+  "name": "cerebro-yandex-direct-landing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "node scripts/local-preview-server.mjs",
+    "test": "node --test site/*.test.mjs scripts/local-preview-server.test.mjs"
+  }
+}

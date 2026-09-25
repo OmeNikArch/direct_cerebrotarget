@@ -30,8 +30,8 @@ test('exposes the approved advertising budget choices', () => {
   ])
 })
 
-test('builds a minimal Bitrix-ready lead payload without removed form fields', () => {
-  assert.deepEqual(buildLeadPayload({ ...baseLead, email: 'legacy@example.com' }), {
+test('builds a minimal Bitrix-ready lead payload without quiz fields', () => {
+  assert.deepEqual(buildLeadPayload({ ...baseLead, site: 'https://example.ru' }), {
     name: 'Анна',
     phone: '+7 999 123-45-67',
     budget: '50–500 тыс. ₽',

@@ -35,7 +35,8 @@ test('places a visual media-plan quiz after fit and moves directly from cases to
   assert.equal(fitPosition < quizPosition && quizPosition < problemsPosition, true)
   assert.equal(proofPosition < conditionsPosition, true)
   assert.equal(html.includes('Получите бесплатный медиаплан'), true)
-  assert.equal(/id="quiz-placeholder-lines"/u.test(html), true)
+  assert.equal(/data-quiz-form/u.test(html), true)
+  assert.equal(/quiz-placeholder-lines/u.test(html), false)
   assert.equal(html.includes('id="before-after"'), false)
 })
 

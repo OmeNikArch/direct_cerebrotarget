@@ -87,7 +87,7 @@ test('removes the retired before-after section and its runtime hookup', () => {
 })
 
 test('applies the refined spacing, CTA, pricing, contact, and review treatments', () => {
-  assert.match(redesignHtml, /id="problems"[^>]*gap-3/u)
+  assert.match(redesignHtml, /id="problems"[^>]*gap-6/u)
   assert.match(redesignHtml, /id="service-scope-cards"[^>]*gap-3/u)
   assert.match(redesignHtml, /data-problems-cta[^>]*text-ink/u)
   assert.match(redesignHtml, /data-case-follow-up[^>]*bg-brand-deep/u)
@@ -114,8 +114,8 @@ test('removes all decorative dot tiles while preserving the review artwork', () 
 
 test('finishes the highlighted cards with the shared visual system', () => {
   assert.match(redesignHtml, /data-quiz-card[^>]*rounded-\[var\(--radius-card\)\]/u)
-  assert.match(redesignScript, /bg-blue-soft\/80 p-5 text-ink[^`]*text-xs text-brand">Станет/u)
-  assert.match(redesignScript, /border border-border bg-white[^`]*text-ink/u)
+  assert.match(redesignScript, /data-problem-card[^`]*grid-cols-\[26px_1fr\][^`]*bg-blue-soft/u)
+  assert.match(redesignScript, /data-problem-solution[^`]*bg-white[^`]*Решение/u)
   assert.match(redesignHtml, /data-pricing-table[^>]*pricing-table[^>]*text-ink/u)
   assert.match(redesignHtml, /\.pricing-table th \{ background: #E9EEFF; \}/u)
   assert.match(redesignHtml, /\.pricing-table td \{ background: #FFFFFF; \}/u)
@@ -156,7 +156,7 @@ test('presents the agency statistic in a wide hero-gradient card', () => {
   assert.match(trust, /data-draw-line[^>]*trust-line-path/u)
 })
 
-test('matches the contact form to the quiz card and offsets the select arrow', () => {
+test('keeps the promotion form independent and offsets its select arrow', () => {
   assert.match(redesignHtml, /id="lead-form"[^>]*data-contact-form-card[^>]*border[^>]*bg-white/u)
   assert.match(redesignHtml, /<select[^>]*appearance-none[^>]*pr-12[^>]*name="budget"/u)
   assert.match(redesignHtml, /data-select-arrow[^>]*right-4/u)
@@ -245,7 +245,7 @@ test('uses the approved fit preview composition without upscaling on wider cards
   assert.match(redesignScript, /data-fit-art[^>]*inset-y-0 right-0 w-full/u)
   assert.match(redesignHtml, /#fit-cards \[data-fit-art\] \{ max-width: 764px; \}/u)
   assert.match(redesignScript, /data-fit-image[^>]*absolute[^>]*object-contain/u)
-  assert.match(redesignScript, /relative z-10 w-\[62%\]/u)
+  assert.doesNotMatch(redesignScript, /data-fit-card-number|text-ink\/45">\$\{n\}/u)
   assert.match(redesignHtml, /#fit-cards \[data-fit-image\] \{ top: 50%; bottom: auto; right: -8%; width: 41%; opacity: \.5; transform: translateY\(-50%\); \}/u)
   assert.match(redesignHtml, /#fit-cards > article:nth-child\(3\) \[data-fit-image\] \{ top: 41%; \}/u)
   assert.match(redesignHtml, /#fit-cards > article:nth-child\(4\) \[data-fit-image\] \{ transform: translateY\(-50%\) scaleX\(-1\); \}/u)
@@ -253,7 +253,7 @@ test('uses the approved fit preview composition without upscaling on wider cards
 })
 
 test('renders the approved responsive transparency bento with five edge-positioned illustrations', () => {
-  assert.match(redesignHtml, /script\.js\?v=fit-approved-1/u)
+  assert.match(redesignHtml, /script\.js\?v=problems-layout-5/u)
   const expectedImages = [
     '01-dashboard-access.png',
     '02-approving-changes.png',
