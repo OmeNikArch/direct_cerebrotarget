@@ -22,6 +22,26 @@ test('keeps the scene geometry invariant below desktop', () => {
   assert.doesNotMatch(mobileCss, /hero-composition-(?:line|yandex|cerebro)/u)
 })
 
+test('reserves the hero lower row on short desktop screens without changing scene internals', () => {
+  assert.match(redesignHtml, /@media \(min-width: 768px\) and \(max-height: 900px\)[\s\S]*?\[data-hero-composition\]\.hero-composition\s*\{[^}]*width:\s*min\(100%,\s*52svh,\s*520px\)/u)
+  assert.match(redesignHtml, /@media \(min-width: 768px\) and \(max-height: 900px\)[\s\S]*?\[data-hero-layout\]\s*\{[^}]*padding-bottom:\s*32px/u)
+  const compactHeroCss = redesignHtml.match(/@media \(min-width: 768px\) and \(max-height: 900px\) \{([\s\S]*?)\n\s*\}/u)?.[1] || ''
+  assert.doesNotMatch(compactHeroCss, /hero-composition-(?:line|yandex|cerebro)/u)
+})
+
+test('uses the requested right-side white-to-blue-soft fade on fit cards', () => {
+  assert.match(redesignHtml, /\.fit-card\s*\{[^}]*linear-gradient\(90deg,\s*#FFFFFF 0%,\s*#FFFFFF 42%,\s*#E9EEFF 100%\)/u)
+  assert.match(redesignScript, /<article class="fit-card /u)
+})
+
+test('makes the four annotated CTAs full width only on mobile', () => {
+  const mobileCss = redesignHtml.match(/@media \(max-width: 767px\) \{([\s\S]*?)\n\s*\}/u)?.[1] || ''
+  for (const selector of ['#proof \\[data-cta="cases"\\]', '\\[data-transparency-section\\] \\[data-cta="transparency"\\]', '#conditions \\[data-cta="pricing"\\]', '#start-options \\[data-cta="start-audit"\\]']) {
+    assert.match(mobileCss, new RegExp(selector, 'u'))
+  }
+  assert.match(mobileCss, /width:\s*100%[^}]*justify-content:\s*center/u)
+})
+
 test('adds a sticky header state layer without changing its height', () => {
   assert.match(redesignHtml, /<header[^>]*data-site-header[^>]*fixed/u)
   assert.match(redesignHtml, /data-header-backdrop/u)
@@ -189,11 +209,29 @@ test('keeps pricing free of decorative dot tiles and uses the blue media-plan ac
 
 test('makes the messenger treatment more visible and uses the approved label', () => {
   assert.match(redesignHtml, /\.review-pattern \{[^}]*background-color: #E9EEFF/u)
-  assert.match(redesignHtml, /\.review-pattern::before \{[^}]*opacity: \.18/u)
+  assert.match(redesignHtml, /\.review-pattern \{[^}]*background-image: linear-gradient\(135deg, #E9EEFF 0%, rgb\(10 35 139 \/ \.12\) 100%\)/u)
+  assert.match(redesignHtml, /\.review-pattern::before \{[^}]*opacity: \.10/u)
   assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-position: left top/u)
   assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-size: 640px auto/u)
   assert.match(redesignHtml, /\.review-pattern > \* \{[^}]*z-index: 1/u)
   assert.match(redesignScript, />Сообщение клиента Ц<\/span>/u)
+})
+
+test('stretches the requested mobile action buttons without changing larger breakpoints', () => {
+  const mobileRules = redesignHtml.match(/@media \(max-width: 767px\) \{[\s\S]*?\n      \}/u)?.[0] || ''
+  assert.match(mobileRules, /\[data-problems-cta\] \[data-cta="problems"\][^{]*\{ width: 100%; justify-content: center; \}/u)
+  assert.match(mobileRules, /#start-options \[data-cta="start-promotion"\][^{]*\{ width: 100%; justify-content: center; \}/u)
+})
+
+test('places partner badges on a dedicated mobile row and softens only mobile pricing cards', () => {
+  const mobileRules = redesignHtml.match(/@media \(max-width: 767px\) \{[\s\S]*?\n      \}/u)?.[0] || ''
+  assert.match(mobileRules, /#trust \.mt-6\.flex > span:first-child \{ flex-basis: 100%; \}/u)
+  assert.match(mobileRules, /#conditions \[data-pricing-mobile\] > article \{ background-color: #E9EEFF; \}/u)
+})
+
+test('uses the hero gradient on the case follow-up and hides the line start above its edge', () => {
+  assert.match(redesignHtml, /\[data-case-follow-up\] \{ background: linear-gradient\(135deg, #2F63F5 0%, #0A238B 60%, #06195F 100%\); \}/u)
+  assert.match(redesignHtml, /\[data-case-line\] \{ transform: translateY\(-8px\); \}/u)
 })
 
 test('uses the hero gradient for quiz and the shared contact/footer surface', () => {
@@ -241,7 +279,7 @@ test('uses the approved fit preview composition without upscaling on wider cards
   assert.match(redesignScript, /const fitImages = \[/u)
   assert.equal((redesignScript.match(/\.\/assets\/fit\//gu) || []).length, 4)
   assert.match(redesignScript, /data-fit-image/u)
-  assert.match(redesignScript, /<article class="relative overflow-hidden bg-white"><figure data-fit-art/u)
+  assert.match(redesignScript, /<article class="fit-card relative overflow-hidden"><figure data-fit-art/u)
   assert.match(redesignScript, /data-fit-art[^>]*inset-y-0 right-0 w-full/u)
   assert.match(redesignHtml, /#fit-cards \[data-fit-art\] \{ max-width: 764px; \}/u)
   assert.match(redesignScript, /data-fit-image[^>]*absolute[^>]*object-contain/u)

@@ -166,11 +166,14 @@ if (siteHeader) createStickyHeaderController({ header: siteHeader })
 if (mobileMenuButton && mobileMenu) createMobileMenuController({ button: mobileMenuButton, menu: mobileMenu, body: document.body })
 
 render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact class="border-b border-white/20 py-3 last:border-b-0 md:px-4 md:even:border-l md:even:border-white/20 lg:border-b-0 lg:border-l lg:border-white/20 lg:first:border-l-0 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-2 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
-render('team-cards', teamMembers.map(([name, role]) => `<article data-team-card class="w-[calc((100%-12px)/2)] shrink-0 text-ink md:w-[calc((100%-32px)/3)] lg:w-[calc((100%-64px)/5)]"><div data-team-photo-placeholder class="aspect-square border border-border bg-paper" role="img" aria-label="Место для фотографии ${name}"></div><h3 class="mt-4 font-display text-lg font-semibold leading-tight tracking-[-.02em]">${name}</h3><p class="mt-2 text-sm leading-5 text-ink/60">${role}</p></article>`).join(''))
+render('team-cards', teamMembers.map(([name, role]) => `<article data-team-card class="w-[calc(48.1%-12px)] shrink-0 text-ink md:w-[calc(32.5%-16px)] lg:w-[calc(19.7%-16px)]"><div data-team-photo-placeholder class="aspect-square border border-border bg-paper" role="img" aria-label="Место для фотографии ${name}"></div><h3 class="mt-4 font-display text-lg font-semibold leading-tight tracking-[-.02em]">${name}</h3><p class="mt-2 text-sm leading-5 text-ink/60">${role}</p></article>`).join(''))
 const teamViewport = document.querySelector('[data-team-viewport]')
 const scrollTeam = (direction) => {
   if (!teamViewport) return
-  teamViewport.scrollBy({ left: direction * (teamViewport.clientWidth / 5 + 16), behavior: reduceMotion ? 'auto' : 'smooth' })
+  const firstCard = teamViewport.querySelector('[data-team-card]')
+  const gap = Number.parseFloat(window.getComputedStyle(document.getElementById('team-cards')).columnGap) || 0
+  const step = (firstCard?.offsetWidth || teamViewport.clientWidth) + gap
+  teamViewport.scrollBy({ left: direction * step, behavior: reduceMotion ? 'auto' : 'smooth' })
 }
 document.getElementById('team-prev')?.addEventListener('click', () => scrollTeam(-1))
 document.getElementById('team-next')?.addEventListener('click', () => scrollTeam(1))
@@ -217,7 +220,7 @@ const fitImages = [
   './assets/fit/03-leads.png',
   './assets/fit/04-transparency.png?v=fit-approved-1',
 ]
-render('fit-cards', landingData.fit.map(([, t, d], index) => `<article class="relative overflow-hidden bg-white"><figure data-fit-art class="pointer-events-none absolute inset-y-0 right-0 w-full" aria-hidden="true"><img data-fit-image class="absolute z-[1] h-auto max-w-none select-none object-contain" src="${fitImages[index]}" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></figure><div class="relative z-10 w-[62%]"><h3 class="font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
+render('fit-cards', landingData.fit.map(([, t, d], index) => `<article class="fit-card relative overflow-hidden"><figure data-fit-art class="pointer-events-none absolute inset-y-0 right-0 w-full" aria-hidden="true"><img data-fit-image class="absolute z-[1] h-auto max-w-none select-none object-contain" src="${fitImages[index]}" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></figure><div class="relative z-10 w-[62%]"><h3 class="font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-md text-sm leading-6 text-ink/60">${d}</p></div></article>`).join(''))
 const problemIcon = './assets/problems/problem-mark.svg'
 const solutionIcon = './assets/problems/solution-mark.svg'
 render('problems', landingData.problems.map(([problem, solution]) => `<article data-problem-card class="grid grid-cols-[26px_1fr] items-start gap-4 text-ink md:grid-cols-[26px_1fr] md:gap-6"><img class="mt-6 h-[26px] w-[26px]" src="${problemIcon}" alt="" aria-hidden="true" width="26" height="26" /><div><div data-problem-header class="relative z-10 bg-blue-soft px-5 py-5 rounded-[var(--radius-card)] md:px-6 md:py-6"><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.02em]">${problem}</h3></div><div data-problem-solution class="relative -mt-1 bg-white p-5 rounded-b-[var(--radius-card)] md:p-6"><div class="flex items-center gap-2"><img class="h-[26px] w-[26px]" src="${solutionIcon}" alt="" aria-hidden="true" width="26" height="26" /><p class="text-sm font-medium text-brand">Решение</p></div><p class="mt-4 text-sm leading-6 text-ink/70">${solution}</p></div></div></article>`).join(''))
