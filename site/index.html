@@ -35,6 +35,7 @@
       .button-press:focus-visible, :where(a, button, input, select):focus-visible { outline: 2px solid #2F63F5; outline-offset: 4px; }
       [data-header-backdrop] { opacity: 0; transition: opacity 200ms var(--ease-out); }
       [data-site-header].is-scrolled [data-header-backdrop] { opacity: 1; }
+      @media (min-width: 768px) and (orientation: landscape) { [data-cta="header-quiz"] { display: inline-flex; } }
       .surface-paper { background: #F4F6FA; }
       .surface-white { background: #FFFFFF; }
       .surface-blue-soft { background: #E9EEFF; }
@@ -58,7 +59,16 @@
       .review-pattern { position: relative; isolation: isolate; background-color: #E9EEFF; background-image: linear-gradient(135deg, #E9EEFF 0%, rgb(10 35 139 / .12) 100%); }
       .review-pattern::before { content: ''; pointer-events: none; position: absolute; inset: 0; z-index: 0; border-radius: inherit; opacity: .10; background-image: url('./assets/review-pattern-v2.png'); background-position: left top; background-repeat: repeat; background-size: 640px auto; }
       .review-pattern > * { position: relative; z-index: 1; }
+      #review-prev, #review-next { height: 44px; width: 44px; border: 0; border-radius: var(--radius-control); background: #FFFFFF; }
+      @media (min-width: 1024px) { #reviews { grid-column: span 7 / span 7; grid-column-start: 6; } }
       .transparency-art { position: absolute; z-index: 1; height: auto; pointer-events: none; user-select: none; }
+      .start-card { position: relative; isolation: isolate; }
+      #start-options .start-copy { position: relative; z-index: 2; width: 100%; padding-bottom: 172px; }
+      .start-art { position: absolute; z-index: 1; width: 60.8%; max-width: 224px; height: auto; right: -48px; bottom: -48px; pointer-events: none; user-select: none; }
+      @media (min-width: 1024px) {
+        #start-options .start-copy { width: 64%; padding-bottom: 28px; }
+        .start-art { width: 46.4%; max-width: none; right: -13%; bottom: -56px; }
+      }
       /* Keep the approved art frame when landing cards exceed preview widths. */
       .fit-card { background: linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 42%, #E9EEFF 100%); }
       #fit-cards > article { min-height: 232px; padding: 28px; }
@@ -103,9 +113,16 @@
       @keyframes hero-line-draw { from { stroke-dashoffset: -1; } to { stroke-dashoffset: 0; } }
       @media (prefers-reduced-motion: reduce) { [data-hero-scene] .hero-composition-light, [data-hero-scene] .hero-composition-yandex, [data-hero-scene] .hero-composition-cerebro, [data-hero-scene] .hero-composition-line path { animation: none; opacity: 1; } [data-hero-scene] .hero-composition-light { transform: translate(-50%, -50%) scale(1); } [data-hero-scene] .hero-composition-yandex { transform: rotate(21deg); } [data-hero-scene] .hero-composition-cerebro { transform: rotate(4.65deg); } [data-hero-scene] .hero-composition-line path { stroke-dashoffset: 0; } }
       .draw-line-path { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+      [data-trust-stat] [data-trust-line] { top: -8px; right: -30px; bottom: auto; height: 164px; width: 176px; }
+      #trust [data-trust-stat] > img { bottom: 8px; opacity: 0; transform: translateX(-18%) rotate(-10deg); transition: transform 420ms var(--ease-out), opacity 420ms var(--ease-out); }
+      #trust [data-trust-stat] > img.is-revealed { opacity: 1; transform: translateX(0) rotate(-10deg); }
+      @media (prefers-reduced-motion: reduce) { #trust [data-trust-stat] > img { opacity: 1; transform: rotate(-10deg); transition: none; } }
       @media (max-width: 767px) {
         :root { --radius-control: 5px; --radius-card: 6px; }
+        [data-trust-stat] > div.relative.z-10 { margin-left: 132px; }
         .container-page { width: calc(100% - 32px); }
+        #start-options .start-copy { padding-bottom: 24px; }
+        .start-art { width: 100px; height: 100px; top: 12px; right: 12px; bottom: auto; }
         #proof [data-cta="cases"], [data-transparency-section] [data-cta="transparency"], #conditions [data-cta="pricing"], #start-options [data-cta="start-audit"], [data-problems-cta] [data-cta="problems"], #start-options [data-cta="start-promotion"] { width: 100%; justify-content: center; }
         #trust .mt-6.flex > span:first-child { flex-basis: 100%; }
         #conditions [data-pricing-mobile] > article { background-color: #E9EEFF; }
@@ -179,13 +196,13 @@
       <div class="container-page relative flex min-h-16 items-center justify-between gap-4 sm:min-h-20 sm:gap-6">
         <a href="#top" aria-label="Церебро — к началу страницы"><img class="h-10 w-[107px] sm:h-12 sm:w-32" src="./assets/cerebro-logo.svg" alt="Церебро" width="128" height="48" /></a>
         <nav class="hidden items-center gap-4 text-xs text-white/75 md:flex lg:gap-7 lg:text-sm" aria-label="Основная навигация">
-          <a class="hover:text-white" href="#process">Как работаем</a><a class="hover:text-white" href="#conditions">Условия</a><a class="hover:text-white" href="#faq">Вопросы</a>
+          <a class="hover:text-white" href="#process">Как работаем</a><a class="hover:text-white" href="#proof">Кейсы</a><a class="hover:text-white" href="#conditions">Стоимость</a><a class="hover:text-white" href="#faq">Вопросы</a>
         </nav>
-        <a data-cta="header-quiz" class="button-press hidden rounded-full bg-accent px-5 py-3 text-sm font-medium text-ink sm:inline-flex" href="#quiz">Бесплатный медиаплан</a>
+        <a data-cta="header-quiz" class="button-press hidden rounded-full bg-accent px-5 py-3 text-sm font-medium text-ink lg:inline-flex" href="#quiz">Бесплатный медиаплан</a>
         <button id="menu-button" aria-expanded="false" aria-controls="mobile-menu" class="button-press border border-white/30 px-3 py-2 text-sm md:hidden">Меню</button>
       </div>
       <nav id="mobile-menu" data-open="false" aria-hidden="true" class="mobile-menu absolute inset-x-0 top-full border-t border-white/15 bg-brand-deep/98 md:hidden" aria-label="Мобильная навигация">
-        <div class="container-page grid gap-1 py-4 text-sm"><a class="rounded-sm px-3 py-3" href="#process">Как работаем</a><a class="rounded-sm px-3 py-3" href="#conditions">Условия</a><a class="rounded-sm px-3 py-3" href="#faq">Вопросы</a><a class="rounded-sm px-3 py-3" href="#quiz">Бесплатный медиаплан</a><a class="rounded-sm px-3 py-3" href="#contact">Обсудить продвижение</a></div>
+        <div class="container-page grid gap-1 py-4 text-sm"><a class="rounded-sm px-3 py-3" href="#process">Как работаем</a><a class="rounded-sm px-3 py-3" href="#proof">Кейсы</a><a class="rounded-sm px-3 py-3" href="#conditions">Стоимость</a><a class="rounded-sm px-3 py-3" href="#faq">Вопросы</a></div>
       </nav>
     </header>
 
@@ -243,11 +260,11 @@
           <div data-problems-layout class="grid gap-10 lg:grid-cols-12 lg:items-stretch lg:gap-12">
             <div data-problems-column class="contents lg:flex lg:flex-col lg:col-span-6">
               <div data-problems-sticky-track class="order-1 lg:order-none lg:flex-1">
-                <div data-problems-intro class="self-start lg:sticky lg:top-28"><p class="text-sm text-ink/55">Типичные проблемы рынка</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Ваша реклама часто не окупается?</h2><p class="mt-5 max-w-sm text-base leading-7 text-ink/65">Церебро знает, как превратить проблемы рекламы в понятный план действий</p></div>
+                <div data-problems-intro class="self-start lg:sticky lg:top-28"><p class="text-sm text-ink/55">Типичные проблемы рынка</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Ваша реклама часто не окупается?</h2><p class="mt-5 max-w-sm text-base leading-7 text-ink/65">Церебро знает, как превратить проблемы рекламы в понятный план действий</p><div data-problems-cta class="mt-5 hidden flex-col gap-5 text-ink lg:flex"><p class="max-w-sm text-sm leading-6 text-ink/65">Ответьте на несколько коротких вопросов —&nbsp;и&nbsp;подготовим основу медиаплана именно под вашу ситуацию.</p><a data-cta="problems" class="button-press inline-flex w-fit bg-accent px-5 py-3 text-sm font-medium text-ink" href="#quiz">Получить медиаплан</a></div></div>
               </div>
-              <div data-problems-cta class="order-3 mt-10 flex flex-col gap-5 text-ink lg:order-none lg:mt-auto"><p class="max-w-sm text-sm leading-6 text-ink/65">Ответьте на несколько коротких вопросов —&nbsp;и&nbsp;подготовим основу медиаплана именно под вашу ситуацию.</p><a data-cta="problems" class="button-press inline-flex w-fit bg-accent px-5 py-3 text-sm font-medium text-ink" href="#quiz">Получить медиаплан</a></div>
             </div>
             <div id="problems" class="order-2 grid gap-6 lg:order-none lg:col-span-6"></div>
+            <div data-problems-cta class="order-3 mt-10 flex flex-col gap-5 text-ink lg:hidden"><p class="max-w-sm text-sm leading-6 text-ink/65">Ответьте на несколько коротких вопросов —&nbsp;и&nbsp;подготовим основу медиаплана именно под вашу ситуацию.</p><a data-cta="problems" class="button-press inline-flex w-fit bg-accent px-5 py-3 text-sm font-medium text-ink" href="#quiz">Получить медиаплан</a></div>
           </div>
           <div class="mt-24 border-t border-ink/10 pt-20 md:mt-32 md:pt-24">
             <div class="grid gap-6 lg:grid-cols-12 lg:items-end"><div class="lg:col-span-7"><p class="text-sm text-ink/55">Состав работы</p><h2 class="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-5xl">Как мы работаем с вашим проектом</h2></div></div>
@@ -268,7 +285,7 @@
 
       <section class="surface-blue-soft py-20 md:py-32"><div class="mx-auto max-w-3xl px-4 text-center"><p class="text-sm text-brand/70">Первый шаг</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] text-ink md:text-5xl">С чего начнём работу</h2></div><div id="start-options" class="container-page mt-10 grid gap-3 md:grid-cols-2"></div></section>
 
-      <section id="trust" class="surface-paper py-16 md:py-20"><div class="container-page grid gap-8 lg:grid-cols-12 lg:items-stretch"><div class="lg:col-span-5"><p class="text-sm text-ink/55">О Церебро</p><div data-trust-stat class="hero-gradient relative mt-5 flex min-h-[152px] items-center gap-5 overflow-hidden rounded-[var(--radius-card)] p-5 text-white md:gap-7 md:p-7"><img class="relative z-10 h-20 w-[76px] shrink-0 object-contain md:h-24 md:w-[90px]" src="./assets/trust-logo.svg" alt="" width="119" height="127" /><div class="relative z-10"><p data-count-up="3000" class="font-display text-4xl font-semibold leading-none tracking-[-.05em] md:text-5xl">3000+</p><p class="mt-2 max-w-[15rem] text-sm leading-5 text-white/75 md:text-base md:leading-6">клиентов работают с Церебро</p></div><svg data-trust-line class="pointer-events-none absolute inset-y-0 right-0 h-full w-[46%] opacity-90" viewBox="0 0 274 245" preserveAspectRatio="none" aria-hidden="true"><path data-draw-line class="draw-line-path trust-line-path" pathLength="1" d="M1.4995 1.50521C62.5 35.4359 121.416 36.9667 172.736 35.4359C177.14 35.3046 229.114 34.0195 217.009 22.4487C201.145 7.28541 164.907 1.8435 135.207 1.5049C99.9077 1.10247 85.2441 24.9067 100.636 60.9157C116.096 97.0828 169.012 102.098 188.802 103.32C208.592 104.542 233.702 93.1661 213.621 80.9844C177.273 58.9343 147.819 81.7872 146.209 101.223C144.411 122.915 185.957 148.328 208.276 162.926C230.596 177.524 259.867 205.674 271.935 242.826" fill="none" stroke="#FFD400" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2 class="mt-8 max-w-md font-display text-2xl font-semibold leading-tight tracking-[-.03em] md:text-3xl">Больше 10 лет ведём рекламу на российских площадках</h2><p class="mt-4 max-w-lg text-base leading-7 text-ink/65">Разбираемся в особенностях каждого канала и помогаем выбрать подходящий сценарий продвижения</p><div class="mt-6 flex flex-wrap items-center gap-3"><span class="text-sm text-ink/55">Официальный партнёр:</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">VK</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Яндекс</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Авито</span></div></div><div id="reviews" class="review-pattern rounded-[var(--radius-card)] p-5 md:p-7 lg:col-span-6 lg:col-start-7"><div class="flex items-center justify-between gap-4"><p class="text-sm text-ink/55">Отзывы клиентов</p><div class="flex items-center gap-4"><p id="review-counter" class="text-sm text-ink/55" aria-live="polite"></p><div class="flex gap-2"><button id="review-prev" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Предыдущий отзыв">←</button><button id="review-next" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Следующий отзыв">→</button></div></div></div><div id="review-slides" class="mt-5" aria-live="polite"></div></div></div></section>
+      <section id="trust" class="surface-paper py-16 md:py-20"><div class="container-page grid gap-8 lg:grid-cols-12 lg:items-stretch"><div class="lg:col-span-5"><p class="text-sm text-ink/55">О Церебро</p><div data-trust-stat class="hero-gradient relative mt-5 flex min-h-[152px] items-center overflow-hidden rounded-[var(--radius-card)] p-5 text-white md:p-7"><svg data-trust-line class="pointer-events-none absolute bottom-0 right-0 hidden h-[145px] w-[156px] opacity-90 md:block" viewBox="0 0 156 145" preserveAspectRatio="xMaxYMax meet" aria-hidden="true"><path data-draw-line class="draw-line-path trust-line-path" pathLength="1" d="M1.50061 1.50054C11.9964 47.0003 46.4443 60.0323 97.7646 58.5015C102.168 58.3702 157.766 53.0019 153.273 36.1358C147.625 14.9304 110.536 14.8086 77.0051 25.0002C43.4738 35.1918 19.0027 71.4051 46.0027 91.0003C73.0027 110.596 111.003 77.395 135.003 95.5003C159.003 113.606 140.499 143 140.499 143" fill="none" stroke="#FFD400" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><img class="absolute bottom-0 left-4 z-10 h-[120px] w-[112px] shrink-0 -rotate-[10deg] object-contain md:h-[136px] md:w-[128px]" src="./assets/trust-logo.svg" alt="" width="119" height="127" /><div class="relative z-10 ml-28 md:ml-40"><p data-count-up="3000" class="font-display text-4xl font-semibold leading-none tracking-[-.05em] md:text-5xl">3000+</p><p class="mt-2 max-w-[15rem] text-sm leading-5 text-white/75 md:text-base md:leading-6">клиентов работают с Церебро</p></div></div><h2 class="mt-8 max-w-md font-display text-2xl font-semibold leading-tight tracking-[-.03em] md:text-3xl">Больше 10 лет ведём рекламу на российских площадках</h2><p class="mt-4 max-w-lg text-base leading-7 text-ink/65">Разбираемся в особенностях каждого канала и помогаем выбрать подходящий сценарий продвижения</p><div class="mt-6 flex flex-wrap items-center gap-3"><span class="text-sm text-ink/55">Официальный партнёр:</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">VK</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Яндекс</span><span class="rounded-full bg-brand px-4 py-2 text-sm font-medium text-white">Авито</span></div></div><div id="reviews" class="review-pattern rounded-[var(--radius-card)] p-5 md:p-7 lg:col-span-6 lg:col-start-7"><div class="flex items-center justify-between gap-4"><p class="text-sm text-ink/55">Отзывы клиентов</p><div class="flex items-center gap-4"><p id="review-counter" class="text-sm text-ink/55" aria-live="polite"></p><div class="flex gap-2"><button id="review-prev" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Предыдущий отзыв">←</button><button id="review-next" class="button-press inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-lg text-brand" type="button" aria-label="Следующий отзыв">→</button></div></div></div><div id="review-slides" class="mt-5" aria-live="polite"></div></div></div></section>
 
       <section id="faq" class="surface-white py-20 md:py-28"><div class="container-page grid gap-10 lg:grid-cols-12"><div class="lg:col-span-4"><p class="text-sm text-ink/55">FAQ</p><h2 class="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-.035em] md:text-4xl">Важные вопросы до старта</h2></div><div id="faq-list" class="lg:col-span-8"></div></div></section>
 
@@ -290,6 +307,6 @@
     <p id="vk-link-status" class="mt-3 text-xs leading-5 text-ink/45">Переход станет доступен после подключения бота</p>
   </section>
 </form></div></section><footer class="py-10 text-white"><div class="container-page grid gap-8 text-sm text-white/60 md:grid-cols-[auto_1fr_auto] md:items-end"><div><a class="inline-flex" href="#top" aria-label="Церебро — к началу страницы"><img class="h-12 w-32" src="./assets/cerebro-logo.svg" alt="Церебро" width="128" height="48" /></a><p class="mt-5">© 2026 Церебро. Все права защищены.</p></div><div class="flex flex-col gap-3 md:items-center"><span data-legal-placeholder role="link" aria-disabled="true" title="Подключить реальный URL перед публикацией">Политика конфиденциальности</span><span data-legal-placeholder role="link" aria-disabled="true" title="Подключить реальный URL перед публикацией">Согласие на обработку персональных данных</span></div><a class="w-fit rounded-full bg-white/10 px-4 py-2 text-white/70 md:justify-self-end" href="#top">Наверх</a></div></footer></div></main>
-    <script type="module" src="./script.js?v=problems-layout-5"></script>
+    <script type="module" src="./script.js?v=start-options-art-1"></script>
   </body>
 </html>

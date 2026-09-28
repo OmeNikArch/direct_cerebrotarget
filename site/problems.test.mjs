@@ -12,7 +12,7 @@ test('keeps market-problems copy in a sticky reading zone above a bottom CTA and
   assert.match(html, /data-problems-intro[^>]*self-start[^>]*lg:sticky[^>]*lg:top-28/u)
   assert.match(html, /Церебро знает, как превратить проблемы рекламы в понятный план действий/u)
   assert.match(html, /data-problems-sticky-track[^>]*order-1[^>]*lg:flex-1/u)
-  assert.match(html, /data-problems-cta[^>]*order-3[^>]*lg:mt-auto/u)
+  assert.match(html, /data-problems-intro[\s\S]*?data-problems-cta[^>]*mt-5/u)
   assert.match(html, /data-problems-layout[^>]*lg:grid-cols-12/u)
   assert.match(html, /data-problems-column[^>]*lg:col-span-6/u)
   assert.match(html, /id="problems"[^>]*order-2[^>]*lg:col-span-6/u)

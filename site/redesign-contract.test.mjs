@@ -160,12 +160,17 @@ test('moves the pricing note inside desktop and mobile pricing surfaces', () => 
   assert.doesNotMatch(redesignHtml, /<\/table><\/div><p class="mt-5[^>]*">Аудит, стратегия/u)
 })
 
-test('uses full-width start cards without decorative side slots or side images', () => {
+test('keeps full-width mobile start-card copy beside compact top-right art', () => {
   const startCards = redesignScript.match(/render\('start-options',[\s\S]*?\.join\(''\)\)/u)?.[0] || ''
   assert.doesNotMatch(redesignHtml, /class="start-media|assets\/cases\/(?:dentistry|furniture)\.png/u)
   assert.match(redesignHtml, /id="start-options"[^>]*container-page[^>]*md:grid-cols-2/u)
   assert.doesNotMatch(startCards, /data-start-media-slot|grid-cols-\[minmax\(0,1fr\)_/u)
-  assert.match(startCards, /<article class="flex min-h-\[286px\][^`]*bg-white\/90/u)
+  assert.match(startCards, /<article class="start-card flex min-h-\[286px\][^`]*bg-white\/65/u)
+  assert.match(startCards, /img data-start-image class="start-art"/u)
+  assert.match(redesignHtml, /\.start-art \{[^}]*width: 60\.8%; max-width: 224px;[^}]*right: -48px; bottom: -48px;/u)
+  assert.match(redesignHtml, /@media \(max-width: 767px\) \{[\s\S]*?#start-options \.start-copy \{[^}]*padding-bottom: 24px;[^}]*\}[\s\S]*?\.start-art \{ width: 100px; height: 100px; top: 12px; right: 12px; bottom: auto;/u)
+  assert.doesNotMatch(redesignHtml, /#start-options \.start-copy > :is\(p, h3\) \{ max-width:/u)
+  assert.match(redesignHtml, /@media \(min-width: 1024px\) \{[\s\S]*?\.start-art \{ width: 46\.4%; max-width: none; right: -13%; bottom: -56px;/u)
 })
 
 test('presents the agency statistic in a wide hero-gradient card', () => {
@@ -214,7 +219,7 @@ test('makes the messenger treatment more visible and uses the approved label', (
   assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-position: left top/u)
   assert.match(redesignHtml, /\.review-pattern::before \{[^}]*background-size: 640px auto/u)
   assert.match(redesignHtml, /\.review-pattern > \* \{[^}]*z-index: 1/u)
-  assert.match(redesignScript, />Сообщение клиента Ц<\/span>/u)
+  assert.match(redesignScript, /<span class="hidden shrink-0 rounded-full border border-ink\/10 bg-white px-3 py-1 text-xs text-ink\/50 md:inline-flex">Сообщение клиента Ц<\/span>/u)
 })
 
 test('stretches the requested mobile action buttons without changing larger breakpoints', () => {
@@ -244,7 +249,8 @@ test('uses the hero gradient for quiz and the shared contact/footer surface', ()
 test('draws the supplied yellow lines along their SVG paths', () => {
   assert.match(redesignHtml, /data-case-follow-up[^>]*relative[^>]*overflow-hidden/u)
   assert.match(redesignHtml, /data-case-line[^>]*left-\[26%\][^>]*-top-7[^>]*h-\[calc\(100%\+28px\)\][^>]*w-\[49%\]/u)
-  assert.match(redesignHtml, /data-trust-line[^>]*inset-y-0[^>]*right-0[^>]*h-full[^>]*w-\[46%\][^>]*preserveAspectRatio="none"/u)
+  assert.match(redesignHtml, /\[data-trust-stat\] \[data-trust-line\] \{ top: -8px; right: -30px; bottom: auto; height: 164px; width: 176px; \}/u)
+  assert.match(redesignHtml, /data-trust-line[^>]*right-0[^>]*hidden[^>]*md:block[^>]*viewBox="0 0 156 145"[^>]*preserveAspectRatio="xMaxYMax meet"/u)
   assert.match(redesignHtml, /class="draw-line-path case-cta-line-path"[^>]*pathLength="1"/u)
   assert.match(redesignHtml, /class="draw-line-path trust-line-path"[^>]*pathLength="1"/u)
   assert.match(redesignScript, /createPathDrawOnViewController/u)
@@ -257,6 +263,39 @@ test('uses white result cells with larger aligned case figures', () => {
   assert.doesNotMatch(redesignScript, /data-case-results[^`]*bg-paper/u)
 })
 
+test('keeps case outcomes and the market-problems CTA free of separating gaps', () => {
+  const caseResults = redesignScript.match(/<div data-case-results[\s\S]*?<\/dl><\/div><\/article>/u)?.[0] || ''
+
+  assert.doesNotMatch(caseResults, /border-(?:t|y)\b/u)
+  assert.match(redesignHtml, /data-problems-intro[^>]*>[\s\S]*?Ответьте на несколько коротких вопросов[\s\S]*?data-cta="problems"/u)
+})
+
+test('places the problems CTA after cards only on mobile', () => {
+  assert.match(redesignHtml, /data-problems-cta[^>]*hidden[^>]*lg:flex/u)
+  assert.match(redesignHtml, /id="problems"[^>]*order-2[\s\S]*?data-problems-cta[^>]*order-3[^>]*lg:hidden/u)
+})
+
+test('uses the supplied right-side trust line and an overlapping angled mark', () => {
+  const trust = redesignHtml.match(/<section id="trust"[\s\S]*?<section id="faq"/u)?.[0] || ''
+
+  assert.match(trust, /data-trust-stat[^>]*overflow-hidden/u)
+  assert.match(trust, /<img class="absolute bottom-0 left-4[^>]*-rotate-[^>]*trust-logo\.svg/u)
+  assert.match(trust, /ml-28 md:ml-40/u)
+  assert.match(redesignHtml, /@media \(max-width: 767px\) \{[\s\S]*?\[data-trust-stat\] > div\.relative\.z-10 \{ margin-left: 132px; \}/u)
+  assert.match(trust, /data-trust-line[^>]*hidden[^>]*viewBox="0 0 156 145"[^>]*preserveAspectRatio="xMaxYMax meet"/u)
+  assert.match(redesignHtml, /#trust \[data-trust-stat\] > img \{ bottom: 8px; opacity: 0; transform: translateX\(-18%\) rotate\(-10deg\); transition: transform 420ms var\(--ease-out\), opacity 420ms var\(--ease-out\); \}/u)
+  assert.match(redesignHtml, /#trust \[data-trust-stat\] > img\.is-revealed \{ opacity: 1; transform: translateX\(0\) rotate\(-10deg\); \}/u)
+  assert.match(redesignScript, /createRevealOnceController\(\{ elements: \[\.\.\.document\.querySelectorAll\('#trust \[data-trust-stat\] > img'\)\], reduceMotion \}\)/u)
+})
+
+test('places the supplied review avatars beside each review message', () => {
+  assert.match(redesignHtml, /@media \(min-width: 1024px\) \{ #reviews \{ grid-column: span 7 \/ span 7; grid-column-start: 6; \} \}/u)
+  assert.match(redesignScript, /const reviewAvatars = \[\s*'\.\/assets\/reviews\/Avatarka1\.svg',\s*'\.\/assets\/reviews\/Avatarka2\.svg',\s*'\.\/assets\/reviews\/Avatarka3\.svg',\s*'\.\/assets\/reviews\/Avatarka4\.svg',\s*'\.\/assets\/reviews\/Avatarka5\.svg',\s*\]/u)
+  assert.match(redesignScript, /data-review-slide class="flex items-start gap-3 md:gap-4"/u)
+  assert.match(redesignScript, /data-review-avatar class="hidden h-8 w-8 shrink-0 rounded-full object-cover md:mt-7 md:block md:h-\[45px\] md:w-\[45px\] md:-translate-y-\[2\.5px\]"/u)
+  assert.match(redesignHtml, /#review-prev, #review-next \{ height: 44px; width: 44px; border: 0; border-radius: var\(--radius-control\); background: #FFFFFF; \}/u)
+})
+
 test('keeps the top header transparent and removes the scrolled divider', () => {
   const headerBackdrop = redesignHtml.match(/<div data-header-backdrop[^>]*class="([^"]*)"/u)?.[1] || ''
   assert.doesNotMatch(headerBackdrop, /border-b|border-border/u)
@@ -264,8 +303,23 @@ test('keeps the top header transparent and removes the scrolled divider', () => 
 
 test('shows full navigation from the tablet breakpoint', () => {
   assert.match(redesignHtml, /<nav[^>]*hidden[^>]*md:flex[^>]*aria-label="Основная навигация"/u)
+  assert.match(redesignHtml, /data-cta="header-quiz"[^>]*hidden[^>]*lg:inline-flex/u)
+  assert.match(redesignHtml, /@media \(min-width: 768px\) and \(orientation: landscape\) \{ \[data-cta="header-quiz"\] \{ display: inline-flex; \} \}/u)
   assert.match(redesignHtml, /id="menu-button"[^>]*md:hidden/u)
   assert.match(redesignHtml, /id="mobile-menu"[^>]*md:hidden/u)
+})
+
+test('uses the four priority routes in both header menus', () => {
+  const desktopNav = redesignHtml.match(/<nav class="hidden items-center[\s\S]*?<\/nav>/u)?.[0] || ''
+  const mobileNav = redesignHtml.match(/<nav id="mobile-menu"[\s\S]*?<\/nav>/u)?.[0] || ''
+
+  for (const menu of [desktopNav, mobileNav]) {
+    assert.match(menu, /href="#process">Как работаем<\/a>/u)
+    assert.match(menu, /href="#proof">Кейсы<\/a>/u)
+    assert.match(menu, /href="#conditions">Стоимость<\/a>/u)
+    assert.match(menu, /href="#faq">Вопросы<\/a>/u)
+    assert.doesNotMatch(menu, />Условия<\/a>|>Бесплатный медиаплан<\/a>|>Обсудить продвижение<\/a>/u)
+  }
 })
 
 test('keeps the fit heading beside cards on desktop and above them on tablet and mobile', () => {
@@ -291,7 +345,7 @@ test('uses the approved fit preview composition without upscaling on wider cards
 })
 
 test('renders the approved responsive transparency bento with five edge-positioned illustrations', () => {
-  assert.match(redesignHtml, /script\.js\?v=problems-layout-5/u)
+  assert.match(redesignHtml, /script\.js\?v=start-options-art-1/u)
   const expectedImages = [
     '01-dashboard-access.png',
     '02-approving-changes.png',

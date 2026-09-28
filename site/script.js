@@ -134,7 +134,7 @@ const landingData = {
   ],
   startOptions: [
     ['Обсудим ваш проект', 'Основной путь', 'Изучим заполненный бриф, при необходимости уточним детали и подготовим предложение по ведению рекламы', 'Обсудить ведение', 'start-promotion'],
-    ['Получить медиаплан по вашей задаче', 'Если пока сравниваете', 'Ответьте на несколько вопросов — так мы поймём контекст и подготовим основу для прогноза', 'Получить медиаплан', 'start-audit'],
+    ['Получить медиаплан по\u00A0вашей\u00A0задаче', 'Если пока сравниваете', 'Ответьте на несколько вопросов — так мы поймём контекст и подготовим основу для прогноза', 'Получить медиаплан', 'start-audit'],
   ],
   faq: [
     ['Кому подходит ведение Яндекс Директ?', 'Бизнесу с понятным продуктом или услугой, готовому ежемесячно инвестировать в рекламу от 100 000 ₽ и принимать обращения. На основе заполненного брифа честно оценим, подходит ли канал вашей задаче.'],
@@ -213,6 +213,7 @@ createPathDrawOnViewController({
   paths: [...document.querySelectorAll('[data-draw-line]')],
   reduceMotion,
 })
+createRevealOnceController({ elements: [...document.querySelectorAll('#trust [data-trust-stat] > img')], reduceMotion })
 
 const fitImages = [
   './assets/fit/01-management.png',
@@ -280,7 +281,7 @@ const renderCaseCards = () => {
   const filteredCases = getFilteredCases()
   caseCardsElement.innerHTML = filteredCases.map(({ label, title, context, task, solution, results }) => {
     const image = caseImages[landingData.cases.findIndex((item) => item.title === title)]
-    return `<article class="flex min-w-0 flex-[0_0_92%] snap-start flex-col overflow-hidden bg-white sm:flex-[0_0_82%] lg:flex-[0_0_72%] xl:flex-[0_0_68%]"><div data-case-header class="grid md:grid-cols-[minmax(0,1fr)_320px]"><div class="min-w-0 p-5 md:p-7"><p class="text-sm font-medium text-brand">${label}</p><p data-case-context class="mt-2 min-w-0 text-xs leading-5 text-ink/45">${context}</p><h3 class="mt-5 max-w-xl font-display text-2xl font-semibold leading-[1.15] tracking-[-.03em] md:text-3xl">${title}</h3></div><div data-case-image class="aspect-[4/3] w-full overflow-hidden bg-blue-soft md:w-80" aria-hidden="true"><img class="h-full w-full object-cover" src="${image}" alt="" width="1024" height="768" /></div></div><div data-case-body class="grid gap-5 border-t border-ink/10 p-5 text-sm leading-6 md:p-7 xl:grid-cols-[2fr_3fr] xl:gap-0"><div data-case-task class="xl:pr-7"><p class="font-medium text-ink">Задача</p><p class="mt-1 text-ink/65">${task}</p></div><div data-case-solution class="xl:border-l xl:border-ink/10 xl:pl-7"><p class="font-medium text-ink">Решение</p><ul class="mt-2 grid gap-2 text-ink/65">${solution.map((item) => `<li class="grid grid-cols-[8px_1fr] gap-2"><span class="mt-[9px] h-1.5 w-1.5 bg-accent" aria-hidden="true"></span><span>${item}</span></li>`).join('')}</ul></div></div><div data-case-results class="mt-auto border-t border-ink/10 p-5 md:p-7"><p class="text-sm font-medium text-ink">Результат</p><dl class="mt-3 grid border-y border-border bg-white sm:grid-cols-3">${results.map(([value, caption]) => `<div data-case-result class="flex min-h-[104px] flex-col justify-between border-t border-border bg-white py-4 first:border-t-0 sm:border-l sm:border-t-0 sm:px-4 sm:first:border-l-0"><dt class="font-display text-2xl font-semibold leading-none tracking-[-.04em] text-brand md:text-3xl">${value}</dt><dd class="mt-3 text-xs leading-5 text-ink/55">${caption}</dd></div>`).join('')}</dl></div></article>`
+    return `<article class="flex min-w-0 flex-[0_0_92%] snap-start flex-col overflow-hidden bg-white sm:flex-[0_0_82%] lg:flex-[0_0_72%] xl:flex-[0_0_68%]"><div data-case-header class="grid md:grid-cols-[minmax(0,1fr)_320px]"><div class="min-w-0 p-5 md:p-7"><p class="text-sm font-medium text-brand">${label}</p><p data-case-context class="mt-2 min-w-0 text-xs leading-5 text-ink/45">${context}</p><h3 class="mt-5 max-w-xl font-display text-2xl font-semibold leading-[1.15] tracking-[-.03em] md:text-3xl">${title}</h3></div><div data-case-image class="aspect-[4/3] w-full overflow-hidden bg-blue-soft md:w-80" aria-hidden="true"><img class="h-full w-full object-cover" src="${image}" alt="" width="1024" height="768" /></div></div><div data-case-body class="grid gap-5 border-t border-ink/10 p-5 text-sm leading-6 md:p-7 xl:grid-cols-[2fr_3fr] xl:gap-0"><div data-case-task class="xl:pr-7"><p class="font-medium text-ink">Задача</p><p class="mt-1 text-ink/65">${task}</p></div><div data-case-solution class="xl:border-l xl:border-ink/10 xl:pl-7"><p class="font-medium text-ink">Решение</p><ul class="mt-2 grid gap-2 text-ink/65">${solution.map((item) => `<li class="grid grid-cols-[8px_1fr] gap-2"><span class="mt-[9px] h-1.5 w-1.5 bg-accent" aria-hidden="true"></span><span>${item}</span></li>`).join('')}</ul></div></div><div data-case-results class="mt-auto p-5 md:p-7"><p class="text-sm font-medium text-ink">Результат</p><dl class="mt-3 grid bg-white sm:grid-cols-3">${results.map(([value, caption]) => `<div data-case-result class="flex min-h-[104px] flex-col justify-between bg-white py-4 sm:border-l sm:border-border sm:px-4 sm:first:border-l-0"><dt class="font-display text-2xl font-semibold leading-none tracking-[-.04em] text-brand md:text-3xl">${value}</dt><dd class="mt-3 text-xs leading-5 text-ink/55">${caption}</dd></div>`).join('')}</dl></div></article>`
   }).join('')
   caseViewport.scrollLeft = 0
   if (typeof requestAnimationFrame === 'function') requestAnimationFrame(updateCaseControls)
@@ -308,7 +309,8 @@ caseViewport.addEventListener('scroll', updateCaseControls, { passive: true })
 window.addEventListener?.('resize', updateCaseControls)
 renderCaseFilters()
 renderCaseCards()
-render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId]) => `<article class="flex min-h-[286px] overflow-hidden bg-white/90 text-left"><div class="flex min-w-0 flex-col p-6 md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></div></article>`).join(''))
+const startImages = ['./assets/start/project-folder-approved.png', './assets/start/media-plan-approved.png']
+render('start-options', landingData.startOptions.map(([title, label, text, ctaLabel, ctaId], index) => `<article class="start-card flex min-h-[286px] overflow-hidden bg-white/65 text-left"><div class="start-copy flex min-w-0 flex-col p-6 md:p-7"><p class="text-sm text-brand">${label}</p><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${title}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${text}</p><a data-cta="${ctaId}" class="button-press mt-6 inline-flex w-fit px-5 py-3 text-sm font-medium ${ctaId === 'start-promotion' ? 'bg-accent text-ink' : 'border border-brand text-brand'}" href="${ctaId === 'start-promotion' ? '#contact' : '#quiz'}">${ctaLabel}</a></div><img data-start-image class="start-art" src="${startImages[index]}" alt="" width="1254" height="1254" loading="lazy" decoding="async" /></article>`).join(''))
 render('faq-list', landingData.faq.map(([question, answer], index) => `<article class="faq-item border-b border-ink/10" data-open="false"><button class="flex w-full items-center justify-between gap-6 py-6 text-left font-display text-lg font-semibold leading-tight" id="faq-button-${index}" aria-expanded="false" aria-controls="faq-answer-${index}"><span>${question}</span><span class="faq-plus text-2xl font-normal text-brand">+</span></button><div class="faq-answer" id="faq-answer-${index}" role="region" aria-labelledby="faq-button-${index}"><div><p class="max-w-2xl pb-6 text-sm leading-6 text-ink/65">${answer}</p></div></div></article>`).join(''))
 
 document.querySelectorAll('.faq-item button').forEach((button) => button.addEventListener('click', () => {
@@ -320,10 +322,17 @@ const reviewCounter = document.getElementById('review-counter')
 const reviewPrevious = document.getElementById('review-prev')
 const reviewNext = document.getElementById('review-next')
 let reviewIndex = 0
+const reviewAvatars = [
+  './assets/reviews/Avatarka1.svg',
+  './assets/reviews/Avatarka2.svg',
+  './assets/reviews/Avatarka3.svg',
+  './assets/reviews/Avatarka4.svg',
+  './assets/reviews/Avatarka5.svg',
+]
 
 const renderReviewSlide = () => {
   const [label, detail, paragraphs] = landingData.reviewSlides[reviewIndex]
-  reviewSlides.innerHTML = `<div data-review-message class="max-w-2xl rounded-[8px] rounded-tl-[3px] bg-white p-5 md:p-6"><div class="flex items-start justify-between gap-4"><div><p class="text-sm font-medium text-brand">${label}</p><p class="mt-1 text-xs leading-5 text-ink/50">${detail}</p></div><span class="shrink-0 rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/50">Сообщение клиента Ц</span></div><div class="mt-5 grid gap-4 text-sm leading-6 text-ink/70">${paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></div>`
+  reviewSlides.innerHTML = `<div data-review-slide class="flex items-start gap-3 md:gap-4"><img data-review-avatar class="hidden h-8 w-8 shrink-0 rounded-full object-cover md:mt-7 md:block md:h-[45px] md:w-[45px] md:-translate-y-[2.5px]" src="${reviewAvatars[reviewIndex]}" alt="" width="45" height="45" /><div data-review-message class="min-w-0 flex-1 rounded-[8px] rounded-tl-[3px] bg-white p-5 md:p-6"><div class="flex items-start justify-between gap-4"><div><p class="text-sm font-medium text-brand">${label}</p><p class="mt-1 text-xs leading-5 text-ink/50">${detail}</p></div><span class="hidden shrink-0 rounded-full border border-ink/10 bg-white px-3 py-1 text-xs text-ink/50 md:inline-flex">Сообщение клиента Ц</span></div><div class="mt-5 grid gap-4 text-sm leading-6 text-ink/70">${paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></div></div>`
   reviewCounter.textContent = `${reviewIndex + 1} / ${landingData.reviewSlides.length}`
 }
 
