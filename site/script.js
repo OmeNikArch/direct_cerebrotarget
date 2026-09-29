@@ -149,12 +149,11 @@ const landingData = {
 const render = (id, html) => { document.getElementById(id).innerHTML = html }
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const teamMembers = [
-  ['Анна Соколова', 'Руководитель направления'],
-  ['Максим Орлов', 'Стратег по performance-маркетингу'],
-  ['Елена Миронова', 'Специалист по Яндекс Директ'],
-  ['Дмитрий Волков', 'Специалист по аналитике'],
-  ['Мария Белова', 'Аккаунт-менеджер'],
-  ['Алексей Ковалёв', 'Руководитель отдела оптимизации'],
+  ['Феликс Зинатуллин', 'CEO', 'felix-zinatullin.png'],
+  ['Виктор Потапов', 'Руководитель агентского направления', 'viktor-potapov.png'],
+  ['Екатерина Тютюнникова', 'Руководитель направления Яндекс Директ', 'ekaterina-tyutyunnikova.png'],
+  ['Михаил Прозоров', 'Руководитель направления Яндекс ПромоСтраницы', 'mihail-prozorov.png'],
+  ['Андрей Плешаков', 'Руководитель товарного направления', 'andrey-pleshakov.png'],
 ]
 
 createInitialScrollController({})
@@ -166,7 +165,7 @@ if (siteHeader) createStickyHeaderController({ header: siteHeader })
 if (mobileMenuButton && mobileMenu) createMobileMenuController({ button: mobileMenuButton, menu: mobileMenu, body: document.body })
 
 render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact class="border-b border-white/20 py-3 last:border-b-0 md:px-4 md:even:border-l md:even:border-white/20 lg:border-b-0 lg:border-l lg:border-white/20 lg:first:border-l-0 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-2 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
-render('team-cards', teamMembers.map(([name, role]) => `<article data-team-card class="w-[calc(48.1%-12px)] shrink-0 text-ink md:w-[calc(32.5%-16px)] lg:w-[calc(19.7%-16px)]"><div data-team-photo-placeholder class="aspect-square border border-border bg-paper" role="img" aria-label="Место для фотографии ${name}"></div><h3 class="mt-4 font-display text-lg font-semibold leading-tight tracking-[-.02em]">${name}</h3><p class="mt-2 text-sm leading-5 text-ink/60">${role}</p></article>`).join(''))
+render('team-cards', teamMembers.map(([name, role, photo]) => `<article data-team-card class="w-[calc(48.1%-12px)] shrink-0 text-ink md:w-[calc(32.5%-16px)] lg:w-[calc(19.7%-16px)]"><div data-team-photo class="relative aspect-[5.5/7]" role="img" aria-label="${name}"><div data-team-photo-panel class="absolute inset-x-0 bottom-0 aspect-square rounded-[var(--radius-card)] bg-white"></div><img data-team-portrait class="absolute inset-0 z-10 h-full w-full rounded-b-[var(--radius-card)] object-cover object-top" src="./assets/team/graded/${photo}" alt="" width="550" height="700" loading="lazy" /></div><h3 class="mt-4 font-display text-lg font-semibold leading-tight tracking-[-.02em]">${name}</h3><p class="mt-2 text-sm leading-5 text-ink/60">${role}</p></article>`).join(''))
 const teamViewport = document.querySelector('[data-team-viewport]')
 const scrollTeam = (direction) => {
   if (!teamViewport) return
@@ -389,9 +388,13 @@ configureVkBriefLink()
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault()
-  const values = { ...Object.fromEntries(new FormData(form)), consent: form.consent.checked }
+  const values = {
+    ...Object.fromEntries(new FormData(form)),
+    privacyConsent: form.privacyConsent.checked,
+    personalDataConsent: form.personalDataConsent.checked,
+  }
   const errors = validateLeadForm(values)
-  ;['name', 'phone', 'budget', 'consent'].forEach((field) => setError(field, errors[field]))
+  ;['name', 'phone', 'budget', 'privacyConsent', 'personalDataConsent'].forEach((field) => setError(field, errors[field]))
   if (Object.keys(errors).length) {
     const firstInvalid = form.elements.namedItem(Object.keys(errors)[0])
     firstInvalid?.focus()

@@ -301,15 +301,15 @@ test('keeps the top header transparent and removes the scrolled divider', () => 
   assert.doesNotMatch(headerBackdrop, /border-b|border-border/u)
 })
 
-test('shows full navigation from the tablet breakpoint', () => {
-  assert.match(redesignHtml, /<nav[^>]*hidden[^>]*md:flex[^>]*aria-label="Основная навигация"/u)
-  assert.match(redesignHtml, /data-cta="header-quiz"[^>]*hidden[^>]*lg:inline-flex/u)
-  assert.match(redesignHtml, /@media \(min-width: 768px\) and \(orientation: landscape\) \{ \[data-cta="header-quiz"\] \{ display: inline-flex; \} \}/u)
-  assert.match(redesignHtml, /id="menu-button"[^>]*md:hidden/u)
-  assert.match(redesignHtml, /id="mobile-menu"[^>]*md:hidden/u)
+test('uses the compact menu through tablet widths to keep header controls spacious', () => {
+  assert.match(redesignHtml, /<nav[^>]*hidden[^>]*lg:flex[^>]*aria-label="Основная навигация"/u)
+  assert.match(redesignHtml, /data-header-actions[^>]*hidden[^>]*lg:flex/u)
+  assert.match(redesignHtml, /data-header-actions[\s\S]*?data-cta="header-quiz"/u)
+  assert.match(redesignHtml, /id="menu-button"[^>]*lg:hidden/u)
+  assert.match(redesignHtml, /id="mobile-menu"[^>]*lg:hidden/u)
 })
 
-test('uses the four priority routes in both header menus', () => {
+test('uses the five priority routes in both header menus', () => {
   const desktopNav = redesignHtml.match(/<nav class="hidden items-center[\s\S]*?<\/nav>/u)?.[0] || ''
   const mobileNav = redesignHtml.match(/<nav id="mobile-menu"[\s\S]*?<\/nav>/u)?.[0] || ''
 
@@ -317,8 +317,32 @@ test('uses the four priority routes in both header menus', () => {
     assert.match(menu, /href="#process">Как работаем<\/a>/u)
     assert.match(menu, /href="#proof">Кейсы<\/a>/u)
     assert.match(menu, /href="#conditions">Стоимость<\/a>/u)
+    assert.match(menu, /href="#reviews">Отзывы<\/a>/u)
     assert.match(menu, /href="#faq">Вопросы<\/a>/u)
     assert.doesNotMatch(menu, />Условия<\/a>|>Бесплатный медиаплан<\/a>|>Обсудить продвижение<\/a>/u)
+  }
+})
+
+test('provides direct messenger links in the header and both mandatory legal consents in forms', () => {
+  const header = redesignHtml.match(/<header[\s\S]*?<\/header>/u)?.[0] || ''
+  const desktopActions = header.match(/<div data-header-actions[^>]*>[\s\S]*?<\/div>/u)?.[0] || ''
+
+  for (const [network, href] of [
+    ['Telegram', 'https://t.me/cerebro_manager'],
+    ['VK', 'https://vk.com/write-73662138'],
+    ['MAX', 'https://max.ru/id7840073550_bot'],
+  ]) assert.match(header, new RegExp(`href="${href}"[^>]*aria-label="${network}"`, 'u'))
+
+  assert.match(desktopActions, /data-header-actions[^>]*gap-2/u)
+  assert.match(desktopActions, /data-header-socials[^>]*gap-2/u)
+  assert.equal((desktopActions.match(/h-\[35px\] w-\[35px\][^>]*rounded-\[var\(--radius-card\)\]/gu) || []).length, 3)
+  assert.doesNotMatch(desktopActions, /\bborder(?:\s|-[\w/]+)/u)
+  assert.match(desktopActions, /data-cta="header-quiz"/u)
+
+  for (const formId of ['quiz-lead-form', 'lead-form']) {
+    const form = redesignHtml.match(new RegExp(`<form[^>]*id="${formId}"[\\s\\S]*?<\\/form>`, 'u'))?.[0] || ''
+    assert.match(form, /name="privacyConsent"[^>]*type="checkbox"/u)
+    assert.match(form, /name="personalDataConsent"[^>]*type="checkbox"/u)
   }
 })
 

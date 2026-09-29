@@ -297,8 +297,8 @@ test('places review navigation before the review message', () => {
   assert.equal(html.indexOf('id="review-counter"') < html.indexOf('id="review-slides"'), true)
 })
 
-test('collects only the project lead fields and consent', () => {
-  for (const field of ['name', 'phone', 'budget', 'consent']) assert.match(html, new RegExp(`name="${field}"`, 'u'))
+test('collects only the project lead fields and both required legal consents', () => {
+  for (const field of ['name', 'phone', 'budget', 'privacyConsent', 'personalDataConsent']) assert.match(html, new RegExp(`name="${field}"`, 'u'))
   for (const removedField of ['email', 'request_type', 'contact_method', 'profile']) assert.doesNotMatch(html, new RegExp(`name="${removedField}"`, 'u'))
 })
 

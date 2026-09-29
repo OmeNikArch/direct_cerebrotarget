@@ -19,7 +19,7 @@ test('turns the media-plan card into a five-step qualification quiz', () => {
 test('shows a separate contact form inside the completed quiz', () => {
   const completion = html.match(/<section data-quiz-complete[\s\S]*?<\/section>/u)?.[0] || ''
   assert.match(completion, /<form id="quiz-lead-form"[^>]*data-quiz-lead-form/u)
-  for (const field of ['name', 'phone', 'site', 'consent']) assert.match(completion, new RegExp(`name="${field}"`, 'u'))
+  for (const field of ['name', 'phone', 'site', 'privacyConsent', 'personalDataConsent']) assert.match(completion, new RegExp(`name="${field}"`, 'u'))
   assert.match(completion, /name="site"[^>]*type="url"/u)
   assert.match(completion, />Оставить заявку<\/button>/u)
   assert.doesNotMatch(completion, /href="#contact"/u)

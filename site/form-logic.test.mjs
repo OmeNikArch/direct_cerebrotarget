@@ -6,19 +6,21 @@ const baseLead = {
   name: 'Анна',
   phone: '+7 999 123-45-67',
   budget: '50-500',
-  consent: true,
+  privacyConsent: true,
+  personalDataConsent: true,
 }
 
-test('accepts the three-field project lead with consent', () => {
+test('accepts the project lead after both required legal consents', () => {
   assert.deepEqual(validateLeadForm(baseLead), {})
 })
 
-test('requires the lead identity, supported budget and consent', () => {
-  assert.deepEqual(validateLeadForm({ name: ' ', phone: '', budget: 'unknown', consent: false }), {
+test('requires the lead identity, supported budget and each legal consent', () => {
+  assert.deepEqual(validateLeadForm({ name: ' ', phone: '', budget: 'unknown', privacyConsent: false, personalDataConsent: false }), {
     name: 'Укажите имя',
     phone: 'Укажите телефон',
     budget: 'Выберите рекламный бюджет',
-    consent: 'Нужно согласие на обработку данных',
+    privacyConsent: 'Подтвердите согласие с политикой конфиденциальности',
+    personalDataConsent: 'Нужно согласие на обработку персональных данных',
   })
 })
 

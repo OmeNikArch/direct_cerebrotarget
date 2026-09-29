@@ -13,7 +13,8 @@ export const validateLeadForm = (values) => {
   if (!hasValue(values.name)) errors.name = 'Укажите имя'
   if (!hasValue(values.phone)) errors.phone = 'Укажите телефон'
   if (!budgetLabels.has(values.budget)) errors.budget = 'Выберите рекламный бюджет'
-  if (!values.consent) errors.consent = 'Нужно согласие на обработку данных'
+  if (!values.privacyConsent) errors.privacyConsent = 'Подтвердите согласие с политикой конфиденциальности'
+  if (!values.personalDataConsent) errors.personalDataConsent = 'Нужно согласие на обработку персональных данных'
 
   return errors
 }
