@@ -14,7 +14,7 @@ const createClassList = () => {
   }
 }
 
-test('starts an unanchored page at the top instead of restoring an old scroll position', () => {
+test('starts an unanchored page at the top without resetting a user scroll after load', () => {
   assert.equal(typeof ui.createInitialScrollController, 'function')
 
   const listeners = new Map()
@@ -36,12 +36,10 @@ test('starts an unanchored page at the top instead of restoring an old scroll po
 
   assert.equal(historyObject.scrollRestoration, 'manual')
   assert.deepEqual(scrollCalls, [[0, 0]])
-
-  listeners.get('pageshow')()
-  assert.deepEqual(scrollCalls, [[0, 0], [0, 0]])
+  assert.equal(listeners.has('pageshow'), false)
 
   controller.destroy()
-  assert.equal(listeners.has('pageshow'), false)
+  assert.deepEqual(scrollCalls, [[0, 0]])
 })
 
 test('preserves a direct link to an anchored section', () => {

@@ -1,14 +1,37 @@
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import { access, readFile } from 'node:fs/promises'
 import test from 'node:test'
 
 const html = await readFile(new URL('./index.html', import.meta.url), 'utf8')
 const script = await readFile(new URL('./script.js', import.meta.url), 'utf8')
+const quiz = await readFile(new URL('./quiz.mjs', import.meta.url), 'utf8')
 
 test('leads media-plan CTAs to the quiz while preserving the consultation route', () => {
-  for (const cta of ['header-quiz', 'hero-quiz', 'problems', 'transparency', 'cases', 'pricing']) assert.equal(new RegExp(`<a[^>]*data-cta="${cta}"[^>]*href="#quiz"`, 'u').test(html), true, `CTA ${cta} should lead to the quiz`)
+  for (const cta of ['header-quiz', 'hero-quiz', 'problems', 'transparency', 'cases']) assert.equal(new RegExp(`<a[^>]*data-cta="${cta}"[^>]*href="#quiz"`, 'u').test(html), true, `CTA ${cta} should lead to the quiz`)
   for (const cta of ['start-promotion', 'start-audit']) assert.equal(script.includes(`'${cta}'`), true, `CTA ${cta} should be defined`)
   assert.equal(/ctaId === 'start-promotion' \? '#contact' : '#quiz'/u.test(script), true, 'Start options should retain separate routes')
+})
+
+test('uses the pricing CTA for the standalone audit without duplicating its offer', () => {
+  const conditions = html.match(/<section id="conditions"[\s\S]*?<\/section>/u)?.[0] || ''
+  assert.match(conditions, /data-cta="audit"[^>]*href="#contact"[^>]*>Заказать аудит<\/a>/u)
+  assert.match(conditions, /<h3[^>]*>Нужен только аудит рекламы\?<\/h3>/u)
+  assert.match(conditions, /Разберём действующие кампании, найдём точки роста и подготовим рекомендации\. Разовый аудит — 5 000 ₽/u)
+  assert.doesNotMatch(conditions, /Аудит включён в стоимость ведения рекламы/u)
+  assert.equal(conditions.indexOf('Нужен только аудит рекламы?') < conditions.indexOf('data-cta="audit"'), true, 'Pricing copy should precede the right-aligned audit action')
+  assert.doesNotMatch(conditions, /Получить бесплатный медиаплан/u)
+  assert.doesNotMatch(html, /data-audit-offer/u)
+})
+
+test('adapts the contact copy for an audit while keeping the media-plan route available', () => {
+  assert.match(html, /data-contact-eyebrow[^>]*>Нужна консультация<\/p>/u)
+  assert.match(html, /data-contact-title[^>]*>Обсудим вашу задачу и следующий шаг<\/h2>/u)
+  assert.match(html, /data-contact-description[^>]*>Позвоним, уточним детали и согласуем дальнейшие действия<\/p>/u)
+  assert.match(html, /href="#quiz">Нужен бесплатный медиаплан\?<\/a>/u)
+  assert.match(html, /data-audit-form-intro[\s\S]*?Заявка на разовый аудит рекламы/u)
+  assert.doesNotMatch(html, /data-audit-form-intro[\s\S]*?Оставьте контакты — уточним детали/u)
+  assert.match(script, /Покажем, что мешает рекламе приносить больше заявок/u)
+  assert.match(script, /Разберём действующие кампании и найдём точки роста\. Подготовим понятные рекомендации: что исправить в первую очередь, чтобы реклама работала эффективнее\./u)
 })
 
 test('makes the free media plan explicit and uses the approved higher-budget fee', () => {
@@ -72,7 +95,7 @@ test('keeps the fee transition and future proof sections explicit', () => {
 })
 
 test('uses a compact desktop form and a responsive hero facts grid', () => {
-  assert.equal(/<form[^>]*id="lead-form"[^>]*md:grid-cols-2/u.test(html), true)
+  assert.equal(/<div[^>]*id="lead-form"[^>]*role="form"[^>]*md:grid-cols-2/u.test(html), true)
   assert.match(html, /id="hero-facts"[^>]*grid-cols-1[^>]*md:grid-cols-2[^>]*lg:grid-cols-4/u)
 })
 
@@ -156,11 +179,11 @@ test('keeps the final form as the consultation route and points media-plan seeke
   assert.equal(html.includes('Оставьте заявку на продвижение'), false)
 })
 
-test('shows conditions as one concise pricing table and keeps the CTA on one line', () => {
+test('shows conditions as one concise pricing table and keeps the audit CTA on one line', () => {
   assert.equal(/<table[^>]*data-pricing-table/u.test(html), true)
   assert.equal((html.match(/<tr\b/gu) || []).length >= 3, true)
   assert.equal(/pricing-cards/u.test(html), false)
-  assert.equal(/data-cta="pricing"[^>]*whitespace-nowrap/u.test(html), true)
+  assert.equal(/data-cta="audit"[^>]*whitespace-nowrap/u.test(html), true)
 })
 
 test('uses stacked pricing rows instead of horizontal scrolling on mobile', () => {
@@ -212,7 +235,7 @@ test('uses the approved title for promotion consulting', () => {
 
 test('stages service scope cards as one icon-led dark grid', () => {
   assert.equal(/id="service-scope-cards"[^>]*lg:grid-cols-4/u.test(html), true)
-  assert.equal(/serviceScope\.map\(\(\[, t, d\], index\)/u.test(script), true)
+  assert.equal(/serviceScope\.map\(\(\[, t, d, partnerLogo\], index\)/u.test(script), true)
   assert.equal(script.includes('data-service-icon aria-hidden="true"'), true)
   assert.equal(script.includes('lg:translate-y-20'), false)
 })
@@ -302,12 +325,19 @@ test('collects only the project lead fields and both required legal consents', (
   for (const removedField of ['email', 'request_type', 'contact_method', 'profile']) assert.doesNotMatch(html, new RegExp(`name="${removedField}"`, 'u'))
 })
 
-test('prepares honest Bitrix submission and a VK brief success state', () => {
+test('shows the approved bot follow-up only after a valid demo or successful backend submission', async () => {
   assert.match(html, /id="lead-form"[^>]*data-endpoint=""/u)
-  assert.match(html, /id="lead-form"[^>]*data-vk-bot-url=""/u)
   assert.match(html, /id="form-status"[^>]*role="status"[^>]*aria-live="polite"/u)
   assert.match(html, /id="lead-success"[^>]*hidden/u)
-  assert.match(html, /id="vk-brief-link"[^>]*bg-\[#0077FF\]/u)
+  assert.match(html, /data-quiz-lead-success[^>]*hidden/u)
+  for (const bot of ['vk', 'telegram', 'max']) {
+    assert.match(html, new RegExp(`assets/bots/${bot}-bot\\.svg`, 'u'))
+    await access(new URL(`./assets/bots/${bot}-bot.svg`, import.meta.url))
+  }
+  for (const label of ['VK-бот', 'Telegram-бот', 'MAX-бот']) assert.equal((html.match(new RegExp(`>${label}<`, 'gu')) || []).length, 2)
+  assert.match(script, /showLeadSuccess/u)
+  assert.match(quiz, /showQuizLeadSuccess/u)
+  assert.doesNotMatch(html, /<form\b/u)
   assert.equal(script.includes("setFormState('submitting')"), true)
   assert.equal(script.includes("setFormState('success'"), true)
   assert.equal(script.includes("setFormState('error'"), true)

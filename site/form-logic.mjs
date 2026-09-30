@@ -3,6 +3,7 @@ export const BUDGET_OPTIONS = [
   ['501-1000', '501 тыс.–1 млн ₽'],
   ['1000-plus', 'Более 1 млн ₽'],
 ]
+export const AUDIT_REQUEST_TYPE = 'Разовый аудит рекламы'
 
 const hasValue = (value) => Boolean(String(value || '').trim())
 const budgetLabels = new Map(BUDGET_OPTIONS)
@@ -12,7 +13,7 @@ export const validateLeadForm = (values) => {
 
   if (!hasValue(values.name)) errors.name = 'Укажите имя'
   if (!hasValue(values.phone)) errors.phone = 'Укажите телефон'
-  if (!budgetLabels.has(values.budget)) errors.budget = 'Выберите рекламный бюджет'
+  if (values.requestType !== AUDIT_REQUEST_TYPE && !budgetLabels.has(values.budget)) errors.budget = 'Выберите рекламный бюджет'
   if (!values.privacyConsent) errors.privacyConsent = 'Подтвердите согласие с политикой конфиденциальности'
   if (!values.personalDataConsent) errors.personalDataConsent = 'Нужно согласие на обработку персональных данных'
 
@@ -22,6 +23,7 @@ export const validateLeadForm = (values) => {
 export const buildLeadPayload = (values) => ({
   name: String(values.name).trim(),
   phone: String(values.phone).trim(),
-  budget: budgetLabels.get(values.budget),
+  ...(values.requestType ? { requestType: values.requestType } : {}),
+  ...(budgetLabels.has(values.budget) ? { budget: budgetLabels.get(values.budget) } : {}),
   source: 'landing-yandex-direct',
 })

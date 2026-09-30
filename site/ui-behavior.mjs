@@ -10,10 +10,9 @@ export const createInitialScrollController = ({
   }
 
   resetToTop()
-  windowObject?.addEventListener?.('pageshow', resetToTop)
 
   return {
-    destroy: () => windowObject?.removeEventListener?.('pageshow', resetToTop),
+    destroy() {},
   }
 }
 

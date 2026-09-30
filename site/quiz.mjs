@@ -43,14 +43,33 @@ export const createQuizController = ({ root }) => {
   const stepLabel = root.querySelector('[data-quiz-step]')
   const topic = root.querySelector('[data-quiz-topic]')
   const progress = root.querySelector('[data-quiz-progress]')
+  const quizMeta = root.querySelector('[data-quiz-meta]')
   const next = root.querySelector('[data-quiz-next]')
   const back = root.querySelector('[data-quiz-back]')
   const quizForm = root.querySelector('[data-quiz-form]')
   const completion = root.querySelector('[data-quiz-complete]')
   const summary = root.querySelector('[data-quiz-summary]')
   const quizLeadForm = root.querySelector('[data-quiz-lead-form]')
+  const quizLeadFields = root.querySelector('[data-quiz-lead-fields]')
+  const quizLeadIntro = root.querySelector('[data-quiz-lead-intro]')
+  const quizLeadStatus = root.querySelector('[data-quiz-lead-status]')
+  const quizLeadSuccess = root.querySelector('[data-quiz-lead-success]')
   const answers = {}
   let index = 0
+
+  const setQuizLeadStatus = (message = '') => {
+    quizLeadStatus.hidden = !message
+    quizLeadStatus.textContent = message
+    quizLeadStatus.className = `rounded-lg px-4 py-3 text-sm md:col-span-2 ${message ? 'bg-red-50 text-red-800' : ''}`
+  }
+
+  const showQuizLeadSuccess = () => {
+    quizMeta.hidden = true
+    quizLeadIntro.hidden = true
+    quizLeadFields.hidden = true
+    quizLeadSuccess.hidden = false
+    quizLeadSuccess.focus()
+  }
 
   const saveAnswersForLead = () => {
     const fieldNames = { business: 'quizBusiness', geography: 'quizGeography', goal: 'quizGoal', situation: 'quizSituation', budget: 'quizBudget' }
@@ -82,8 +101,7 @@ export const createQuizController = ({ root }) => {
     next.disabled = false
   })
 
-  quizForm.addEventListener('submit', (event) => {
-    event.preventDefault()
+  next.addEventListener('click', () => {
     if (!answers[quizSteps[index].id]) return
     if (index < quizSteps.length - 1) {
       index += 1
@@ -95,6 +113,39 @@ export const createQuizController = ({ root }) => {
     quizForm.hidden = true
     completion.hidden = false
     summary.textContent = 'Готово: мы учли ваш контекст и бюджет. Оставьте контакты — подготовим медиаплан.'
+  })
+
+  const quizLeadButton = quizLeadForm.querySelector('[data-quiz-lead-submit]')
+
+  quizLeadButton.addEventListener('click', async () => {
+    const firstInvalid = [...quizLeadForm.querySelectorAll('[required]')].find((control) => !control.checkValidity())
+    if (firstInvalid) {
+      firstInvalid.reportValidity()
+      return
+    }
+
+    quizLeadButton.disabled = true
+    quizLeadButton.textContent = 'Отправляем…'
+    setQuizLeadStatus()
+    try {
+      if (quizLeadForm.dataset.endpoint) {
+        const values = Object.fromEntries([...quizLeadForm.querySelectorAll('[name]')]
+          .filter((control) => control.type !== 'checkbox' || control.checked)
+          .map((control) => [control.name, control.value]))
+        const response = await fetch(quizLeadForm.dataset.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+        })
+        if (!response.ok) throw new Error(`Quiz lead request failed: ${response.status}`)
+      }
+      showQuizLeadSuccess()
+    } catch (error) {
+      console.error(error)
+      quizLeadButton.disabled = false
+      quizLeadButton.textContent = 'Оставить заявку'
+      setQuizLeadStatus('Не удалось отправить заявку. Попробуйте ещё раз позже.')
+    }
   })
 
   back.addEventListener('click', () => {

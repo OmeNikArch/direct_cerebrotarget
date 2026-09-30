@@ -14,6 +14,25 @@ test('accepts the project lead after both required legal consents', () => {
   assert.deepEqual(validateLeadForm(baseLead), {})
 })
 
+test('accepts a standalone audit request without an advertising budget and preserves its CRM intent', () => {
+  const auditLead = {
+    name: 'Иван',
+    phone: '+7 999 765-43-21',
+    budget: '',
+    requestType: 'Разовый аудит рекламы',
+    privacyConsent: true,
+    personalDataConsent: true,
+  }
+
+  assert.deepEqual(validateLeadForm(auditLead), {})
+  assert.deepEqual(buildLeadPayload(auditLead), {
+    name: 'Иван',
+    phone: '+7 999 765-43-21',
+    requestType: 'Разовый аудит рекламы',
+    source: 'landing-yandex-direct',
+  })
+})
+
 test('requires the lead identity, supported budget and each legal consent', () => {
   assert.deepEqual(validateLeadForm({ name: ' ', phone: '', budget: 'unknown', privacyConsent: false, personalDataConsent: false }), {
     name: 'Укажите имя',

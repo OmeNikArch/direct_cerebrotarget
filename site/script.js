@@ -1,7 +1,7 @@
 import { buildLeadPayload, validateLeadForm } from './form-logic.mjs'
-import { createQuizController } from './quiz.mjs?v=quiz-final-1'
+import { createQuizController } from './quiz.mjs?v=hixo-quiz-2'
 import { createHeroCompositionController } from './hero-composition.mjs'
-import { createInitialScrollController, createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs'
+import { createInitialScrollController, createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs?v=hixo-scroll-1'
 import { createCountUpController, protectHeadingOrphans } from './content-polish.mjs'
 
 const landingData = {
@@ -26,7 +26,7 @@ const landingData = {
   serviceScope: [
     ['01', 'Стратегия и аудит', 'Разбираем спрос, сайт и точки роста перед запуском'],
     ['02', 'Запуск и оптимизация', 'Настраиваем кампании, объявления и регулярно улучшаем их по данным'],
-    ['03', 'Аналитика и отчёты', 'Связываем рекламу с обращениями и показываем понятную динамику'],
+    ['03', 'Аналитика и отчёты', 'Настраиваем аналитику под вашу воронку и при необходимости подключаем инструменты Calltouch', './assets/partners/calltouch.svg'],
     ['04', 'Рекомендации по сайту', 'Подсказываем, что на посадочной странице мешает заявкам'],
   ],
   process: [
@@ -230,7 +230,11 @@ const serviceIcons = [
   './assets/service-icons/03-analytics.svg',
   './assets/service-icons/04-site-recommendations.svg',
 ]
-render('service-scope-cards', landingData.serviceScope.map(([, t, d], index) => `<article class="service-card min-h-[260px] border border-border bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms"><span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span><h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
+render('service-scope-cards', landingData.serviceScope.map(([, t, d, partnerLogo], index) => {
+  const serviceIcon = `<span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span>`
+  const cardMarks = partnerLogo ? `<div class="flex h-7 items-center gap-2">${serviceIcon}<span aria-hidden="true" class="text-xl leading-none text-accent">+</span><img class="h-7 w-auto" src="${partnerLogo}" alt="Calltouch" width="25" height="28" /></div>` : serviceIcon
+  return `<article class="service-card min-h-[260px] border border-border bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms">${cardMarks}<h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`
+}).join(''))
 createRevealOnceController({ elements: [...document.querySelectorAll('.service-card')], reduceMotion })
 render('process-cards', landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-[30px] w-[30px] items-center justify-center rounded-[5px] bg-blue-soft font-display text-sm font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
 const transparencyImages = [
@@ -352,14 +356,53 @@ const quizRoot = document.querySelector('[data-quiz-card]')
 if (quizRoot) createQuizController({ root: quizRoot })
 const formFields = document.getElementById('lead-form-fields')
 const successPanel = document.getElementById('lead-success')
-const vkBriefLink = document.getElementById('vk-brief-link')
-const vkLinkStatus = document.getElementById('vk-link-status')
-const formButton = form.querySelector('button[type="submit"]')
+const formButton = form.querySelector('button[type="button"]')
 const formStatus = document.getElementById('form-status')
+const requestType = form.querySelector('[data-request-type]')
+const auditFormIntro = form.querySelector('[data-audit-form-intro]')
+const budgetField = form.querySelector('[data-contact-budget]')
+const contactEyebrow = document.querySelector('[data-contact-eyebrow]')
+const contactTitle = document.querySelector('[data-contact-title]')
+const contactDescription = document.querySelector('[data-contact-description]')
+
+const contactCopy = {
+  promotion: {
+    eyebrow: 'Нужна консультация',
+    title: 'Обсудим вашу задачу и следующий шаг',
+    description: 'Позвоним, уточним детали и согласуем дальнейшие действия',
+  },
+  audit: {
+    eyebrow: 'Разовый аудит рекламы',
+    title: 'Покажем, что мешает рекламе приносить больше заявок',
+    description: 'Разберём действующие кампании и найдём точки роста. Подготовим понятные рекомендации: что исправить в первую очередь, чтобы реклама работала эффективнее.',
+  },
+}
+
+const setContactMode = (mode = 'promotion') => {
+  const isAudit = mode === 'audit'
+  const copy = contactCopy[isAudit ? 'audit' : 'promotion']
+  requestType.value = isAudit ? 'Разовый аудит рекламы' : 'Консультация по ведению рекламы'
+  auditFormIntro.hidden = !isAudit
+  budgetField.hidden = isAudit
+  contactEyebrow.textContent = copy.eyebrow
+  contactTitle.textContent = copy.title
+  contactDescription.textContent = copy.description
+  if (isAudit) setError('budget')
+}
+
+document.querySelector('[data-cta="audit"]')?.addEventListener('click', (event) => {
+  event.preventDefault()
+  setContactMode('audit')
+  document.getElementById('contact').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+})
+
+document.querySelectorAll('a[href="#contact"]:not([data-cta="audit"])').forEach((link) => {
+  link.addEventListener('click', () => setContactMode())
+})
 
 const setError = (field, message) => {
   const target = form.querySelector(`[data-error="${field}"]`)
-  const control = form.elements.namedItem(field)
+  const control = form.querySelector(`[name="${field}"]`)
   target.textContent = message || ''
   target.classList.toggle('hidden', !message)
   control?.setAttribute('aria-invalid', String(Boolean(message)))
@@ -375,46 +418,38 @@ const setFormState = (state, message = '') => {
   formStatus.className = `rounded-lg px-4 py-3 text-sm md:col-span-2 ${state === 'error' ? 'bg-red-50 text-red-800' : 'bg-paper text-ink'}`
 }
 
-const configureVkBriefLink = () => {
-  const botUrl = String(form.dataset.vkBotUrl || '').trim()
-  if (!botUrl) return
-  vkBriefLink.href = botUrl
-  vkBriefLink.removeAttribute('aria-disabled')
-  vkBriefLink.removeAttribute('tabindex')
-  vkLinkStatus.hidden = true
+const showLeadSuccess = () => {
+  formFields.hidden = true
+  successPanel.hidden = false
+  successPanel.focus()
 }
 
-configureVkBriefLink()
-
-form.addEventListener('submit', async (event) => {
-  event.preventDefault()
+formButton.addEventListener('click', async () => {
   const values = {
-    ...Object.fromEntries(new FormData(form)),
-    privacyConsent: form.privacyConsent.checked,
-    personalDataConsent: form.personalDataConsent.checked,
+    ...Object.fromEntries([...form.querySelectorAll('[name]')].map((control) => [control.name, control.value])),
+    privacyConsent: form.querySelector('[name="privacyConsent"]').checked,
+    personalDataConsent: form.querySelector('[name="personalDataConsent"]').checked,
   }
   const errors = validateLeadForm(values)
   ;['name', 'phone', 'budget', 'privacyConsent', 'personalDataConsent'].forEach((field) => setError(field, errors[field]))
   if (Object.keys(errors).length) {
-    const firstInvalid = form.elements.namedItem(Object.keys(errors)[0])
+    const firstInvalid = form.querySelector(`[name="${Object.keys(errors)[0]}"]`)
     firstInvalid?.focus()
     return
   }
 
   setFormState('submitting')
   try {
-    if (!form.dataset.endpoint) throw new Error('Lead form endpoint is not configured')
-    const response = await fetch(form.dataset.endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(buildLeadPayload(values)),
-    })
-    if (!response.ok) throw new Error(`Lead form request failed: ${response.status}`)
-    form.reset()
+    if (form.dataset.endpoint) {
+      const response = await fetch(form.dataset.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildLeadPayload(values)),
+      })
+      if (!response.ok) throw new Error(`Lead form request failed: ${response.status}`)
+    }
     setFormState('success')
-    formFields.hidden = true
-    successPanel.hidden = false
-    successPanel.focus?.()
+    showLeadSuccess()
   } catch (error) {
     console.error(error)
     setFormState('error', 'Не удалось отправить заявку. Попробуйте ещё раз позже.')

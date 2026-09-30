@@ -16,13 +16,29 @@ test('turns the media-plan card into a five-step qualification quiz', () => {
   assert.match(script, /createQuizController/u)
 })
 
-test('shows a separate contact form inside the completed quiz', () => {
+test('shows a separate contact panel inside the completed quiz without a native form submit', () => {
   const completion = html.match(/<section data-quiz-complete[\s\S]*?<\/section>/u)?.[0] || ''
-  assert.match(completion, /<form id="quiz-lead-form"[^>]*data-quiz-lead-form/u)
+  assert.match(completion, /<div id="quiz-lead-form"[^>]*data-quiz-lead-form[^>]*role="form"/u)
+  assert.doesNotMatch(completion, /<form\b/u)
   for (const field of ['name', 'phone', 'site', 'privacyConsent', 'personalDataConsent']) assert.match(completion, new RegExp(`name="${field}"`, 'u'))
   assert.match(completion, /name="site"[^>]*type="url"/u)
   assert.match(completion, />Оставить заявку<\/button>/u)
   assert.doesNotMatch(completion, /href="#contact"/u)
+})
+
+test('uses a button-driven quiz instead of submitting a form on each step', () => {
+  assert.match(html, /<div data-quiz-form/u)
+  assert.match(html, /data-quiz-next[^>]*type="button"/u)
+  assert.doesNotMatch(html, /<form data-quiz-form/u)
+  assert.match(quiz, /next\.addEventListener\('click'/u)
+  assert.doesNotMatch(quiz, /quizForm\.addEventListener\('submit'/u)
+})
+
+test('leaves only the thank-you content after the quiz lead is sent', () => {
+  assert.match(html, /data-quiz-meta/u)
+  assert.match(html, /data-quiz-lead-intro/u)
+  assert.match(quiz, /quizMeta\.hidden = true/u)
+  assert.match(quiz, /quizLeadIntro\.hidden = true/u)
 })
 
 test('keeps quiz answers inside the quiz form instead of changing the promotion form', () => {

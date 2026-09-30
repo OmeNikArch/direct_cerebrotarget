@@ -36,7 +36,7 @@ test('uses the requested right-side white-to-blue-soft fade on fit cards', () =>
 
 test('makes the four annotated CTAs full width only on mobile', () => {
   const mobileCss = redesignHtml.match(/@media \(max-width: 767px\) \{([\s\S]*?)\n\s*\}/u)?.[1] || ''
-  for (const selector of ['#proof \\[data-cta="cases"\\]', '\\[data-transparency-section\\] \\[data-cta="transparency"\\]', '#conditions \\[data-cta="pricing"\\]', '#start-options \\[data-cta="start-audit"\\]']) {
+  for (const selector of ['#proof \\[data-cta="cases"\\]', '\\[data-transparency-section\\] \\[data-cta="transparency"\\]', '#conditions \\[data-cta="audit"\\]', '#start-options \\[data-cta="start-audit"\\]']) {
     assert.match(mobileCss, new RegExp(selector, 'u'))
   }
   assert.match(mobileCss, /width:\s*100%[^}]*justify-content:\s*center/u)
@@ -185,7 +185,7 @@ test('keeps the promotion form independent and offsets its select arrow', () => 
   assert.match(redesignHtml, /id="lead-form"[^>]*data-contact-form-card[^>]*border[^>]*bg-white/u)
   assert.match(redesignHtml, /<select[^>]*appearance-none[^>]*pr-12[^>]*name="budget"/u)
   assert.match(redesignHtml, /data-select-arrow[^>]*right-4/u)
-  assert.match(redesignHtml, /<button[^>]*bg-accent[^>]*type="submit"/u)
+  assert.match(redesignHtml, /<button[^>]*bg-accent[^>]*type="button"/u)
 })
 
 test('styles the quiz next control like the shared project buttons', () => {
@@ -207,9 +207,10 @@ test('uses a clean sky case chapter and borderless niche filters', () => {
   assert.doesNotMatch(redesignScript, /<button class="button-press[^"`]*border(?:-|\s)[^"`]*"[^>]*data-case-filter/u)
 })
 
-test('keeps pricing free of decorative dot tiles and uses the blue media-plan action', () => {
+test('keeps pricing free of decorative dot tiles and uses the outlined audit action', () => {
   assert.doesNotMatch(redesignHtml, /data-pricing-pattern|dot-field-light/u)
-  assert.match(redesignHtml, /data-cta="pricing"[^>]*bg-brand[^>]*text-white/u)
+  assert.match(redesignHtml, /data-cta="audit"[^>]*border[^>]*border-brand[^>]*text-brand/u)
+  assert.doesNotMatch(redesignHtml, /data-cta="audit"[^>]*bg-brand/u)
 })
 
 test('makes the messenger treatment more visible and uses the approved label', () => {
@@ -340,9 +341,9 @@ test('provides direct messenger links in the header and both mandatory legal con
   assert.match(desktopActions, /data-cta="header-quiz"/u)
 
   for (const formId of ['quiz-lead-form', 'lead-form']) {
-    const form = redesignHtml.match(new RegExp(`<form[^>]*id="${formId}"[\\s\\S]*?<\\/form>`, 'u'))?.[0] || ''
-    assert.match(form, /name="privacyConsent"[^>]*type="checkbox"/u)
-    assert.match(form, /name="personalDataConsent"[^>]*type="checkbox"/u)
+    const panel = redesignHtml.match(new RegExp(`<div[^>]*id="${formId}"[\\s\\S]*?<\\/div>`, 'u'))?.[0] || ''
+    assert.match(panel, /name="privacyConsent"[^>]*type="checkbox"/u)
+    assert.match(panel, /name="personalDataConsent"[^>]*type="checkbox"/u)
   }
 })
 
@@ -369,7 +370,7 @@ test('uses the approved fit preview composition without upscaling on wider cards
 })
 
 test('renders the approved responsive transparency bento with five edge-positioned illustrations', () => {
-  assert.match(redesignHtml, /script\.js\?v=start-options-art-1/u)
+  assert.match(redesignHtml, /script\.js\?v=audit-copy-1/u)
   const expectedImages = [
     '01-dashboard-access.png',
     '02-approving-changes.png',
