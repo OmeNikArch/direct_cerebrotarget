@@ -2,7 +2,7 @@ import { buildLeadPayload, validateLeadForm } from './form-logic.mjs'
 import { createQuizController } from './quiz.mjs?v=hixo-quiz-2'
 import { createHeroCompositionController } from './hero-composition.mjs'
 import { createInitialScrollController, createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs?v=hixo-scroll-1'
-import { createCountUpController, protectHeadingOrphans } from './content-polish.mjs'
+import { createCountUpController, protectHeadingOrphans, protectTypography } from './content-polish.mjs'
 
 const landingData = {
   facts: [
@@ -124,6 +124,198 @@ const landingData = {
         ['−44%', 'стоимость заказа'],
       ],
     },
+    {
+      category: 'services',
+      label: 'Услуги',
+      title: 'Окупили рекламу остекления балконов в 2,68 раза',
+      context: 'Санкт-Петербург · Яндекс Директ · 4 месяца',
+      task: 'Проверить Яндекс Директ как источник квалифицированных заявок на замену холодного остекления и утепление балконов.',
+      solution: [
+        'Собрали узкую семантику по замене фасадного и холодного остекления, разделили кампании на Поиск, РСЯ и Мастер кампаний.',
+        'В объявлениях использовали реальные фото объектов и офферы, собранные из частых вопросов клиентов.',
+      ],
+      results: [
+        ['2,68×', 'окупаемость вложений в рекламу'],
+        ['12', 'квалифицированных лидов'],
+        ['5', 'оплаченных договоров'],
+      ],
+    },
+    {
+      category: 'e-commerce',
+      label: 'Интернет-магазины',
+      title: 'Принесли 2,3 млн ₽ выручки интернет-магазину спортивного питания',
+      context: '4 города · Яндекс Директ · 7 месяцев',
+      task: 'Снизить зависимость от брендового трафика и получать продажи в KPI при ограниченном гео.',
+      solution: [
+        'Провели аудит, нашли перекос в брендовые запросы и выстроили баланс между брендовым и небрендовым спросом.',
+        'Протестировали 44 кампании и масштабировали связки, которые приводили покупателей по стоимости до 800 ₽.',
+      ],
+      results: [
+        ['2,3 млн ₽', 'выручка из рекламы'],
+        ['+12%', 'продаж к предыдущему продвижению'],
+        ['+18,7%', 'доля повторных продаж из Директа'],
+      ],
+    },
+    {
+      category: 'education',
+      label: 'Образование',
+      title: 'В 1,7 раза больше заявок для музыкальной школы в несезон',
+      context: 'Иркутск · Яндекс Директ · несезон',
+      task: 'Получать заявки на занятия по цене до 2 000 ₽ в период низкого спроса.',
+      solution: [
+        'Исправили технические ошибки сайта, настроили Метрику и цели на реальное заполнение формы.',
+        'Протестировали кампании в Поиске и Мастере кампаний, оставив для дальнейшей работы пять результативных связок.',
+      ],
+      results: [
+        ['×1,7', 'заявок к показателю за прошлый год'],
+        ['6 081', 'посетитель из Яндекс Директа'],
+        ['5', 'рабочих рекламных кампаний'],
+      ],
+    },
+    {
+      category: 'services',
+      label: 'Услуги для бизнеса',
+      title: '21 заявка на археологические изыскания за 3 месяца',
+      context: 'Краснодар · Яндекс Директ · 3 месяца',
+      task: 'Запустить лидогенерацию для сложной услуги с узкой аудиторией и длинным циклом сделки.',
+      solution: [
+        'С нуля подготовили посадочную страницу, кабинет, семантику и объявления за 15 рабочих дней.',
+        'Проверили Мастер кампаний, РСЯ и Поиск, затем оптимизировали связки под редкие конверсии и ограниченный бюджет.',
+      ],
+      results: [
+        ['21', 'заявка за период'],
+        ['250 000 ₽', 'средний чек услуги'],
+        ['15 дней', 'чистый срок подготовки к запуску'],
+      ],
+    },
+    {
+      category: 'services',
+      label: 'Гостиничный бизнес',
+      title: 'Окупили продвижение пятизвёздочного отеля на 355%',
+      context: 'Санкт-Петербург · Яндекс Директ · 12 месяцев',
+      task: 'Выйти на окупаемость и выстроить прозрачную отчётность для маркетолога и нескольких команд со стороны клиента.',
+      solution: [
+        'Провели аудит, настроили корректные цели и помогли связать Метрику с системой бронирования.',
+        'Проверили кампании в Поиске и РСЯ, затем оставили и развивали наиболее результативную поисковую связку.',
+      ],
+      results: [
+        ['355%', 'окупаемость продвижения за год'],
+        ['26', 'броней за первые две недели теста'],
+        ['1 442 ₽', 'стоимость брони на тесте'],
+      ],
+    },
+    {
+      category: 'e-commerce',
+      label: 'Премиальные товары',
+      title: 'В 3 раза выше конверсия в квалифицированные лиды для ателье',
+      context: 'Пошив изделий из кожи · Яндекс Директ · 1 месяц',
+      task: 'Найти рабочие рекламные связки для премиальных сумок и аксессуаров с высоким средним чеком.',
+      solution: [
+        'Проанализировали конкурентов, воронку и источники трафика, сформулировали преимущества индивидуального пошива.',
+        'Протестировали кампании для сумок и аксессуаров, сосредоточившись на приоритетном направлении с высокой маржинальностью.',
+      ],
+      results: [
+        ['18', 'заявок за тестовый месяц'],
+        ['44%', 'конверсия заявок в квалифицированные лиды'],
+        ['×3', 'выше средней конверсии сайта в квалифицированный лид'],
+      ],
+    },
+    {
+      category: 'education',
+      label: 'Образование',
+      title: '1 237 подписчиков в Telegram через Яндекс Директ',
+      context: 'B2G-образование · Яндекс Директ · 2,5 месяца',
+      task: 'Привлечь релевантную аудиторию в Telegram-канал для сложного продукта с длинным циклом продаж.',
+      solution: [
+        'Выбрали Telegram-канал как посадочную страницу после анализа прошлых воронок и CRM-баз.',
+        'Протестировали кампании и масштабировали автотаргетинг, несмотря на первоначальные опасения клиента.',
+      ],
+      results: [
+        ['1 237', 'новых подписчиков'],
+        ['до 70 ₽', 'стоимость подписчика'],
+        ['39,6%', 'подписок принес автотаргетинг'],
+      ],
+    },
+    {
+      category: 'culture',
+      label: 'Культура и развлечения',
+      title: 'Продали 10 000+ билетов в Калининградский драматический театр',
+      context: 'Калининград · Яндекс Директ · 8 месяцев',
+      task: 'Увеличить продажи билетов и выстроить рекламные кампании под конкретные спектакли и аудитории.',
+      solution: [
+        'Связали Метрику с билетной системой, чтобы оптимизировать рекламу по фактическим покупкам и выручке.',
+        'Протестировали 30 кампаний: Мастер кампаний для спектаклей, Поиск, РСЯ, ретаргетинг и товарную кампанию на афишу.',
+      ],
+      results: [
+        ['10 000+', 'проданных билетов'],
+        ['11,8 млн ₽', 'выручка из продаж'],
+        ['4 837', 'покупок из билетной системы'],
+      ],
+    },
+    {
+      category: 'e-commerce',
+      label: 'Интернет-магазины',
+      title: 'Почти 3 млн ₽ выручки и снижение CPS на 41%',
+      context: 'Подарочные мясные наборы · Яндекс Директ · 6 месяцев',
+      task: 'Снизить стоимость продажи с 1 300–1 500 ₽ до KPI в 1 000 ₽ и подготовить рекламу к масштабированию.',
+      solution: [
+        'Провели аудит кабинета, сайта и Метрики, выделили конверсионные сегменты и товарные категории.',
+        'Запустили кампании с оптимизацией на продажи, товарную галерею и персональные предложения для корпоративных заказов.',
+      ],
+      results: [
+        ['почти 3 млн ₽', 'выручка за период'],
+        ['−41%', 'снижение стоимости продажи'],
+        ['1 000 ₽', 'целевой CPS'],
+      ],
+    },
+    {
+      category: 'services',
+      label: 'Услуги',
+      title: 'Окупили рекламу химчистки ковров на 436%',
+      context: 'Санкт-Петербург · Яндекс Директ · 2 месяца',
+      task: 'С нуля протестировать Яндекс Директ и оценить рентабельность канала для химчистки ковров.',
+      solution: [
+        'Использовали преимущества сервиса в объявлениях, подготовили кампании под спрос и подключили коллтрекинг.',
+        'Настроили цели в Метрике для заявок и звонков, чтобы оптимизировать кампании по реальным обращениям.',
+      ],
+      results: [
+        ['436%', 'окупаемость рекламы'],
+        ['90+', 'заказов за 2 месяца'],
+        ['2 месяца', 'от запуска до подтверждённого результата'],
+      ],
+    },
+    {
+      category: 'education',
+      label: 'Онлайн-образование',
+      title: 'Подняли конверсию в продажу курсов с 1,3% до 12%',
+      context: '«Информатика с Джобсом» · Яндекс Директ · 3 месяца',
+      task: 'Окупить рекламу онлайн-курсов и методических материалов после неудачного опыта с другим подрядчиком.',
+      solution: [
+        'Доработали посадочные страницы, настроили Метрику и передачу UTM-меток в Senler.',
+        'Проверили Поиск, РСЯ и Telegram в несезон, затем масштабировали рабочие кампании в высокий сезон.',
+      ],
+      results: [
+        ['1,3% → 12%', 'конверсия из подписки в продажу'],
+        ['×3', 'рост количества лидов в сезон'],
+        ['3 месяца', 'до результата после запуска'],
+      ],
+    },
+    {
+      category: 'medicine',
+      label: 'Медицина',
+      title: 'С нуля до 72 заявок в месяц для офтальмологических клиник',
+      context: 'Москва · Яндекс Директ · первый год продвижения',
+      task: 'Создать поток заявок на ортокератологию для новых клиник при ограниченном гео и среднем чеке 33 000 ₽.',
+      solution: [
+        'Провели аудит спроса и конкурентов, подготовили цели на формы и целевые звонки, подключили коллтрекинг.',
+        'Собрали кампании для нескольких офферов и посадочных страниц, нашли результативную ЕПК и развивали гипотезы по геотаргетингу.',
+      ],
+      results: [
+        ['до 72', 'заявок в месяц'],
+        ['33 000 ₽', 'средний чек услуги'],
+        ['3', 'посадочные страницы под разные офферы'],
+      ],
+    },
   ],
   reviewSlides: [
     ['Яркий Феникс', 'Химчистка ковров · Санкт-Петербург', ['Стираем много ковров в Питере, работаем уже 4 года. За это время в Директе пытались запускаться трижды. Два раза — с разными директологами с опытом в нише, один раз — самостоятельно на автоматических стратегиях. Как итог — даже рекламный бюджет не окупали.', 'Так как уже достаточно плотно и успешно работали с Церебро по таргету, решили попробовать и Директ.', 'На данный момент работаем больше года: <strong>окупаемость бюджета примерно ×2, лиды по 700–1 300 ₽</strong>. Для нас это ультрарезультат. Инструмент глобально недешёвый, но <strong>работает в плюс и стабильно приводит новых клиентов</strong> — а для нас это самое главное.']],
@@ -164,7 +356,7 @@ const mobileMenu = document.getElementById('mobile-menu')
 if (siteHeader) createStickyHeaderController({ header: siteHeader })
 if (mobileMenuButton && mobileMenu) createMobileMenuController({ button: mobileMenuButton, menu: mobileMenu, body: document.body })
 
-render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact class="border-b border-white/20 py-3 last:border-b-0 md:px-4 md:even:border-l md:even:border-white/20 lg:border-b-0 lg:border-l lg:border-white/20 lg:first:border-l-0 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-2 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
+render('hero-facts', landingData.facts.map(([, item], index) => `<div data-hero-fact class="${index === 2 ? 'border-b-0' : 'border-b border-white/20'} py-3 last:border-b-0 md:px-4 md:even:border-l md:even:border-white/20 lg:border-b-0 lg:border-l lg:border-white/20 lg:first:border-l-0 lg:px-6"><span class="text-xs font-medium text-accent">${String(index + 1).padStart(2, '0')}</span><p class="mt-2 max-w-[13rem] text-sm leading-5 text-white/70">${item}</p></div>`).join(''))
 render('team-cards', teamMembers.map(([name, role, photo]) => `<article data-team-card class="w-[calc(48.1%-12px)] shrink-0 text-ink md:w-[calc(32.5%-16px)] lg:w-[calc(19.7%-16px)]"><div data-team-photo class="relative aspect-[5.5/7]" role="img" aria-label="${name}"><div data-team-photo-panel class="absolute inset-x-0 bottom-0 aspect-square rounded-[var(--radius-card)] bg-white"></div><img data-team-portrait class="absolute inset-0 z-10 h-full w-full rounded-b-[var(--radius-card)] object-cover object-top" src="./assets/team/graded/${photo}" alt="" width="550" height="700" loading="lazy" /></div><h3 class="mt-4 font-display text-lg font-semibold leading-tight tracking-[-.02em]">${name}</h3><p class="mt-2 text-sm leading-5 text-ink/60">${role}</p></article>`).join(''))
 const teamViewport = document.querySelector('[data-team-viewport]')
 const scrollTeam = (direction) => {
@@ -233,7 +425,7 @@ const serviceIcons = [
 render('service-scope-cards', landingData.serviceScope.map(([, t, d, partnerLogo], index) => {
   const serviceIcon = `<span data-service-icon aria-hidden="true" class="block h-7 w-7 bg-accent [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]" style="mask-image:url('${serviceIcons[index]}');-webkit-mask-image:url('${serviceIcons[index]}')"></span>`
   const cardMarks = partnerLogo ? `<div class="flex h-7 items-center gap-2">${serviceIcon}<span aria-hidden="true" class="text-xl leading-none text-accent">+</span><img class="h-7 w-auto" src="${partnerLogo}" alt="Calltouch" width="25" height="28" /></div>` : serviceIcon
-  return `<article class="service-card min-h-[260px] border border-border bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms">${cardMarks}<h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`
+  return `<article class="service-card min-h-[260px] bg-white p-6 text-ink md:p-7" style="--service-delay:${index * 60}ms">${cardMarks}<h3 class="mt-10 font-display text-xl font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 text-sm leading-6 text-ink/60">${d}</p></article>`
 }).join(''))
 createRevealOnceController({ elements: [...document.querySelectorAll('.service-card')], reduceMotion })
 render('process-cards', landingData.process.map(([n, t, d]) => `<article class="relative min-h-[248px] bg-white/85 p-5 pt-20 md:p-6 md:pt-20"><span data-process-number class="absolute left-5 top-5 flex h-[30px] w-[30px] items-center justify-center rounded-[5px] bg-blue-soft font-display text-sm font-semibold text-white md:left-6 md:top-6">${n}</span><h3 class="font-display text-lg font-semibold leading-tight tracking-[-.025em]">${t}</h3><p class="mt-3 max-w-sm text-sm leading-6 text-ink/60">${d}</p></article>`).join(''))
@@ -251,6 +443,8 @@ const caseFilters = [
   ['e-commerce', 'Интернет-магазины'],
   ['education', 'Онлайн-образование'],
   ['manufacturing', 'Производство'],
+  ['services', 'Услуги'],
+  ['culture', 'Культура'],
 ]
 const caseFiltersElement = document.getElementById('case-filters')
 const caseCardsElement = document.getElementById('case-cards')
@@ -264,6 +458,18 @@ const caseImages = [
   './assets/cases/atv.png',
   './assets/cases/marketplace.png',
   './assets/cases/furniture.png',
+  './assets/cases/balcony-glazing.png',
+  './assets/cases/sports-nutrition.png',
+  './assets/cases/music-school.png',
+  './assets/cases/archaeology.png',
+  './assets/cases/hotel.png',
+  './assets/cases/premium-atelier.png',
+  './assets/cases/telegram-education.png',
+  './assets/cases/theatre.png',
+  './assets/cases/meat-gifts.png',
+  './assets/cases/carpet-cleaning.png',
+  './assets/cases/it-courses.png',
+  './assets/cases/ophthalmology.png',
 ]
 
 const getFilteredCases = () => landingData.cases.filter(({ category }) => activeCaseFilter === 'all' || category === activeCaseFilter)
@@ -344,6 +550,7 @@ reviewNext.addEventListener('click', () => { reviewIndex = (reviewIndex + 1) % l
 renderReviewSlide()
 
 protectHeadingOrphans()
+protectTypography()
 createCountUpController({
   element: document.querySelector('[data-count-up]'),
   target: 3000,

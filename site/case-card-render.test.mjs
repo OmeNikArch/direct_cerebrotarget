@@ -44,3 +44,26 @@ test('renders a responsive 4:3 production image in every case card', async () =>
   assert.match(caseCards, /aspect-\[4\/3\][^"']*md:w-80/u)
   assert.match(caseCards, /assets\/cases\/dentistry\.png/u)
 })
+
+test('renders the twelve new case cards with their dedicated images', async () => {
+  const elements = new Map()
+  const getElement = (id) => {
+    if (!elements.has(id)) elements.set(id, new FakeElement())
+    return elements.get(id)
+  }
+
+  globalThis.document = {
+    getElementById: getElement,
+    querySelector: () => null,
+    querySelectorAll: () => [],
+  }
+  globalThis.window = { matchMedia: () => ({ matches: false }) }
+
+  await import(new URL('./script.js?new-case-cards', import.meta.url).href)
+
+  const caseCards = getElement('case-cards').innerHTML
+  assert.equal((caseCards.match(/data-case-image/g) || []).length, 17)
+  assert.match(caseCards, /Окупили рекламу остекления балконов в 2,68 раза/u)
+  assert.match(caseCards, /assets\/cases\/balcony-glazing\.png/u)
+  assert.match(caseCards, /assets\/cases\/ophthalmology\.png/u)
+})

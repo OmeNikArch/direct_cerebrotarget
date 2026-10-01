@@ -141,10 +141,10 @@ test('finishes the highlighted cards with the shared visual system', () => {
   assert.match(redesignHtml, /\.pricing-table td \{ background: #FFFFFF; \}/u)
 })
 
-test('lets the problems CTA sit directly on the section background', () => {
+test('uses a compact outlined problems CTA without a fill', () => {
   const cta = redesignHtml.match(/<div data-problems-cta[^>]*class="([^"]*)"/u)?.[1] || ''
   assert.doesNotMatch(cta, /\bbg-/u)
-  assert.doesNotMatch(cta, /(?:^|\s)(?:p|px|pl|pr)-/u)
+  assert.match(cta, /border border-ink\/15 p-5/u)
   assert.match(redesignHtml, /data-cta="problems"[^>]*bg-accent[^>]*text-ink/u)
 })
 
@@ -171,6 +171,12 @@ test('keeps full-width mobile start-card copy beside compact top-right art', () 
   assert.match(redesignHtml, /@media \(max-width: 767px\) \{[\s\S]*?#start-options \.start-copy \{[^}]*padding-bottom: 24px;[^}]*\}[\s\S]*?\.start-art \{ width: 100px; height: 100px; top: 12px; right: 12px; bottom: auto;/u)
   assert.doesNotMatch(redesignHtml, /#start-options \.start-copy > :is\(p, h3\) \{ max-width:/u)
   assert.match(redesignHtml, /@media \(min-width: 1024px\) \{[\s\S]*?\.start-art \{ width: 46\.4%; max-width: none; right: -13%; bottom: -56px;/u)
+})
+
+test('separates pricing rows inside the table and removes the third hero fact divider', () => {
+  assert.match(redesignHtml, /data-pricing-table[\s\S]*?<tr aria-hidden="true"><td colspan="2" class="px-4 pt-1"><div class="border-t border-border"><\/div><\/td><\/tr>[\s\S]*?от 501 000 ₽/u)
+  assert.doesNotMatch(redesignHtml, /<div class="mt-7 border-t border-ink\/10 pt-7">[\s\S]*?data-pricing-cta/u)
+  assert.match(redesignScript, /index === 2 \? 'border-b-0' : 'border-b border-white\/20'/u)
 })
 
 test('presents the agency statistic in a wide hero-gradient card', () => {

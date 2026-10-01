@@ -3,6 +3,30 @@ const shortWordPattern = new RegExp(`(^|[\\s(«„"—-])(${shortWords})\\s+`, '
 
 export const protectShortWords = (text) => text.replace(shortWordPattern, '$1$2\u00a0')
 
+const groupedNumberPattern = /(\d{1,3})\s(?=\d{3}\b)/gu
+const currencyPattern = /(\d+(?:[.,]\d+)?(?:[+%])?)\s+(?=₽)/gu
+const numberUnitPattern = /(\d+(?:[.,]\d+)?(?:[+%])?)\s+(?=(?:р\.|руб(?:\.|лей|ля)?|тыс\.|млн|млрд|месяц(?:а|ев)?|год(?:а|лет)|дн(?:я|ей)|недел[ьи]|раз(?:а)?|заяв(?:ка|ки|ок)|лид(?:а|ов)?|билет(?:а|ов)?|клиент(?:а|ов)?|кампани(?:я|и|й)|конверси(?:я|и|й)|продаж(?:а|и|й))(?:\s|$|[,.!?;:]))/giu
+
+export const protectNumberGroups = (text) => text
+  .replace(groupedNumberPattern, '$1\u00a0')
+  .replace(currencyPattern, '$1\u00a0')
+  .replace(numberUnitPattern, '$1\u00a0')
+
+export const protectTypography = ({
+  root = document.body,
+  documentObject = document,
+  nodeFilter = { SHOW_TEXT: 4 },
+} = {}) => {
+  if (!root?.querySelectorAll) return
+  const visualTextSelectors = 'h1, h2, h3, p, li, a, button, label, td, th, figcaption, summary'
+  root.querySelectorAll(visualTextSelectors).forEach((element) => {
+    const walker = documentObject.createTreeWalker(element, nodeFilter.SHOW_TEXT)
+    const textNodes = []
+    while (walker.nextNode()) textNodes.push(walker.currentNode)
+    textNodes.forEach((node) => { node.nodeValue = protectShortWords(protectNumberGroups(node.nodeValue)) })
+  })
+}
+
 export const protectHeadingOrphans = ({
   root = document,
   documentObject = document,

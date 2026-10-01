@@ -15,6 +15,18 @@ test('protects short Russian prepositions in headings', () => {
   )
 })
 
+test('keeps grouped numbers, prices and units on one line', () => {
+  assert.equal(typeof polish.protectNumberGroups, 'function')
+  assert.equal(
+    polish.protectNumberGroups('Бюджет от 100 000 ₽ в месяц'),
+    'Бюджет от 100\u00a0000\u00a0₽ в месяц',
+  )
+  assert.equal(
+    polish.protectNumberGroups('Работаем 6 месяцев и получили 72 заявки'),
+    'Работаем 6\u00a0месяцев и получили 72\u00a0заявки',
+  )
+})
+
 test('shows the final counter value immediately for reduced motion', () => {
   assert.equal(typeof polish.createCountUpController, 'function')
   const element = { textContent: '' }

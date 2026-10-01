@@ -25,3 +25,10 @@ test('keeps market-problems copy in a sticky reading zone above a bottom CTA and
   assert.match(script, /data-problem-solution[^`]*-mt-1[^`]*rounded-b-\[var\(--radius-card\)\]/u)
   assert.match(html, /—&nbsp;и&nbsp;подготовим основу медиаплана/u)
 })
+
+test('uses a compact outlined problems CTA and borderless service cards', () => {
+  assert.match(html, /data-problems-cta[^>]*border[^>]*border-ink\/15[^>]*md:flex-row[^>]*md:items-center[^>]*md:justify-between/u)
+  assert.doesNotMatch(html, /data-problems-cta[^>]*bg-/u)
+  assert.match(html, /data-problems-cta[\s\S]*?data-cta="problems"[^>]*md:shrink-0/u)
+  assert.doesNotMatch(script, /service-card[^`]*border-border/u)
+})
