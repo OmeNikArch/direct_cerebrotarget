@@ -21,9 +21,17 @@ test('shows a separate contact panel inside the completed quiz without a native 
   assert.match(completion, /<div id="quiz-lead-form"[^>]*data-quiz-lead-form[^>]*role="form"/u)
   assert.doesNotMatch(completion, /<form\b/u)
   for (const field of ['name', 'phone', 'site', 'privacyConsent', 'personalDataConsent']) assert.match(completion, new RegExp(`name="${field}"`, 'u'))
+  assert.match(completion, /name="phone"[^>]*inputmode="numeric"[^>]*placeholder="\+7 \(___\) ___-__-__"/u)
   assert.match(completion, /name="site"[^>]*type="url"/u)
   assert.match(completion, />Оставить заявку<\/button>/u)
   assert.doesNotMatch(completion, /href="#contact"/u)
+})
+
+test('uses the shared Russian phone mask in both lead forms', () => {
+  assert.equal((html.match(/name="phone"[^>]*inputmode="numeric"/gu) || []).length, 2)
+  assert.match(script, /attachRussianPhoneMask\(form\.querySelector\('\[name="phone"\]'\)\)/u)
+  assert.match(quiz, /const quizPhoneInput = quizLeadForm\.querySelector\('\[name="phone"\]'\)[\s\S]*?attachRussianPhoneMask\(quizPhoneInput\)/u)
+  assert.match(quiz, /isRussianPhoneComplete\(quizPhoneInput\.value\)/u)
 })
 
 test('uses a button-driven quiz instead of submitting a form on each step', () => {

@@ -270,6 +270,24 @@ test('uses white result cells with larger aligned case figures', () => {
   assert.doesNotMatch(redesignScript, /data-case-results[^`]*bg-paper/u)
 })
 
+test('keeps case navigation visible and lets mouse drags settle on a card edge', () => {
+  assert.match(redesignHtml, /id="case-prev"[^>]*bg-brand-deep[^>]*text-white[^>]*hover:bg-brand/u)
+  assert.match(redesignHtml, /class="[^"]*bg-brand-deep[^"]*text-white[^"]*hover:bg-brand[^"]*"[^>]*data-case-step="-1"/u)
+  assert.match(redesignHtml, /#case-viewport\.is-dragging \{ cursor: grabbing; user-select: none; \}/u)
+  assert.match(redesignHtml, /#case-viewport\.is-free-scrolling \{ scroll-snap-type: none; \}/u)
+  assert.match(redesignHtml, /#case-viewport img \{ -webkit-user-drag: none; \}/u)
+  assert.match(redesignHtml, /id="case-viewport"[^>]*snap-x[^>]*snap-mandatory/u)
+  assert.match(redesignScript, /caseViewport\.addEventListener\('pointerdown'/u)
+  assert.match(redesignScript, /caseViewport\.addEventListener\('dragstart', \(event\) => event\.preventDefault\(\)\)/u)
+  assert.match(redesignScript, /createInertialCaseScroller/u)
+  assert.match(redesignScript, /caseInertiaScroller\.track\(caseViewport\.scrollLeft, event\.timeStamp\)/u)
+  assert.match(redesignScript, /caseInertiaScroller\.release\(\)/u)
+  assert.match(redesignScript, /caseViewport\.classList\.add\('is-free-scrolling'\)/u)
+  assert.match(redesignScript, /caseViewport\.classList\.remove\('is-free-scrolling'\)/u)
+  assert.match(redesignScript, /const duration = 240/u)
+  assert.match(redesignScript, /const eased = 1 - Math\.pow\(1 - progress, 4\)/u)
+})
+
 test('keeps case outcomes and the market-problems CTA free of separating gaps', () => {
   const caseResults = redesignScript.match(/<div data-case-results[\s\S]*?<\/dl><\/div><\/article>/u)?.[0] || ''
 

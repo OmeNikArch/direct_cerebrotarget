@@ -17,7 +17,7 @@ test('accepts the project lead after both required legal consents', () => {
 test('accepts a standalone audit request without an advertising budget and preserves its CRM intent', () => {
   const auditLead = {
     name: 'Иван',
-    phone: '+7 999 765-43-21',
+    phone: '+79997654321',
     budget: '',
     requestType: 'Разовый аудит рекламы',
     privacyConsent: true,
@@ -27,7 +27,7 @@ test('accepts a standalone audit request without an advertising budget and prese
   assert.deepEqual(validateLeadForm(auditLead), {})
   assert.deepEqual(buildLeadPayload(auditLead), {
     name: 'Иван',
-    phone: '+7 999 765-43-21',
+    phone: '+79997654321',
     requestType: 'Разовый аудит рекламы',
     source: 'landing-yandex-direct',
   })
@@ -43,6 +43,12 @@ test('requires the lead identity, supported budget and each legal consent', () =
   })
 })
 
+test('requires a complete Russian phone number', () => {
+  assert.deepEqual(validateLeadForm({ ...baseLead, phone: '+7 (999) 123-45' }), {
+    phone: 'Введите номер полностью',
+  })
+})
+
 test('exposes the approved advertising budget choices', () => {
   assert.deepEqual(BUDGET_OPTIONS, [
     ['50-500', '50–500 тыс. ₽'],
@@ -54,7 +60,7 @@ test('exposes the approved advertising budget choices', () => {
 test('builds a minimal Bitrix-ready lead payload without quiz fields', () => {
   assert.deepEqual(buildLeadPayload({ ...baseLead, site: 'https://example.ru' }), {
     name: 'Анна',
-    phone: '+7 999 123-45-67',
+    phone: '+79991234567',
     budget: '50–500 тыс. ₽',
     source: 'landing-yandex-direct',
   })

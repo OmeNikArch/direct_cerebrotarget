@@ -3,6 +3,8 @@ import { createQuizController } from './quiz.mjs?v=hixo-quiz-2'
 import { createHeroCompositionController } from './hero-composition.mjs'
 import { createInitialScrollController, createMobileMenuController, createPathDrawOnViewController, createRevealOnceController, createStickyHeaderController } from './ui-behavior.mjs?v=hixo-scroll-1'
 import { createCountUpController, protectHeadingOrphans, protectTypography } from './content-polish.mjs'
+import { createInertialCaseScroller } from './case-carousel-physics.mjs'
+import { attachRussianPhoneMask } from './phone-input.mjs'
 
 const landingData = {
   facts: [
@@ -515,6 +517,94 @@ casePrevious.addEventListener('click', () => slideCases(-1))
 caseNext.addEventListener('click', () => slideCases(1))
 document.querySelectorAll('[data-case-step]').forEach((button) => button.addEventListener('click', () => slideCases(Number(button.dataset.caseStep))))
 caseViewport.addEventListener('scroll', updateCaseControls, { passive: true })
+let caseDragStartX = 0
+let caseDragStartScroll = 0
+let caseDragPointerId = null
+let caseDragged = false
+let caseSnapAnimation = null
+const cancelCaseSnapAnimation = () => {
+  if (caseSnapAnimation !== null && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(caseSnapAnimation)
+  caseSnapAnimation = null
+}
+const getNearestCaseSnapPoint = () => {
+  const caseSnapPoints = [...caseCardsElement.querySelectorAll('article')].map((card) => card.offsetLeft)
+  return caseSnapPoints.reduce((nearestPoint, point) => (
+    Math.abs(point - caseViewport.scrollLeft) < Math.abs(nearestPoint - caseViewport.scrollLeft) ? point : nearestPoint
+  ), caseSnapPoints[0])
+}
+const settleCaseViewport = () => {
+  const target = getNearestCaseSnapPoint()
+  cancelCaseSnapAnimation()
+  if (reduceMotion || typeof requestAnimationFrame !== 'function') {
+    caseViewport.scrollLeft = target
+    caseViewport.classList.remove('is-free-scrolling')
+    return
+  }
+  const start = caseViewport.scrollLeft
+  const distance = target - start
+  const duration = 240
+  let startTime = null
+  const animate = (timestamp) => {
+    if (startTime === null) startTime = timestamp
+    const progress = Math.min((timestamp - startTime) / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 4)
+    caseViewport.scrollLeft = start + distance * eased
+    if (progress < 1) {
+      caseSnapAnimation = requestAnimationFrame(animate)
+      return
+    }
+    caseViewport.scrollLeft = target
+    caseViewport.classList.remove('is-free-scrolling')
+    caseSnapAnimation = null
+  }
+  caseSnapAnimation = requestAnimationFrame(animate)
+}
+const caseInertiaScroller = createInertialCaseScroller({
+  getPosition: () => caseViewport.scrollLeft,
+  setPosition: (position) => { caseViewport.scrollLeft = position },
+  requestFrame: (callback) => requestAnimationFrame(callback),
+  cancelFrame: (frame) => cancelAnimationFrame(frame),
+  onInertiaEnd: settleCaseViewport,
+})
+caseViewport.addEventListener('pointerdown', (event) => {
+  if (event.pointerType !== 'mouse' || event.button !== 0) return
+  cancelCaseSnapAnimation()
+  caseDragPointerId = event.pointerId
+  caseDragStartX = event.clientX
+  caseDragStartScroll = caseViewport.scrollLeft
+  caseDragged = false
+  caseViewport.setPointerCapture(event.pointerId)
+  caseViewport.classList.add('is-free-scrolling')
+  caseViewport.classList.add('is-dragging')
+  caseInertiaScroller.begin(caseViewport.scrollLeft, event.timeStamp)
+})
+caseViewport.addEventListener('pointermove', (event) => {
+  if (event.pointerId !== caseDragPointerId) return
+  const distance = event.clientX - caseDragStartX
+  if (Math.abs(distance) > 4) caseDragged = true
+  caseViewport.scrollLeft = caseDragStartScroll - distance
+  if (caseDragged) caseInertiaScroller.track(caseViewport.scrollLeft, event.timeStamp)
+})
+const endCaseDrag = (event) => {
+  if (event.pointerId !== caseDragPointerId) return
+  caseDragPointerId = null
+  caseViewport.classList.remove('is-dragging')
+  if (!caseDragged) {
+    caseViewport.classList.remove('is-free-scrolling')
+    return
+  }
+  if (reduceMotion) settleCaseViewport()
+  else caseInertiaScroller.release()
+}
+const cancelCaseDrag = (event) => {
+  if (event.pointerId !== caseDragPointerId) return
+  caseDragPointerId = null
+  caseInertiaScroller.stop()
+  caseViewport.classList.remove('is-dragging', 'is-free-scrolling')
+}
+caseViewport.addEventListener('pointerup', endCaseDrag)
+caseViewport.addEventListener('pointercancel', cancelCaseDrag)
+caseViewport.addEventListener('dragstart', (event) => event.preventDefault())
 window.addEventListener?.('resize', updateCaseControls)
 renderCaseFilters()
 renderCaseCards()
@@ -559,6 +649,7 @@ createCountUpController({
   reduceMotion,
 })
 const form = document.getElementById('lead-form')
+attachRussianPhoneMask(form.querySelector('[name="phone"]'))
 const quizRoot = document.querySelector('[data-quiz-card]')
 if (quizRoot) createQuizController({ root: quizRoot })
 const formFields = document.getElementById('lead-form-fields')

@@ -1,3 +1,5 @@
+import { attachRussianPhoneMask, isRussianPhoneComplete, normalizeRussianPhone } from './phone-input.mjs'
+
 export const quizSteps = [
   {
     id: 'business',
@@ -116,6 +118,8 @@ export const createQuizController = ({ root }) => {
   })
 
   const quizLeadButton = quizLeadForm.querySelector('[data-quiz-lead-submit]')
+  const quizPhoneInput = quizLeadForm.querySelector('[name="phone"]')
+  attachRussianPhoneMask(quizPhoneInput)
 
   quizLeadButton.addEventListener('click', async () => {
     const firstInvalid = [...quizLeadForm.querySelectorAll('[required]')].find((control) => !control.checkValidity())
@@ -123,6 +127,12 @@ export const createQuizController = ({ root }) => {
       firstInvalid.reportValidity()
       return
     }
+    if (!isRussianPhoneComplete(quizPhoneInput.value)) {
+      quizPhoneInput.setCustomValidity('Введите номер полностью')
+      quizPhoneInput.reportValidity()
+      return
+    }
+    quizPhoneInput.setCustomValidity('')
 
     quizLeadButton.disabled = true
     quizLeadButton.textContent = 'Отправляем…'
@@ -132,6 +142,7 @@ export const createQuizController = ({ root }) => {
         const values = Object.fromEntries([...quizLeadForm.querySelectorAll('[name]')]
           .filter((control) => control.type !== 'checkbox' || control.checked)
           .map((control) => [control.name, control.value]))
+        values.phone = normalizeRussianPhone(values.phone)
         const response = await fetch(quizLeadForm.dataset.endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
