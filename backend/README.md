@@ -1,0 +1,52 @@
+# Бэкенд лендинга «Церебро Директ»
+
+Payload CMS 3 + Next.js 16 + PostgreSQL 16, по образцу clickout.cerebrotarget.ru и vk.cerebrotarget.ru.
+Фронт (`../site`) не меняется: при сборке он копируется в `public/`, а в `data-endpoint` обеих форм
+подставляется адрес приёма заявок. Один процесс отдаёт лендинг (`/`), админку (`/admin`) и API.
+
+## Что умеет
+
+- `POST /api/leads/submit` — приём заявок с контактной формы и квиза медиаплана. Серверная проверка
+  (имя, телефон +7, бюджет, тип заявки), лимит 5 заявок за 10 минут с IP, тело до 10 КБ.
+- Админка `/admin` (на русском): **Заявки** — ответы квиза, бюджет, UTM/yclid из адреса страницы,
+  источник («Яндекс Директ», «Органика»…), статус обработки и комментарий менеджера, статус в Битрикс24.
+- **Настройки сайта → Интеграция Битрикс24**: вебхук, Лид или Сделка (воронка, стадия, ответственный).
+  По умолчанию выключено — заявки только копятся в админке. Галочка «Отправить в Битрикс24 ещё раз»
+  в карточке заявки отправляет её вручную.
+- Публично закрыто: чтение/создание заявок через REST, настройки (там вебхук) — только после входа.
+
+## Формат заявки (то, что шлёт фронт)
+
+| Форма | Поля |
+|---|---|
+| Контактная (`#lead-form`) | `name`, `phone`, `requestType` («Консультация по ведению рекламы» / «Разовый аудит рекламы»), `budget` (подпись, кроме аудита), `source` |
+| Квиз (`#quiz-lead-form`) | `name`, `phone`, `site`, `quizBusiness`, `quizGeography`, `quizGoal`, `quizSituation`, `quizBudget` (value → подпись), `privacyConsent`, `personalDataConsent` |
+
+Ответ: `201 {ok:true,id}`; `422 {ok:false,errors}`; `429` при спаме; `500` при сбое БД.
+
+## Локальный запуск
+
+```bash
+docker run -d --name ydlanding-pg -e POSTGRES_USER=ydlanding -e POSTGRES_PASSWORD=... \
+  -e POSTGRES_DB=ydlanding -p 127.0.0.1:5435:5432 postgres:16-alpine
+cp .env.example .env            # заполнить
+npm install
+npm run migrate                 # схема БД
+npm run create-admin            # первый админ из ADMIN_EMAIL/ADMIN_PASSWORD
+npm run build && npm start      # http://127.0.0.1:3020, админка /admin
+npm test                        # юнит-тесты разбора заявок и Битрикса
+```
+
+Схема БД меняется только миграциями (`push: false`): поменяли поля → `npm run payload migrate:create <имя>` → `npm run migrate`.
+
+## Фронт на другом домене
+
+Если лендинг публикуется отдельно (HIXO, Pages), а бэкенд — на своём домене:
+в `.env` бэкенда `CORS_ORIGINS=https://домен-лендинга`, а у форм в `site/index.html`
+`data-endpoint="https://домен-бэкенда/api/leads/submit"`. UTM в этом случае не придут
+(браузер отдаёт чужому домену только origin) — нужна будет передача меток с фронта.
+
+## Деплой на сервер
+
+См. `deploy/`: `deploy.sh` (rsync → migrate → build → restart), `ydlanding.service` (systemd),
+`Caddyfile.snippet`. На сервере не трогаются `.env` и БД. Порядок первого запуска — в шапке `deploy.sh`.

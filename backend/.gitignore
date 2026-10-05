@@ -1,0 +1,8 @@
+node_modules/
+.next/
+# Генерируется из ../site скриптом sync-site
+public/
+media/
+.env
+*.tsbuildinfo
+next-env.d.ts
