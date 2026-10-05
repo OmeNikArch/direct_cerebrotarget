@@ -17,7 +17,8 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "create-admin": "cross-env NODE_OPTIONS=--no-deprecation payload run scripts/create-admin.ts",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "slots": "tsx scripts/gen-slots.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.85.0",
@@ -28,6 +29,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
     "graphql": "^16.8.1",
+    "linkedom": "^0.18.13",
     "next": "16.2.6",
     "payload": "3.85.0",
     "react": "19.2.6",

@@ -9,10 +9,8 @@ const dirname = path.dirname(__filename)
 const nextConfig: NextConfig = {
   // Тестовый показ через Cloudflare-туннель.
   allowedDevOrigins: ['*.trycloudflare.com'],
-  // Лендинг — статическая копия ../site в public/ (scripts/sync-site.mjs). Корень отдаёт его index.html.
-  async rewrites() {
-    return [{ source: '/', destination: '/index.html' }]
-  },
+  // Лендинг: ассеты — копия ../site в public/ (scripts/sync-site.mjs); index.html, script.js и quiz.mjs
+  // собираются с данными админки маршрутами src/app/(site).
   async headers() {
     return [
       {

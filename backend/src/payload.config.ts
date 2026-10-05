@@ -8,6 +8,10 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Leads } from './collections/Leads'
+import { Media } from './collections/Media'
+import { PageTexts } from './globals/PageTexts'
+import { LandingBlocks } from './globals/LandingBlocks'
+import { seedLandingBlocks } from './lib/seed'
 import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 
@@ -30,8 +34,9 @@ export default buildConfig({
       titleSuffix: '— Церебро Директ',
     },
   },
-  collections: [Leads, Users],
-  globals: [SiteSettings],
+  collections: [Leads, Media, Users],
+  globals: [PageTexts, LandingBlocks, SiteSettings],
+  onInit: seedLandingBlocks,
   i18n: {
     supportedLanguages: { ru },
     fallbackLanguage: 'ru',

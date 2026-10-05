@@ -1,0 +1,754 @@
+[
+ {
+  "key": "header_16y4ug8",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Как работаем",
+  "count": 2
+ },
+ {
+  "key": "header_1h3nhyc",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Кейсы",
+  "count": 2
+ },
+ {
+  "key": "header_0jrilgg",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Стоимость",
+  "count": 2
+ },
+ {
+  "key": "header_05z6bid",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Отзывы",
+  "count": 2
+ },
+ {
+  "key": "header_1quyd57",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Вопросы",
+  "count": 2
+ },
+ {
+  "key": "header_1yud1og",
+  "block": "header",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Бесплатный медиаплан",
+  "count": 1
+ },
+ {
+  "key": "header_0g5ccs0",
+  "block": "header",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Меню",
+  "count": 1
+ },
+ {
+  "key": "header_0ef0a5y",
+  "block": "header",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Написать нам",
+  "count": 1
+ },
+ {
+  "key": "hero_0ggomn9",
+  "block": "hero",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Контекстная реклама для бизнеса",
+  "count": 1
+ },
+ {
+  "key": "hero_17uuuwp",
+  "block": "hero",
+  "tag": "h1",
+  "kind": "Главный заголовок",
+  "text": "Приведём целевые заявки из Яндекс Директа",
+  "count": 1
+ },
+ {
+  "key": "hero_1pwx7wz",
+  "block": "hero",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Берём на себя аудит, стратегию, запуск, оптимизацию и аналитику — чтобы вы понимали, как реклама влияет на обращения и продажи",
+  "count": 1
+ },
+ {
+  "key": "hero_0dghjfn",
+  "block": "hero",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Получить медиаплан бесплатно",
+  "count": 1
+ },
+ {
+  "key": "hero_047kpq6",
+  "block": "hero",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Обсудить продвижение",
+  "count": 1
+ },
+ {
+  "key": "fit_0b6cpc4",
+  "block": "fit",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Вам подойдёт, если:",
+  "count": 1
+ },
+ {
+  "key": "fit_07pimtn",
+  "block": "fit",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Хотите понимать не только цену, но и качество заявок?",
+  "count": 1
+ },
+ {
+  "key": "quiz_0nud82c",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Бесплатный медиаплан",
+  "count": 1
+ },
+ {
+  "key": "quiz_0pwb9vj",
+  "block": "quiz",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Получите бесплатный медиаплан",
+  "count": 1
+ },
+ {
+  "key": "quiz_1a47ml2",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Подготовим бесплатно — без обязательств. Поймёте, какой бюджет и сценарий продвижения подойдут вашей задаче",
+  "count": 1
+ },
+ {
+  "key": "quiz_1m3b92y",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Пять коротких вопросов помогут собрать вводные и подготовить прогноз для вашего бизнеса",
+  "count": 1
+ },
+ {
+  "key": "quiz_022d996",
+  "block": "quiz",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Назад",
+  "count": 1
+ },
+ {
+  "key": "quiz_0du0jd4",
+  "block": "quiz",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Выберите один вариант",
+  "count": 1
+ },
+ {
+  "key": "quiz_1mnkf5i",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Ответы сохранены",
+  "count": 1
+ },
+ {
+  "key": "quiz_1r814k4",
+  "block": "quiz",
+  "tag": "h3",
+  "kind": "Подзаголовок",
+  "text": "Осталось оставить контакты",
+  "count": 1
+ },
+ {
+  "key": "quiz_104x80x",
+  "block": "quiz",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Имя",
+  "count": 1
+ },
+ {
+  "key": "quiz_0vysykq",
+  "block": "quiz",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Телефон",
+  "count": 1
+ },
+ {
+  "key": "quiz_1rlagui",
+  "block": "quiz",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Сайт или соцсети",
+  "count": 1
+ },
+ {
+  "key": "quiz_12dllcx",
+  "block": "quiz",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "(необязательно)",
+  "count": 1
+ },
+ {
+  "key": "quiz_1d3bzsj",
+  "block": "quiz",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Принимаю политику конфиденциальности",
+  "count": 1
+ },
+ {
+  "key": "quiz_1w6im60",
+  "block": "quiz",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Согласен на обработку персональных данных",
+  "count": 1
+ },
+ {
+  "key": "quiz_01chigc",
+  "block": "quiz",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Оставить заявку",
+  "count": 1
+ },
+ {
+  "key": "quiz_0rob5zq",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Спасибо, заявка отправлена",
+  "count": 1
+ },
+ {
+  "key": "quiz_14b5xg1",
+  "block": "quiz",
+  "tag": "h3",
+  "kind": "Подзаголовок",
+  "text": "Мы получили ваши данные и свяжемся с вами в ближайшее время",
+  "count": 1
+ },
+ {
+  "key": "quiz_0eub6nu",
+  "block": "quiz",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Не хотите ждать звонка? Начните диалог в удобном мессенджере — уточним детали там.",
+  "count": 1
+ },
+ {
+  "key": "quiz_13rzsb1",
+  "block": "quiz",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "VK-бот",
+  "count": 1
+ },
+ {
+  "key": "quiz_18pux9h",
+  "block": "quiz",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Telegram-бот",
+  "count": 1
+ },
+ {
+  "key": "quiz_0ezs5ug",
+  "block": "quiz",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "MAX-бот",
+  "count": 1
+ },
+ {
+  "key": "experience_dark_1dq6k2i",
+  "block": "experience-dark",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Типичные проблемы рынка",
+  "count": 1
+ },
+ {
+  "key": "experience_dark_1cstrqg",
+  "block": "experience-dark",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Ваша реклама часто не окупается?",
+  "count": 1
+ },
+ {
+  "key": "experience_dark_1p3vwnx",
+  "block": "experience-dark",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Церебро знает, как превратить проблемы рекламы в понятный план действий",
+  "count": 1
+ },
+ {
+  "key": "experience_dark_080owmi",
+  "block": "experience-dark",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Ответьте на несколько коротких вопросов — и подготовим основу медиаплана именно под вашу ситуацию.",
+  "count": 2
+ },
+ {
+  "key": "experience_dark_07nhqii",
+  "block": "experience-dark",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Получить медиаплан",
+  "count": 2
+ },
+ {
+  "key": "experience_dark_0ezzil2",
+  "block": "experience-dark",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Состав работы",
+  "count": 1
+ },
+ {
+  "key": "experience_dark_0zxea3i",
+  "block": "experience-dark",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Как мы работаем с вашим проектом",
+  "count": 1
+ },
+ {
+  "key": "process_16qm1ph",
+  "block": "process",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Понятный старт",
+  "count": 1
+ },
+ {
+  "key": "process_18b0fw8",
+  "block": "process",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Вы оставили заявку. Что дальше?",
+  "count": 1
+ },
+ {
+  "key": "proof_01afd7s",
+  "block": "proof",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Практика по нишам",
+  "count": 1
+ },
+ {
+  "key": "proof_19p2pbm",
+  "block": "proof",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Наши кейсы",
+  "count": 1
+ },
+ {
+  "key": "proof_1ekzjuo",
+  "block": "proof",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Не нашли свою нишу? После заявки подберём кейсы, релевантные вашей задаче — часть портфеля закрыта NDA.",
+  "count": 1
+ },
+ {
+  "key": "proof_1xv0mmj",
+  "block": "proof",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Нужны примеры из вашей ниши?",
+  "count": 1
+ },
+ {
+  "key": "proof_0i84v22",
+  "block": "proof",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Подберём кейсы под вашу задачу",
+  "count": 1
+ },
+ {
+  "key": "proof_0gjsxsn",
+  "block": "proof",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Получить бесплатный медиаплан",
+  "count": 1
+ },
+ {
+  "key": "team_07gvuiu",
+  "block": "team",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Эксперты Церебро",
+  "count": 1
+ },
+ {
+  "key": "team_1ttuzow",
+  "block": "team",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Команда, которая работает с рекламой каждый день",
+  "count": 1
+ },
+ {
+  "key": "team_1xibfms",
+  "block": "team",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "В команде — специалисты по стратегии, запуску, аналитике и оптимизации рекламных кампаний.",
+  "count": 1
+ },
+ {
+  "key": "conditions_044vglv",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Условия и стоимость",
+  "count": 1
+ },
+ {
+  "key": "conditions_1k5w3nb",
+  "block": "conditions",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Стоимость ведения",
+  "count": 4
+ },
+ {
+  "key": "conditions_15y6p9q",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Рекламный бюджет",
+  "count": 3
+ },
+ {
+  "key": "conditions_1xvz6f4",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "от 100 000 до 500 000 ₽",
+  "count": 2
+ },
+ {
+  "key": "conditions_1er02g1",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "50 000 ₽ / месяц",
+  "count": 2
+ },
+ {
+  "key": "conditions_0nmnl2a",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "от 501 000 ₽",
+  "count": 2
+ },
+ {
+  "key": "conditions_1bbnxlk",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "50 000 ₽ / месяц + 7% рекламного бюджета",
+  "count": 2
+ },
+ {
+  "key": "conditions_1g6sv4z",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Аудит, стратегия и запуск включены. Рекламный бюджет оплачивается отдельно.",
+  "count": 2
+ },
+ {
+  "key": "conditions_15e906r",
+  "block": "conditions",
+  "tag": "h3",
+  "kind": "Подзаголовок",
+  "text": "Нужен только аудит рекламы?",
+  "count": 1
+ },
+ {
+  "key": "conditions_0gpu0bl",
+  "block": "conditions",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Разберём действующие кампании, найдём точки роста и подготовим рекомендации. Разовый аудит — 5 000 ₽",
+  "count": 1
+ },
+ {
+  "key": "conditions_0at9rxw",
+  "block": "conditions",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Заказать аудит",
+  "count": 1
+ },
+ {
+  "key": "trust_0bo5z50",
+  "block": "trust",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "О Церебро",
+  "count": 1
+ },
+ {
+  "key": "trust_13wnhyd",
+  "block": "trust",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "клиентов работают с Церебро",
+  "count": 1
+ },
+ {
+  "key": "trust_0nkbyys",
+  "block": "trust",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Больше 10 лет ведём рекламу на российских площадках",
+  "count": 1
+ },
+ {
+  "key": "trust_1g7znkx",
+  "block": "trust",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Разбираемся в особенностях каждого канала и помогаем выбрать подходящий сценарий продвижения",
+  "count": 1
+ },
+ {
+  "key": "trust_10kry0o",
+  "block": "trust",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Официальный партнёр:",
+  "count": 1
+ },
+ {
+  "key": "trust_055jotg",
+  "block": "trust",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "VK",
+  "count": 1
+ },
+ {
+  "key": "trust_1040999",
+  "block": "trust",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Яндекс",
+  "count": 1
+ },
+ {
+  "key": "trust_1utui8n",
+  "block": "trust",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Авито",
+  "count": 1
+ },
+ {
+  "key": "trust_058r5f5",
+  "block": "trust",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Отзывы клиентов",
+  "count": 1
+ },
+ {
+  "key": "faq_0ndm1ej",
+  "block": "faq",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "FAQ",
+  "count": 1
+ },
+ {
+  "key": "faq_13wl8ia",
+  "block": "faq",
+  "tag": "h2",
+  "kind": "Заголовок секции",
+  "text": "Важные вопросы до старта",
+  "count": 1
+ },
+ {
+  "key": "contact_0rwlu9u",
+  "block": "contact",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Нужен бесплатный медиаплан?",
+  "count": 1
+ },
+ {
+  "key": "contact_04rwusz",
+  "block": "contact",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Заявка на разовый аудит рекламы",
+  "count": 1
+ },
+ {
+  "key": "contact_11mm6eq",
+  "block": "contact",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Имя",
+  "count": 1
+ },
+ {
+  "key": "contact_1g543l1",
+  "block": "contact",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Телефон",
+  "count": 1
+ },
+ {
+  "key": "contact_1d0bww7",
+  "block": "contact",
+  "tag": "label",
+  "kind": "Подпись поля",
+  "text": "Общий рекламный бюджет",
+  "count": 1
+ },
+ {
+  "key": "contact_01kdf1q",
+  "block": "contact",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Принимаю политику конфиденциальности",
+  "count": 1
+ },
+ {
+  "key": "contact_1vpzdbf",
+  "block": "contact",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Согласен на обработку персональных данных",
+  "count": 1
+ },
+ {
+  "key": "contact_1s8de5n",
+  "block": "contact",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Отправить заявку",
+  "count": 1
+ },
+ {
+  "key": "lead_success_1jem5ft",
+  "block": "lead-success",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Спасибо, заявка отправлена",
+  "count": 1
+ },
+ {
+  "key": "lead_success_1cg7jb8",
+  "block": "lead-success",
+  "tag": "h3",
+  "kind": "Подзаголовок",
+  "text": "Мы получили ваши данные и свяжемся с вами в ближайшее время",
+  "count": 1
+ },
+ {
+  "key": "lead_success_0viwzhl",
+  "block": "lead-success",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "Не хотите ждать звонка? Начните диалог в удобном мессенджере — уточним детали там.",
+  "count": 1
+ },
+ {
+  "key": "lead_success_1vdk5zu",
+  "block": "lead-success",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "VK-бот",
+  "count": 1
+ },
+ {
+  "key": "lead_success_1qkd45m",
+  "block": "lead-success",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "Telegram-бот",
+  "count": 1
+ },
+ {
+  "key": "lead_success_09cuf2x",
+  "block": "lead-success",
+  "tag": "button",
+  "kind": "Кнопка",
+  "text": "MAX-бот",
+  "count": 1
+ },
+ {
+  "key": "footer_0tcheml",
+  "block": "footer",
+  "tag": "p",
+  "kind": "Текст",
+  "text": "© 2026 Церебро. Все права защищены.",
+  "count": 1
+ },
+ {
+  "key": "footer_0vbx99k",
+  "block": "footer",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Политика конфиденциальности",
+  "count": 1
+ },
+ {
+  "key": "footer_01ju50l",
+  "block": "footer",
+  "tag": "span",
+  "kind": "Текст",
+  "text": "Согласие на обработку персональных данных",
+  "count": 1
+ },
+ {
+  "key": "footer_0o8c9p1",
+  "block": "footer",
+  "tag": "a",
+  "kind": "Ссылка / кнопка",
+  "text": "Наверх",
+  "count": 1
+ }
+]

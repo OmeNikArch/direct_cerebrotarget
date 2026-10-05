@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     leads: Lead;
+    media: Media;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -77,6 +78,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -88,9 +90,13 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    'page-texts': PageText;
+    'landing-blocks': LandingBlock;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    'page-texts': PageTextsSelect<false> | PageTextsSelect<true>;
+    'landing-blocks': LandingBlocksSelect<false> | LandingBlocksSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
@@ -172,11 +178,31 @@ export interface Lead {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
   name?: string | null;
+  role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -223,6 +249,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'users';
@@ -318,10 +348,29 @@ export interface LeadsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -380,11 +429,379 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Заголовки, подписи и кнопки. Пустое поле — на сайте остаётся исходный текст.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-texts".
+ */
+export interface PageText {
+  id: number;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_header_16y4ug8?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_header_1h3nhyc?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_header_0jrilgg?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_header_05z6bid?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_header_1quyd57?: string | null;
+  t_header_1yud1og?: string | null;
+  t_header_0g5ccs0?: string | null;
+  t_header_0ef0a5y?: string | null;
+  t_hero_0ggomn9?: string | null;
+  t_hero_17uuuwp?: string | null;
+  t_hero_1pwx7wz?: string | null;
+  t_hero_0dghjfn?: string | null;
+  t_hero_047kpq6?: string | null;
+  t_fit_0b6cpc4?: string | null;
+  t_fit_07pimtn?: string | null;
+  t_quiz_0nud82c?: string | null;
+  t_quiz_0pwb9vj?: string | null;
+  t_quiz_1a47ml2?: string | null;
+  t_quiz_1m3b92y?: string | null;
+  t_quiz_022d996?: string | null;
+  t_quiz_0du0jd4?: string | null;
+  t_quiz_1mnkf5i?: string | null;
+  t_quiz_1r814k4?: string | null;
+  t_quiz_104x80x?: string | null;
+  t_quiz_0vysykq?: string | null;
+  t_quiz_1rlagui?: string | null;
+  t_quiz_12dllcx?: string | null;
+  t_quiz_1d3bzsj?: string | null;
+  t_quiz_1w6im60?: string | null;
+  t_quiz_01chigc?: string | null;
+  t_quiz_0rob5zq?: string | null;
+  t_quiz_14b5xg1?: string | null;
+  t_quiz_0eub6nu?: string | null;
+  t_quiz_13rzsb1?: string | null;
+  t_quiz_18pux9h?: string | null;
+  t_quiz_0ezs5ug?: string | null;
+  t_experience_dark_1dq6k2i?: string | null;
+  t_experience_dark_1cstrqg?: string | null;
+  t_experience_dark_1p3vwnx?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_experience_dark_080owmi?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_experience_dark_07nhqii?: string | null;
+  t_experience_dark_0ezzil2?: string | null;
+  t_experience_dark_0zxea3i?: string | null;
+  t_process_16qm1ph?: string | null;
+  t_process_18b0fw8?: string | null;
+  t_proof_01afd7s?: string | null;
+  t_proof_19p2pbm?: string | null;
+  t_proof_1ekzjuo?: string | null;
+  t_proof_1xv0mmj?: string | null;
+  t_proof_0i84v22?: string | null;
+  t_proof_0gjsxsn?: string | null;
+  t_team_07gvuiu?: string | null;
+  t_team_1ttuzow?: string | null;
+  t_team_1xibfms?: string | null;
+  t_conditions_044vglv?: string | null;
+  /**
+   * Встречается на странице 4 раза — меняется везде.
+   */
+  t_conditions_1k5w3nb?: string | null;
+  /**
+   * Встречается на странице 3 раза — меняется везде.
+   */
+  t_conditions_15y6p9q?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_conditions_1xvz6f4?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_conditions_1er02g1?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_conditions_0nmnl2a?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_conditions_1bbnxlk?: string | null;
+  /**
+   * Встречается на странице 2 раза — меняется везде.
+   */
+  t_conditions_1g6sv4z?: string | null;
+  t_conditions_15e906r?: string | null;
+  t_conditions_0gpu0bl?: string | null;
+  t_conditions_0at9rxw?: string | null;
+  t_trust_0bo5z50?: string | null;
+  t_trust_13wnhyd?: string | null;
+  t_trust_0nkbyys?: string | null;
+  t_trust_1g7znkx?: string | null;
+  t_trust_10kry0o?: string | null;
+  t_trust_055jotg?: string | null;
+  t_trust_1040999?: string | null;
+  t_trust_1utui8n?: string | null;
+  t_trust_058r5f5?: string | null;
+  t_faq_0ndm1ej?: string | null;
+  t_faq_13wl8ia?: string | null;
+  t_contact_0rwlu9u?: string | null;
+  t_contact_04rwusz?: string | null;
+  t_contact_11mm6eq?: string | null;
+  t_contact_1g543l1?: string | null;
+  t_contact_1d0bww7?: string | null;
+  t_contact_01kdf1q?: string | null;
+  t_contact_1vpzdbf?: string | null;
+  t_contact_1s8de5n?: string | null;
+  t_lead_success_1jem5ft?: string | null;
+  t_lead_success_1cg7jb8?: string | null;
+  t_lead_success_0viwzhl?: string | null;
+  t_lead_success_1vdk5zu?: string | null;
+  t_lead_success_1qkd45m?: string | null;
+  t_lead_success_09cuf2x?: string | null;
+  t_footer_0tcheml?: string | null;
+  t_footer_0vbx99k?: string | null;
+  t_footer_01ju50l?: string | null;
+  t_footer_0o8c9p1?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Карточки, кейсы, отзывы, вопросы, команда и квиз. Порядок меняется перетаскиванием.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "landing-blocks".
+ */
+export interface LandingBlock {
+  id: number;
+  seeded?: boolean | null;
+  facts?:
+    | {
+        key?: string | null;
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ровно 4 карточки — под каждую своя иллюстрация.
+   */
+  fit?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  problems?:
+    | {
+        problem: string;
+        solution?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ровно 4 карточки — под каждую своя иконка.
+   */
+  serviceScope?:
+    | {
+        title: string;
+        text?: string | null;
+        partnerLogo?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  process?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ровно 5 карточек — под каждую своя иллюстрация.
+   */
+  transparency?:
+    | {
+        title: string;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  caseFilters?:
+    | {
+        id?: string | null;
+        label: string;
+      }[]
+    | null;
+  cases?:
+    | {
+        category: 'medicine' | 'e-commerce' | 'education' | 'manufacturing' | 'services' | 'culture';
+        label?: string | null;
+        context?: string | null;
+        title: string;
+        task?: string | null;
+        solution?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        results?:
+          | {
+              value: string;
+              label?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Если не загружена — остаётся картинка с сайта.
+         */
+        image?: (number | null) | Media;
+        defaultImage?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  team?:
+    | {
+        name: string;
+        role?: string | null;
+        /**
+         * Если не загружено — остаётся фото с сайта.
+         */
+        photo?: (number | null) | Media;
+        photoFile?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * До 5 отзывов — по числу аватарок.
+   */
+  reviews?:
+    | {
+        name: string;
+        detail?: string | null;
+        /**
+         * Можно выделить жирным: <strong>текст</strong>.
+         */
+        paragraphs?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  startOptions?:
+    | {
+        label?: string | null;
+        title: string;
+        text?: string | null;
+        cta?: string | null;
+        ctaId?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        question: string;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  contactCopy?: {
+    promotion?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      description?: string | null;
+    };
+    audit?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      description?: string | null;
+    };
+  };
+  /**
+   * Пять шагов; меняются тексты вопросов и вариантов.
+   */
+  quizSteps?:
+    | {
+        id?: string | null;
+        topic?: string | null;
+        question: string;
+        options?:
+          | {
+              value?: string | null;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Исходный: #0A238B
+   */
+  colorBrand?: string | null;
+  /**
+   * Исходный: #2F63F5
+   */
+  colorBrandBright?: string | null;
+  /**
+   * Исходный: #06195F
+   */
+  colorBrandDeep?: string | null;
+  /**
+   * Исходный: #FFD400
+   */
+  colorAccent?: string | null;
+  /**
+   * Исходный: #F4F6FA
+   */
+  colorPaper?: string | null;
+  /**
+   * Исходный: #FFFFFF
+   */
+  colorSurface?: string | null;
+  /**
+   * Исходный: #E9EEFF
+   */
+  colorBlueSoft?: string | null;
+  /**
+   * Исходный: #FFF7CC
+   */
+  colorYellowSoft?: string | null;
+  /**
+   * Исходный: #152038
+   */
+  colorInk?: string | null;
+  /**
+   * Исходный: #526078
+   */
+  colorInkMuted?: string | null;
+  /**
+   * Исходный: #DCE3EE
+   */
+  colorBorder?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
   /**
    * Пока выключено — заявки только сохраняются в админке, в Битрикс не уходят.
    */
@@ -414,9 +831,280 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-texts_select".
+ */
+export interface PageTextsSelect<T extends boolean = true> {
+  t_header_16y4ug8?: T;
+  t_header_1h3nhyc?: T;
+  t_header_0jrilgg?: T;
+  t_header_05z6bid?: T;
+  t_header_1quyd57?: T;
+  t_header_1yud1og?: T;
+  t_header_0g5ccs0?: T;
+  t_header_0ef0a5y?: T;
+  t_hero_0ggomn9?: T;
+  t_hero_17uuuwp?: T;
+  t_hero_1pwx7wz?: T;
+  t_hero_0dghjfn?: T;
+  t_hero_047kpq6?: T;
+  t_fit_0b6cpc4?: T;
+  t_fit_07pimtn?: T;
+  t_quiz_0nud82c?: T;
+  t_quiz_0pwb9vj?: T;
+  t_quiz_1a47ml2?: T;
+  t_quiz_1m3b92y?: T;
+  t_quiz_022d996?: T;
+  t_quiz_0du0jd4?: T;
+  t_quiz_1mnkf5i?: T;
+  t_quiz_1r814k4?: T;
+  t_quiz_104x80x?: T;
+  t_quiz_0vysykq?: T;
+  t_quiz_1rlagui?: T;
+  t_quiz_12dllcx?: T;
+  t_quiz_1d3bzsj?: T;
+  t_quiz_1w6im60?: T;
+  t_quiz_01chigc?: T;
+  t_quiz_0rob5zq?: T;
+  t_quiz_14b5xg1?: T;
+  t_quiz_0eub6nu?: T;
+  t_quiz_13rzsb1?: T;
+  t_quiz_18pux9h?: T;
+  t_quiz_0ezs5ug?: T;
+  t_experience_dark_1dq6k2i?: T;
+  t_experience_dark_1cstrqg?: T;
+  t_experience_dark_1p3vwnx?: T;
+  t_experience_dark_080owmi?: T;
+  t_experience_dark_07nhqii?: T;
+  t_experience_dark_0ezzil2?: T;
+  t_experience_dark_0zxea3i?: T;
+  t_process_16qm1ph?: T;
+  t_process_18b0fw8?: T;
+  t_proof_01afd7s?: T;
+  t_proof_19p2pbm?: T;
+  t_proof_1ekzjuo?: T;
+  t_proof_1xv0mmj?: T;
+  t_proof_0i84v22?: T;
+  t_proof_0gjsxsn?: T;
+  t_team_07gvuiu?: T;
+  t_team_1ttuzow?: T;
+  t_team_1xibfms?: T;
+  t_conditions_044vglv?: T;
+  t_conditions_1k5w3nb?: T;
+  t_conditions_15y6p9q?: T;
+  t_conditions_1xvz6f4?: T;
+  t_conditions_1er02g1?: T;
+  t_conditions_0nmnl2a?: T;
+  t_conditions_1bbnxlk?: T;
+  t_conditions_1g6sv4z?: T;
+  t_conditions_15e906r?: T;
+  t_conditions_0gpu0bl?: T;
+  t_conditions_0at9rxw?: T;
+  t_trust_0bo5z50?: T;
+  t_trust_13wnhyd?: T;
+  t_trust_0nkbyys?: T;
+  t_trust_1g7znkx?: T;
+  t_trust_10kry0o?: T;
+  t_trust_055jotg?: T;
+  t_trust_1040999?: T;
+  t_trust_1utui8n?: T;
+  t_trust_058r5f5?: T;
+  t_faq_0ndm1ej?: T;
+  t_faq_13wl8ia?: T;
+  t_contact_0rwlu9u?: T;
+  t_contact_04rwusz?: T;
+  t_contact_11mm6eq?: T;
+  t_contact_1g543l1?: T;
+  t_contact_1d0bww7?: T;
+  t_contact_01kdf1q?: T;
+  t_contact_1vpzdbf?: T;
+  t_contact_1s8de5n?: T;
+  t_lead_success_1jem5ft?: T;
+  t_lead_success_1cg7jb8?: T;
+  t_lead_success_0viwzhl?: T;
+  t_lead_success_1vdk5zu?: T;
+  t_lead_success_1qkd45m?: T;
+  t_lead_success_09cuf2x?: T;
+  t_footer_0tcheml?: T;
+  t_footer_0vbx99k?: T;
+  t_footer_01ju50l?: T;
+  t_footer_0o8c9p1?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "landing-blocks_select".
+ */
+export interface LandingBlocksSelect<T extends boolean = true> {
+  seeded?: T;
+  facts?:
+    | T
+    | {
+        key?: T;
+        text?: T;
+        id?: T;
+      };
+  fit?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  problems?:
+    | T
+    | {
+        problem?: T;
+        solution?: T;
+        id?: T;
+      };
+  serviceScope?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        partnerLogo?: T;
+        id?: T;
+      };
+  process?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  transparency?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  caseFilters?:
+    | T
+    | {
+        id?: T;
+        label?: T;
+      };
+  cases?:
+    | T
+    | {
+        category?: T;
+        label?: T;
+        context?: T;
+        title?: T;
+        task?: T;
+        solution?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        results?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+        image?: T;
+        defaultImage?: T;
+        id?: T;
+      };
+  team?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        photo?: T;
+        photoFile?: T;
+        id?: T;
+      };
+  reviews?:
+    | T
+    | {
+        name?: T;
+        detail?: T;
+        paragraphs?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  startOptions?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        text?: T;
+        cta?: T;
+        ctaId?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  contactCopy?:
+    | T
+    | {
+        promotion?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              description?: T;
+            };
+        audit?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              description?: T;
+            };
+      };
+  quizSteps?:
+    | T
+    | {
+        id?: T;
+        topic?: T;
+        question?: T;
+        options?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  colorBrand?: T;
+  colorBrandBright?: T;
+  colorBrandDeep?: T;
+  colorAccent?: T;
+  colorPaper?: T;
+  colorSurface?: T;
+  colorBlueSoft?: T;
+  colorYellowSoft?: T;
+  colorInk?: T;
+  colorInkMuted?: T;
+  colorBorder?: T;
+  seoTitle?: T;
+  seoDescription?: T;
   bitrixEnabled?: T;
   bitrixWebhookUrl?: T;
   bitrixEntity?: T;
