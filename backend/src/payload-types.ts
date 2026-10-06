@@ -800,6 +800,9 @@ export interface SiteSetting {
    * Исходный: #DCE3EE
    */
   colorBorder?: string | null;
+  botVkUrl?: string | null;
+  botTelegramUrl?: string | null;
+  botMaxUrl?: string | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
   /**
@@ -1103,6 +1106,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   colorInk?: T;
   colorInkMuted?: T;
   colorBorder?: T;
+  botVkUrl?: T;
+  botTelegramUrl?: T;
+  botMaxUrl?: T;
   seoTitle?: T;
   seoDescription?: T;
   bitrixEnabled?: T;

@@ -16,7 +16,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 HOST=${DEPLOY_HOST:-dev@clickout.cerebrotarget.ru}
 REMOTE_DIR=/home/dev/yd-landing
 
-EXCLUDES=(--exclude .git --exclude .next --exclude .env --exclude media --exclude public --exclude docs)
+EXCLUDES=(--exclude .git --exclude .next --exclude .env --exclude media --exclude public --exclude site-template --exclude docs)
 if [ "${1:-}" != "--with-modules" ]; then
   EXCLUDES+=(--exclude node_modules)
 fi

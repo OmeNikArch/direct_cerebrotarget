@@ -5,6 +5,7 @@ import { invalidateHook } from '@/lib/siteCache'
 
 // Поля Битрикс24 видит и меняет только администратор (там вебхук).
 const bitrixAccess = { read: adminOnlyField, update: adminOnlyField }
+const urlOrEmpty = (v: unknown) => !v || /^https:\/\/\S+$/i.test(String(v).trim()) || 'Ссылка должна начинаться с https://'
 const colorField = (p: (typeof PALETTE)[number]): Field => ({
   name: p.field,
   type: 'text',
@@ -42,6 +43,15 @@ export const SiteSettings: GlobalConfig = {
               type: 'row',
               fields: PALETTE.slice(8).map(colorField),
             },
+          ],
+        },
+        {
+          label: 'Боты',
+          description: 'Кнопки «VK-бот», «Telegram-бот», «MAX-бот» на экранах «Спасибо» после заявки. Пустое поле — кнопка остаётся неактивной.',
+          fields: [
+            { name: 'botVkUrl', type: 'text', label: 'VK-бот (ссылка автоподписки Senler)', validate: urlOrEmpty, admin: { placeholder: 'https://vk.ru/app5898182_-73662138#s=…&force=1' } },
+            { name: 'botTelegramUrl', type: 'text', label: 'Telegram-бот', validate: urlOrEmpty, admin: { placeholder: 'https://t.me/…' } },
+            { name: 'botMaxUrl', type: 'text', label: 'MAX-бот', validate: urlOrEmpty, admin: { placeholder: 'https://max.ru/…' } },
           ],
         },
         {

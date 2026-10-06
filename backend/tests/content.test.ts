@@ -85,3 +85,17 @@ describe('сборка script.js и quiz.mjs из админки', () => {
     expect(buildScriptJs({})).toBe(site('script.js'))
   })
 })
+
+describe('кнопки ботов', () => {
+  it('ставит ссылку только тем ботам, у кого она задана', async () => {
+    const { applyBotLinks } = await import('@/lib/renderSite')
+    const { document } = parseHTML(site('index.html'))
+    applyBotLinks(document as never, { botVkUrl: 'https://vk.ru/app5898182_-73662138#s=4054320&force=1' })
+    const links = [...document.querySelectorAll('[data-bot-actions] a')]
+    expect(links).toHaveLength(2)
+    expect(links[0].getAttribute('href')).toBe('https://vk.ru/app5898182_-73662138#s=4054320&force=1')
+    expect(links[0].textContent).toContain('VK-бот')
+    expect(links[0].getAttribute('class')).not.toContain('disabled:')
+    expect(document.querySelectorAll('[data-bot-actions] button[disabled]')).toHaveLength(4)
+  })
+})
